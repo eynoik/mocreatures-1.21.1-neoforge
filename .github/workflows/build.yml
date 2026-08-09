@@ -70,12 +70,22 @@ jobs:
           python3 tools/port_fixes.py
           python3 tools/port_fixes_stage2.py
           python3 tools/port_fixes_stage3.py
+          python3 tools/port_fixes_stage4.py
+
+      - name: Snapshot patched source
+        shell: bash
+        run: |
+          set -euxo pipefail
+          tar -czf patched-source.tar.gz src/main/java src/main/resources tools build.gradle gradle.properties settings.gradle
 
       - name: Setup Java 21
         uses: actions/setup-java@v5
         with:
           distribution: temurin
           java-version: '21'
+
+      - name: Setup Gradle cache
+        uses: gradle/actions/setup-gradle@v4
 
       - name: Align Gradle wrapper with NeoForge build
         shell: bash
@@ -96,13 +106,14 @@ jobs:
           STATUS=${PIPESTATUS[0]}
           exit $STATUS
 
-      - name: Upload JARs, compiler log and reports
+      - name: Upload JARs, patched source, compiler log and reports
         if: always()
         uses: actions/upload-artifact@v4
         with:
           name: mocreatures-build-output
           if-no-files-found: warn
           path: |
+            ${{ env.PORT_ROOT }}/patched-source.tar.gz
             ${{ env.PORT_ROOT }}/compile.log
             ${{ env.PORT_ROOT }}/build/libs/*.jar
             ${{ env.PORT_ROOT }}/build/reports/**
