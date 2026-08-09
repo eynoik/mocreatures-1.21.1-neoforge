@@ -13,9 +13,7 @@ import drzhark.mocreatures.client.renderer.fx.data.VanishParticleData;
 import net.minecraft.core.particles.ParticleType;
 import net.minecraft.core.particles.SimpleParticleType;
 import net.neoforged.neoforge.registries.DeferredRegister;
-import net.neoforged.fml.common.EventBusSubscriber;
 
-@EventBusSubscriber(modid = MoCConstants.MOD_ID, bus = EventBusSubscriber.Bus.MOD)
 public class MoCParticles {
     public static final DeferredRegister<ParticleType<?>> PARTICLES =
             DeferredRegister.create(Registries.PARTICLE_TYPE, MoCConstants.MOD_ID);
