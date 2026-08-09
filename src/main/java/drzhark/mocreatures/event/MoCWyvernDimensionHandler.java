@@ -17,16 +17,17 @@ import net.neoforged.neoforge.event.server.ServerAboutToStartEvent;
 import net.neoforged.bus.api.Event;
 import net.neoforged.bus.api.EventPriority;
 import net.neoforged.bus.api.SubscribeEvent;
-import net.neoforged.fml.common.EventBusSubscriber;
 
 import java.util.Arrays;
 import java.util.List;
 import java.util.function.Supplier;
 
 /**
- * Event handler specifically for managing the Wyvern dimension mob spawning
+ * Event handler specifically for managing the Wyvern dimension mob spawning.
+ *
+ * The legacy event hooks are currently commented out, so this class must not be registered
+ * as an event-bus subscriber until active @SubscribeEvent methods are restored.
  */
-@EventBusSubscriber(modid = MoCConstants.MOD_ID)
 public class MoCWyvernDimensionHandler {
 
     // Use suppliers to delay initialization until the entities are actually registered
@@ -80,4 +81,4 @@ public class MoCWyvernDimensionHandler {
     //         MoCreatures.LOGGER.info("  - {}", EntityType.getKey(entityType));
     //     }
     // }
-} 
+}
