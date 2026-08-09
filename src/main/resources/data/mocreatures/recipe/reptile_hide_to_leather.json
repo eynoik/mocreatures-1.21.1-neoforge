@@ -1,0 +1,11 @@
+{
+  "type": "minecraft:crafting_shapeless",
+  "ingredients": [
+    {
+      "item": "mocreatures:reptilehide"
+    }
+  ],
+  "result": {
+    "id": "minecraft:leather"
+  }
+}

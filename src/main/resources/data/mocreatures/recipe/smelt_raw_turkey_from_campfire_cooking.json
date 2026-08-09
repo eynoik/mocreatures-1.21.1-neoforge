@@ -1,0 +1,11 @@
+{
+  "type": "minecraft:campfire_cooking",
+  "ingredient": {
+    "item": "mocreatures:turkeyraw"
+  },
+  "result": {
+    "id": "mocreatures:turkeycooked"
+  },
+  "experience": 0.35,
+  "cookingtime": 600
+}

@@ -1,0 +1,19 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "pattern": [
+    "X  ",
+    "X# ",
+    "XXX"
+  ],
+  "key": {
+    "X": {
+      "tag": "c:ingots/iron"
+    },
+    "#": {
+      "item": "minecraft:lead"
+    }
+  },
+  "result": {
+    "id": "mocreatures:tusksiron"
+  }
+}

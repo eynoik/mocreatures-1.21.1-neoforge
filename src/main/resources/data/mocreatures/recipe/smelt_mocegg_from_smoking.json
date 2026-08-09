@@ -1,0 +1,11 @@
+{
+  "type": "minecraft:smoking",
+  "ingredient": {
+    "item": "mocreatures:mocegg"
+  },
+  "result": {
+    "id": "mocreatures:omelet"
+  },
+  "experience": 0.35,
+  "cookingtime": 100
+}

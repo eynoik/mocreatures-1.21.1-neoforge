@@ -1,0 +1,12 @@
+{
+  "type": "minecraft:crafting_shapeless",
+  "ingredients": [
+    {
+      "item": "mocreatures:wyvwood_log"
+    }
+  ],
+  "result": {
+    "count": 4,
+    "id": "mocreatures:wyvwood_planks"
+  }
+}

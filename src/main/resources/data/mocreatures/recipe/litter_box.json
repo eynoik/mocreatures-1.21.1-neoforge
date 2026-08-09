@@ -1,0 +1,19 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "pattern": [
+    "XXX",
+    "X#X",
+    "XXX"
+  ],
+  "key": {
+    "X": {
+      "tag": "c:planks"
+    },
+    "#": {
+      "item": "minecraft:sand"
+    }
+  },
+  "result": {
+    "id": "mocreatures:kittylitter"
+  }
+}

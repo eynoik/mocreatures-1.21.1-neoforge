@@ -1,0 +1,22 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "pattern": [
+    " X ",
+    "#R#",
+    " X "
+  ],
+  "key": {
+    "X": {
+      "item": "minecraft:white_wool"
+    },
+    "#": {
+      "item": "minecraft:chest"
+    },
+    "R": {
+      "item": "mocreatures:hide"
+    }
+  },
+  "result": {
+    "id": "mocreatures:elephantchest"
+  }
+}

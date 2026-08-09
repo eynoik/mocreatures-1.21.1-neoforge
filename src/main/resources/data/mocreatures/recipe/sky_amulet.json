@@ -1,0 +1,22 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "pattern": [
+    "#X#",
+    "XZX",
+    "#X#"
+  ],
+  "key": {
+    "X": {
+      "tag": "c:nuggets/gold"
+    },
+    "#": {
+      "item": "minecraft:blaze_powder"
+    },
+    "Z": {
+      "item": "minecraft:diamond"
+    }
+  },
+  "result": {
+    "id": "mocreatures:amuletpegasus"
+  }
+}

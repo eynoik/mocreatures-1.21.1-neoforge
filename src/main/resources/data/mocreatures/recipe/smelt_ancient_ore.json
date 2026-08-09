@@ -1,0 +1,11 @@
+{
+  "type": "minecraft:smelting",
+  "ingredient": {
+    "item": "mocreatures:ancient_ore"
+  },
+  "result": {
+    "id": "mocreatures:ancientsilveringot"
+  },
+  "experience": 0.2,
+  "cookingtime": 200
+}

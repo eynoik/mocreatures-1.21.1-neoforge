@@ -1,0 +1,111 @@
+{
+  "type": "mocreatures:wyvernlairworld",
+  "generator": {
+    "type": "minecraft:noise",
+    "settings": "mocreatures:floating_islands",
+    "biome_source": {
+      "type": "minecraft:multi_noise",
+      "biomes": [
+        {
+          "biome": "mocreatures:wyvernlairlands",
+          "parameters": {
+            "temperature": 0.4,
+            "humidity": 0.4,
+            "continentalness": 0.0,
+            "erosion": 0.0,
+            "weirdness": 0.0,
+            "depth": 0.0,
+            "offset": 0.2
+          }
+        },
+        {
+          "biome": "mocreatures:wyvernlairlands",
+          "parameters": {
+            "temperature": 0.4,
+            "humidity": 0.3,
+            "continentalness": 0.1,
+            "erosion": 0.2,
+            "weirdness": 0.2,
+            "depth": 0.0,
+            "offset": 0.3
+          }
+        },
+        {
+          "biome": "mocreatures:wyvernlairlandsforest",
+          "parameters": {
+            "temperature": 0.8,
+            "humidity": 0.8,
+            "continentalness": 0.0,
+            "erosion": 0.0,
+            "weirdness": 0.0,
+            "depth": 0.0,
+            "offset": 0.2
+          }
+        },
+        {
+          "biome": "mocreatures:wyvernlairlandsforest",
+          "parameters": {
+            "temperature": 0.7,
+            "humidity": 0.7,
+            "continentalness": 0.2,
+            "erosion": 0.1,
+            "weirdness": 0.1,
+            "depth": 0.0,
+            "offset": 0.3
+          }
+        },
+        {
+          "biome": "mocreatures:wyvernlair_mountains",
+          "parameters": {
+            "temperature": 0.3,
+            "humidity": 0.1,
+            "continentalness": 1.0,
+            "erosion": -0.5,
+            "weirdness": 0.0,
+            "depth": 0.0,
+            "offset": 0.2
+          }
+        },
+        {
+          "biome": "mocreatures:wyvernlair_mountains",
+          "parameters": {
+            "temperature": 0.25,
+            "humidity": 0.2,
+            "continentalness": 0.9,
+            "erosion": -0.4,
+            "weirdness": 0.1,
+            "depth": 0.0,
+            "offset": 0.3
+          }
+        },
+        {
+          "biome": "mocreatures:wyvernlair_desertlands",
+          "parameters": {
+            "temperature": 1.5,
+            "humidity": -0.5,
+            "continentalness": 0.0,
+            "erosion": 0.0,
+            "weirdness": 0.0,
+            "depth": 0.0,
+            "offset": 0.2
+          }
+        },
+        {
+          "biome": "mocreatures:wyvernlair_desertlands",
+          "parameters": {
+            "temperature": 1.4,
+            "humidity": -0.4,
+            "continentalness": 0.1,
+            "erosion": 0.1,
+            "weirdness": 0.1,
+            "depth": 0.0,
+            "offset": 0.3
+          }
+        }
+      ]
+    }
+  },
+  "structures": {
+    "structures": {}
+  }
+} 

@@ -1,0 +1,22 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "pattern": [
+    "X#X",
+    "RXR",
+    "#X#"
+  ],
+  "key": {
+    "X": {
+      "item": "mocreatures:hide"
+    },
+    "#": {
+      "tag": "c:wool"
+    },
+    "R": {
+      "tag": "c:ingots/iron"
+    }
+  },
+  "result": {
+    "id": "mocreatures:elephantharness"
+  }
+}

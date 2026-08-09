@@ -1,0 +1,22 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "pattern": [
+    "S",
+    "G",
+    "C"
+  ],
+  "key": {
+    "S": {
+      "item": "mocreatures:scorpstingnether"
+    },
+    "G": {
+      "item": "minecraft:golden_sword"
+    },
+    "C": {
+      "item": "mocreatures:chitinnether"
+    }
+  },
+  "result": {
+    "id": "mocreatures:scorpswordnether"
+  }
+}

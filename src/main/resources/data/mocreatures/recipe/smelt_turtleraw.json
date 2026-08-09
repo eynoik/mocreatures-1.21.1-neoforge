@@ -1,0 +1,11 @@
+{
+  "type": "minecraft:smelting",
+  "ingredient": {
+    "item": "mocreatures:turtleraw"
+  },
+  "result": {
+    "id": "mocreatures:turtlecooked"
+  },
+  "experience": 0.35,
+  "cookingtime": 200
+}

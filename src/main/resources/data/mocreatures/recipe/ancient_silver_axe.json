@@ -1,0 +1,19 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "pattern": [
+    "SS",
+    "SI",
+    " I"
+  ],
+  "key": {
+    "S": {
+      "item": "mocreatures:ancientsilveringot"
+    },
+    "I": {
+      "tag": "c:ingots/iron"
+    }
+  },
+  "result": {
+    "id": "mocreatures:silveraxe"
+  }
+}

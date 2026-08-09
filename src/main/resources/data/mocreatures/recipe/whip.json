@@ -1,0 +1,22 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "pattern": [
+    "#X#",
+    "X X",
+    "# Z"
+  ],
+  "key": {
+    "X": {
+      "item": "minecraft:leather"
+    },
+    "#": {
+      "item": "mocreatures:bigcatclaw"
+    },
+    "Z": {
+      "tag": "c:ingots/iron"
+    }
+  },
+  "result": {
+    "id": "mocreatures:whip"
+  }
+}

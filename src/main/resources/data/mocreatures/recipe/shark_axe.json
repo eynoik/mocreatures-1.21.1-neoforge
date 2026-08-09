@@ -1,0 +1,22 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "pattern": [
+    "#X#",
+    "#X#",
+    " S "
+  ],
+  "key": {
+    "X": {
+      "tag": "c:planks"
+    },
+    "S": {
+      "item": "minecraft:stick"
+    },
+    "#": {
+      "item": "mocreatures:sharkteeth"
+    }
+  },
+  "result": {
+    "id": "mocreatures:sharkaxe"
+  }
+}

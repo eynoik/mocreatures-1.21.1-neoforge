@@ -1,0 +1,11 @@
+{
+  "type": "minecraft:smoking",
+  "ingredient": {
+    "item": "mocreatures:ostrichraw"
+  },
+  "result": {
+    "id": "mocreatures:ostrichcooked"
+  },
+  "experience": 0.35,
+  "cookingtime": 100
+}

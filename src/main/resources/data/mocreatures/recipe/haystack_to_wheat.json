@@ -1,0 +1,12 @@
+{
+  "type": "minecraft:crafting_shapeless",
+  "ingredients": [
+    {
+      "item": "mocreatures:haystack"
+    }
+  ],
+  "result": {
+    "count": 6,
+    "id": "minecraft:wheat"
+  }
+}
