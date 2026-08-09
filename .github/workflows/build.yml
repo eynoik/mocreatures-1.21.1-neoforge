@@ -39,6 +39,14 @@ jobs:
           distribution: temurin
           java-version: '21'
 
+      - name: Align Gradle wrapper with current NeoForge 1.21.1 MDK
+        shell: bash
+        run: |
+          set -euxo pipefail
+          WRAPPER="$PORT_ROOT/gradle/wrapper/gradle-wrapper.properties"
+          sed -i -E 's#gradle-[0-9.]+-bin\.zip#gradle-9.2.1-bin.zip#' "$WRAPPER"
+          grep distributionUrl "$WRAPPER"
+
       - name: Build
         shell: bash
         run: |
