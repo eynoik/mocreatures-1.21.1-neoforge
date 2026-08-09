@@ -17,7 +17,6 @@ import drzhark.mocreatures.init.MoCSoundEvents;
 import drzhark.mocreatures.init.MoCSpawnEggs;
 import drzhark.mocreatures.network.MoCMessageHandler;
 import drzhark.mocreatures.proxy.MoCProxy;
-import drzhark.mocreatures.proxy.MoCProxyClient;
 import drzhark.mocreatures.registry.MoCPOI;
 import drzhark.mocreatures.world.MoCSpawnBiomeModifier;
 import drzhark.mocreatures.util.MoCArmorMaterial;
@@ -65,8 +64,9 @@ public class MoCreatures {
     public MoCreatures(IEventBus eventBus) {
         instance = this;
 
-        // Register for config events
-        this.proxy = net.neoforged.fml.loading.FMLEnvironment.dist == net.neoforged.api.distmarker.Dist.CLIENT ? new MoCProxyClient() : new MoCProxy();
+        // Keep the common mod class free of a direct MoCProxyClient bytecode reference.
+        // NeoForge's dedicated-server dist cleaner rejects common classes that directly reference @OnlyIn client types.
+        this.proxy = createPhysicalSideProxy();
         eventBus.addListener(MoCMessageHandler::register);
         eventBus.addListener(this::setup);
         NeoForge.EVENT_BUS.register(new MoCEventHooks());
@@ -85,6 +85,18 @@ public class MoCreatures {
 
         // Register the custom biome modifier codec on the NeoForge mod bus.
         MoCSpawnBiomeModifier.SERIALIZERS.register(eventBus);
+    }
+
+    private static MoCProxy createPhysicalSideProxy() {
+        if (net.neoforged.fml.loading.FMLEnvironment.dist == net.neoforged.api.distmarker.Dist.CLIENT) {
+            try {
+                Class<?> proxyClass = Class.forName("drzhark.mocreatures.proxy.MoCProxyClient");
+                return (MoCProxy) proxyClass.getDeclaredConstructor().newInstance();
+            } catch (ReflectiveOperationException e) {
+                throw new RuntimeException("Failed to create Mo' Creatures client proxy", e);
+            }
+        }
+        return new MoCProxy();
     }
     
     private void setup(final FMLCommonSetupEvent event) {
