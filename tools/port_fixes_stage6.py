@@ -153,4 +153,61 @@ s = s.replace('@EventBusSubscriber(modid = MoCConstants.MOD_ID, bus = EventBusSu
               'public class MoCBlocks {', 1)
 write(rel, s)
 
-print('Applied stage6 compile and dedicated-server runtime fixes')
+# 1.21.1 datapack/worldgen codec migrations exposed by the server smoke test.
+# - NeoForge built-in biome modifier serializer is neoforge:add_features.
+# - Uniform IntProvider fields are direct min/max members (the old nested "value" wrapper no longer decodes).
+# - Vanilla grass block/item was renamed to short_grass.
+# - The biome tag id is mocreatures:is_wyvern_lair; worldgen/biome is the registry tag folder, not part of the id.
+import json
+
+RES_ROOT = Path('src/main/resources/data/mocreatures')
+
+def migrate_data_value(value):
+    changed = False
+    if isinstance(value, dict):
+        # Recursively migrate children first.
+        for key in list(value.keys()):
+            new_child, child_changed = migrate_data_value(value[key])
+            if child_changed:
+                value[key] = new_child
+                changed = True
+
+        if value.get('type') == 'minecraft:uniform' and isinstance(value.get('value'), dict):
+            bounds = value['value']
+            if 'min_inclusive' in bounds and 'max_inclusive' in bounds:
+                value['min_inclusive'] = bounds['min_inclusive']
+                value['max_inclusive'] = bounds['max_inclusive']
+                del value['value']
+                changed = True
+        return value, changed
+
+    if isinstance(value, list):
+        for i, child in enumerate(value):
+            new_child, child_changed = migrate_data_value(child)
+            if child_changed:
+                value[i] = new_child
+                changed = True
+        return value, changed
+
+    if isinstance(value, str):
+        replacements = {
+            'neoc:add_features': 'neoforge:add_features',
+            'minecraft:grass': 'minecraft:short_grass',
+            '#mocreatures:worldgen/biome/is_wyvern_lair': '#mocreatures:is_wyvern_lair',
+        }
+        new_value = replacements.get(value, value)
+        return new_value, new_value != value
+
+    return value, False
+
+migrated_jsons = []
+for json_path in RES_ROOT.rglob('*.json'):
+    data = json.loads(json_path.read_text(encoding='utf-8'))
+    data, changed = migrate_data_value(data)
+    if changed:
+        json_path.write_text(json.dumps(data, indent=2, ensure_ascii=False) + '\n', encoding='utf-8')
+        migrated_jsons.append(str(json_path))
+
+print(f'Migrated {len(migrated_jsons)} 1.21.1 datapack/worldgen JSON files')
+
+print('Applied stage6 compile, datapack and dedicated-server runtime fixes')
