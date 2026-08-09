@@ -97,4 +97,21 @@ for rel in [
     )
     write(rel, s)
 
-print('Applied stage6 fixes for the final 13 compile errors from build #14')
+# Dedicated-server dist safety: never leave a direct bytecode reference to the @OnlyIn CLIENT proxy
+# in the common mod constructor. RuntimeDistCleaner rejects the whole mod class otherwise.
+rel = 'drzhark/mocreatures/MoCreatures.java'
+s = read(rel)
+s = s.replace('import drzhark.mocreatures.proxy.MoCProxyClient;\n', '')
+s = s.replace(
+    'this.proxy = net.neoforged.fml.loading.FMLEnvironment.dist == net.neoforged.api.distmarker.Dist.CLIENT ? new MoCProxyClient() : new MoCProxy();',
+    'this.proxy = createPhysicalSideProxy();'
+)
+if 'private static MoCProxy createPhysicalSideProxy()' not in s:
+    marker = '    private void setup(final FMLCommonSetupEvent event) {'
+    helper = """    private static MoCProxy createPhysicalSideProxy() {\n        if (net.neoforged.fml.loading.FMLEnvironment.dist == net.neoforged.api.distmarker.Dist.CLIENT) {\n            try {\n                Class<?> proxyClass = Class.forName(\"drzhark.mocreatures.proxy.MoCProxyClient\");\n                return (MoCProxy) proxyClass.getDeclaredConstructor().newInstance();\n            } catch (ReflectiveOperationException e) {\n                throw new RuntimeException(\"Failed to create Mo' Creatures client proxy\", e);\n            }\n        }\n        return new MoCProxy();\n    }\n\n"""
+    if marker not in s:
+        raise RuntimeError('MoCreatures setup marker not found')
+    s = s.replace(marker, helper + marker, 1)
+write(rel, s)
+
+print('Applied stage6 compile and dedicated-server dist fixes')
