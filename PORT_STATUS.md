@@ -41,6 +41,7 @@ This repository contains a substantial source-level port of the supplied 1.20.1 
 - Full Java/Gradle build with the real NeoForge classpath: pass.
 - Dedicated server fresh-world startup: pass.
 - Headless client startup under Xvfb for 90 seconds: pass; renderer/resource initialization proceeds without a Mo' Creatures mod-loading crash.
+- The CI runner logs expected headless-Linux audio/narrator warnings (missing `flite` / OpenAL device); they are environment warnings, not Mo' Creatures loading failures, and the client continues through texture/resource initialization.
 - `net.minecraftforge` imports: 0.
 - `RegistryObject` references: 0.
 - `SimpleChannel` / old Forge networking references: 0.
