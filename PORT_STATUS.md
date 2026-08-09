@@ -9,6 +9,8 @@ This repository contains a substantial source-level port of the supplied 1.20.1 
 - Full repository-source `./gradlew clean build`: **PASS**.
 - Dedicated server `runServer` startup: **PASS**; fresh server reaches `Done`.
 - Headless client `runClient` startup under Xvfb: **PASS** for a 90-second startup window with no Mo' Creatures mod-loading crash.
+- Validated client-fix code SHA: `43790475da1e7bb06dfa84bcef9ec032bb7354c6`.
+- Validated GitHub Actions run: `31334615915`.
 - Build no longer depends on the staged `tools/port_fixes*.py` scripts or workflow-time source rewriting.
 - Gradle wrapper is pinned to 9.2.1 in the repository.
 - Produced artifact: `mocreatures-1.21.1-1.0.0-neoforge-port.jar`.
