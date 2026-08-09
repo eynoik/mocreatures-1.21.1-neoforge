@@ -9,15 +9,12 @@ import drzhark.mocreatures.client.renderer.fx.MoCParticles;
 import drzhark.mocreatures.client.renderer.fx.data.StarParticleData;
 import drzhark.mocreatures.client.renderer.fx.data.VacuumParticleData;
 import drzhark.mocreatures.client.renderer.fx.data.VanishParticleData;
-import drzhark.mocreatures.client.renderer.fx.impl.MoCEntityFXUndead;
-import drzhark.mocreatures.client.renderer.fx.impl.MoCEntityFXVanish;
 import drzhark.mocreatures.client.renderer.texture.MoCTextures;
 import drzhark.mocreatures.entity.IMoCEntity;
 import drzhark.mocreatures.entity.hostile.MoCEntityGolem;
 import drzhark.mocreatures.entity.passive.MoCEntityHorse;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.multiplayer.ClientLevel;
-import net.minecraft.client.particle.ParticleEngine;
 import net.minecraft.core.particles.ParticleTypes;
 import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceLocation;
@@ -25,15 +22,11 @@ import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.player.Player;
 import net.neoforged.api.distmarker.Dist;
 import net.neoforged.api.distmarker.OnlyIn;
-import net.neoforged.neoforge.client.event.RegisterParticleProvidersEvent;
-import net.neoforged.bus.api.SubscribeEvent;
-import net.neoforged.fml.common.EventBusSubscriber;
 
 /**
  * Client-side proxy for Mo' Creatures
  */
 @OnlyIn(Dist.CLIENT)
-@EventBusSubscriber(modid = "mocreatures", bus = EventBusSubscriber.Bus.MOD, value = Dist.CLIENT)
 public class MoCProxyClient extends MoCProxy {
 
     public static Minecraft mc = Minecraft.getInstance();
@@ -88,7 +81,6 @@ public class MoCProxyClient extends MoCProxy {
         // Entity renderers are now registered via events in MoCModelRegistry and MoCRendererRegistry
         // This method is maintained for compatibility but doesn't need to do anything since
         // renderer registration is now event-based
-        
         MoCreatures.LOGGER.info("MoCreatures client setup initialized");
     }
 
@@ -131,7 +123,6 @@ public class MoCProxyClient extends MoCProxy {
 
         ClientLevel level = (ClientLevel) entity.level();
         for (int x = 0; x < i; x++) {
-            // Create the undead particle directly in ClientLevel
             level.addParticle(
                 MoCParticles.UNDEAD_FX.get(),
                 entity.getX(),
@@ -148,8 +139,6 @@ public class MoCProxyClient extends MoCProxy {
         if (densityInt == 0 || !(entity.level() instanceof ClientLevel)) return;
 
         ClientLevel level = (ClientLevel) entity.level();
-        
-        // Get colors from horse entity
         float r = entity.colorFX(1, entity.getTypeMoC());
         float g = entity.colorFX(2, entity.getTypeMoC());
         float b = entity.colorFX(3, entity.getTypeMoC());
@@ -160,11 +149,7 @@ public class MoCProxyClient extends MoCProxy {
             double y = entity.getY() + level.getRandom().nextFloat() * entity.getBbHeight();
             double z = entity.getZ();
 
-            level.addParticle(
-                    new StarParticleData(r, g, b),
-                    x, y, z,
-                    0, 0, 0
-            );
+            level.addParticle(new StarParticleData(r, g, b), x, y, z, 0, 0, 0);
         }
     }
 
@@ -177,10 +162,10 @@ public class MoCProxyClient extends MoCProxy {
         double var2 = entity.level().getRandom().nextGaussian() * 0.02D;
         double var4 = entity.level().getRandom().nextGaussian() * 0.02D;
         double var6 = entity.level().getRandom().nextGaussian() * 0.02D;
-        mc.level.addParticle(ParticleTypes.LAVA, 
-            entity.getX() + entity.level().getRandom().nextFloat() * entity.getBbWidth() - entity.getBbWidth(), 
-            entity.getY() + 0.5D + entity.level().getRandom().nextFloat() * entity.getBbHeight(), 
-            entity.getZ() + entity.level().getRandom().nextFloat() * entity.getBbWidth() - entity.getBbWidth(), 
+        mc.level.addParticle(ParticleTypes.LAVA,
+            entity.getX() + entity.level().getRandom().nextFloat() * entity.getBbWidth() - entity.getBbWidth(),
+            entity.getY() + 0.5D + entity.level().getRandom().nextFloat() * entity.getBbHeight(),
+            entity.getZ() + entity.level().getRandom().nextFloat() * entity.getBbWidth() - entity.getBbWidth(),
             var2, var4, var6);
     }
 
@@ -190,8 +175,6 @@ public class MoCProxyClient extends MoCProxy {
         if (densityInt == 0 || !(entity.level() instanceof ClientLevel)) return;
 
         ClientLevel level = (ClientLevel) entity.level();
-
-        // Get colors from horse entity
         float r = entity.colorFX(1, entity.getTypeMoC());
         float g = entity.colorFX(2, entity.getTypeMoC());
         float b = entity.colorFX(3, entity.getTypeMoC());
@@ -206,11 +189,7 @@ public class MoCProxyClient extends MoCProxy {
             double speedY = (level.getRandom().nextFloat() - 0.5D) * 0.5D;
             double speedZ = level.getRandom().nextFloat() * 2.0F * sign;
 
-            level.addParticle(
-                    new VanishParticleData(r, g, b, false), // Using horse's custom RGB
-                    newPosX, newPosY, newPosZ,
-                    speedX, speedY, speedZ
-            );
+            level.addParticle(new VanishParticleData(r, g, b, false), newPosX, newPosY, newPosZ, speedX, speedY, speedZ);
         }
     }
 
@@ -220,8 +199,6 @@ public class MoCProxyClient extends MoCProxy {
         if (densityInt == 0 || !(entity.level() instanceof ClientLevel)) return;
 
         ClientLevel level = (ClientLevel) entity.level();
-
-        // Get colors from horse entity
         float r = entity.colorFX(1, entity.getTypeMoC());
         float g = entity.colorFX(2, entity.getTypeMoC());
         float b = entity.colorFX(3, entity.getTypeMoC());
@@ -236,11 +213,7 @@ public class MoCProxyClient extends MoCProxy {
             double speedY = (level.getRandom().nextFloat() - 0.5D) * 0.5D;
             double speedZ = level.getRandom().nextFloat() * 2.0F * sign;
 
-            level.addParticle(
-                    new VanishParticleData(r, g, b, false),
-                    newPosX, newPosY, newPosZ,
-                    speedX, speedY, speedZ
-            );
+            level.addParticle(new VanishParticleData(r, g, b, false), newPosX, newPosY, newPosZ, speedX, speedY, speedZ);
         }
     }
 
@@ -250,8 +223,6 @@ public class MoCProxyClient extends MoCProxy {
         if (densityInt == 0 || !(entity.level() instanceof ClientLevel)) return;
 
         ClientLevel level = (ClientLevel) entity.level();
-
-        // Get colors from golem entity
         float r = entity.colorFX(1);
         float g = entity.colorFX(2);
         float b = entity.colorFX(3);
@@ -276,7 +247,6 @@ public class MoCProxyClient extends MoCProxy {
         if (densityInt == 0 || !(entity.level() instanceof ClientLevel)) return;
 
         ClientLevel level = (ClientLevel) entity.level();
-        
         for (int var6 = 0; var6 < (densityInt * 10); ++var6) {
             double newPosX = ((float) entity.getX() + level.getRandom().nextFloat());
             double newPosY = 0.3D + ((float) entity.getY() + level.getRandom().nextFloat());
@@ -285,13 +255,7 @@ public class MoCProxyClient extends MoCProxy {
             double speedY = (level.getRandom().nextFloat() - 0.5D) * 0.5D;
             double speedX = level.getRandom().nextFloat() * 2.0F * var19;
             double speedZ = level.getRandom().nextFloat() * 2.0F * var19;
-
-            // Use a spell particle instead of custom particle for now
-            level.addParticle(
-                ParticleTypes.ENCHANT,
-                newPosX, newPosY, newPosZ,
-                speedX, speedY, speedZ
-            );
+            level.addParticle(ParticleTypes.ENCHANT, newPosX, newPosY, newPosZ, speedX, speedY, speedZ);
         }
     }
 
@@ -301,7 +265,6 @@ public class MoCProxyClient extends MoCProxy {
         if (densityInt == 0 || !(entity.level() instanceof ClientLevel)) return;
 
         ClientLevel level = (ClientLevel) entity.level();
-        
         for (int var6 = 0; var6 < (densityInt * 50); ++var6) {
             double newPosX = ((float) entity.getX() + level.getRandom().nextFloat());
             double newPosY = 0.7D + ((float) entity.getY() + level.getRandom().nextFloat());
@@ -310,13 +273,7 @@ public class MoCProxyClient extends MoCProxy {
             double speedY = (level.getRandom().nextFloat() - 0.5D) * 0.5D;
             double speedX = level.getRandom().nextFloat() * 2.0F * var19;
             double speedZ = level.getRandom().nextFloat() * 2.0F * var19;
-
-            // Use VanishParticleData
-            level.addParticle(
-                new VanishParticleData(1.0F, 1.0F, 1.0F, false),
-                newPosX, newPosY, newPosZ,
-                speedX, speedY, speedZ
-            );
+            level.addParticle(new VanishParticleData(1.0F, 1.0F, 1.0F, false), newPosX, newPosY, newPosZ, speedX, speedY, speedZ);
         }
     }
 
