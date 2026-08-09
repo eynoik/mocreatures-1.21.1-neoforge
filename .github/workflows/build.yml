@@ -58,7 +58,7 @@ jobs:
 
           if ! git diff --cached --quiet; then
             git commit -m "Unpack Mo Creatures 1.21.1 NeoForge port source"
-            git push origin HEAD:main
+            git push origin "HEAD:${GITHUB_REF_NAME}"
           fi
 
           echo "PORT_ROOT=." >> "$GITHUB_ENV"
@@ -73,6 +73,21 @@ jobs:
           python3 tools/port_fixes_stage4.py
           python3 tools/port_fixes_stage5.py
           python3 tools/port_fixes_stage6.py
+
+      - name: Persist patched source
+        if: startsWith(github.ref, 'refs/heads/agent/')
+        shell: bash
+        run: |
+          set -euxo pipefail
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add src/main/java src/main/resources tools build.gradle gradle.properties settings.gradle
+          if ! git diff --cached --quiet; then
+            git commit -m "Materialize NeoForge 1.21.1 port fixes"
+            git push origin "HEAD:${GITHUB_REF_NAME}"
+          else
+            echo "Port fixes are already materialized."
+          fi
 
       - name: Snapshot patched source
         shell: bash
