@@ -35,7 +35,7 @@
                 "type": "minecraft:not",
                 "predicate": {
                   "type": "minecraft:matching_blocks",
-                  "blocks": ["minecraft:tall_grass", "minecraft:grass"]
+                  "blocks": ["minecraft:tall_grass", "minecraft:short_grass"]
                 }
               }
             ]
@@ -44,4 +44,4 @@
       ]
     }
   }
-} 
+}
