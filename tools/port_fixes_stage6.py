@@ -114,4 +114,19 @@ if 'private static MoCProxy createPhysicalSideProxy()' not in s:
     s = s.replace(marker, helper + marker, 1)
 write(rel, s)
 
-print('Applied stage6 compile and dedicated-server dist fixes')
+# The WyvernDimensionHandler currently contains no active @SubscribeEvent methods (all are commented out).
+# Registering such a class is an error on the 1.21.1 NeoForge event bus, so keep it dormant until hooks are restored.
+rel = 'drzhark/mocreatures/MoCreatures.java'
+s = read(rel)
+s = s.replace('import drzhark.mocreatures.event.MoCWyvernDimensionHandler;\n', '')
+s = s.replace('        // Register the Wyvern dimension handler\n        NeoForge.EVENT_BUS.register(MoCWyvernDimensionHandler.class);\n',
+              '        // Wyvern dimension handler is currently dormant; its legacy event hooks are commented out.\n')
+write(rel, s)
+
+rel = 'drzhark/mocreatures/event/MoCWyvernDimensionHandler.java'
+s = read(rel)
+s = s.replace('@EventBusSubscriber(modid = MoCConstants.MOD_ID)\n', '')
+s = s.replace('import net.neoforged.fml.common.EventBusSubscriber;\n', '')
+write(rel, s)
+
+print('Applied stage6 compile and dedicated-server runtime fixes')
