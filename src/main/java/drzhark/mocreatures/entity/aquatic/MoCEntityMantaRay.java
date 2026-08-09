@@ -49,8 +49,6 @@ public class MoCEntityMantaRay extends MoCEntityRay {
     public boolean isMantaRay() {
         return true;
     }
-
-    @Override
     protected float getStandingEyeHeight(Pose poseIn, EntityDimensions sizeIn) {
         return this.getBbHeight() * 0.5875F;
     }

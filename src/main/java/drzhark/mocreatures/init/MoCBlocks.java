@@ -1,5 +1,6 @@
 package drzhark.mocreatures.init;
 
+import net.minecraft.core.registries.Registries;
 import drzhark.mocreatures.MoCConstants;
 import drzhark.mocreatures.block.*;
 import net.minecraft.client.renderer.ItemBlockRenderTypes;
@@ -13,18 +14,17 @@ import net.neoforged.api.distmarker.Dist;
 import net.neoforged.api.distmarker.OnlyIn;
 import net.neoforged.bus.api.IEventBus;
 import net.neoforged.bus.api.SubscribeEvent;
-import net.neoforged.fml.common.Mod;
+import net.neoforged.fml.common.EventBusSubscriber;
 import net.neoforged.fml.event.lifecycle.FMLClientSetupEvent;
 import net.neoforged.neoforge.registries.DeferredRegister;
-import net.neoforged.neoforge.registries.ForgeRegistries;
 
 import java.util.function.Supplier;
 
-@Mod.EventBusSubscriber(modid = MoCConstants.MOD_ID, bus = Mod.EventBusSubscriber.Bus.MOD)
+@EventBusSubscriber(modid = MoCConstants.MOD_ID, bus = EventBusSubscriber.Bus.MOD)
 public class MoCBlocks {
 
-    public static final DeferredRegister<Block> BLOCKS = DeferredRegister.create(ForgeRegistries.BLOCKS, MoCConstants.MOD_ID);
-    public static final DeferredRegister<Item> ITEMS = DeferredRegister.create(ForgeRegistries.ITEMS, MoCConstants.MOD_ID);
+    public static final DeferredRegister<Block> BLOCKS = DeferredRegister.create(Registries.BLOCK, MoCConstants.MOD_ID);
+    public static final DeferredRegister<Item> ITEMS = DeferredRegister.create(Registries.ITEM, MoCConstants.MOD_ID);
 
     public static final Supplier<Block> ancientSilverBlock = register("ancient_silver_block", () ->
             new MoCBlockMetal(BlockBehaviour.Properties.of().strength(3.0F, 10.0F).mapColor(MapColor.METAL)));
@@ -122,7 +122,7 @@ public class MoCBlocks {
     }
 
     @OnlyIn(Dist.CLIENT)
-    @Mod.EventBusSubscriber(value = Dist.CLIENT, modid = MoCConstants.MOD_ID, bus = Mod.EventBusSubscriber.Bus.MOD)
+    @EventBusSubscriber(value = Dist.CLIENT, modid = MoCConstants.MOD_ID, bus = EventBusSubscriber.Bus.MOD)
     public static class ClientEvents {
         @SubscribeEvent
         public static void registerRenderLayers(FMLClientSetupEvent event) {

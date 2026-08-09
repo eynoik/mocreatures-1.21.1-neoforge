@@ -369,10 +369,6 @@ public abstract class MoCEntityAnimal extends Animal implements IMoCEntity {
         return false;
     }
 
-    @Override
-    public boolean canBreatheUnderwater() {
-        return isAmphibian();
-    }
 
     public ItemEntity getClosestItem(Entity entity, double d, Ingredient... items) {
         double closestDistSq = -1D;
@@ -765,8 +761,7 @@ public void faceLocation(double x, double y, double z, float maxTurn) {
                 (float) this.getAttributeValue(Attributes.ATTACK_DAMAGE)
         );
         if (flag) {
-            this.doEnchantDamageEffects(this, entityIn);
-        }
+}
         return flag;
     }
 
@@ -779,11 +774,8 @@ public void faceLocation(double x, double y, double z, float maxTurn) {
     }
 
     @Override
-    public boolean canBeLeashed(Player player) {
-        if (!this.level().isClientSide && !MoCTools.isThisPlayerAnOP(player) && this.getIsTamed() && !player.getUUID().equals(this.getOwnerId())) {
-            return false;
-        }
-        return super.canBeLeashed(player);
+    public boolean canBeLeashed() {
+        return super.canBeLeashed();
     }
 
     @Override
@@ -1033,5 +1025,10 @@ public void faceLocation(double x, double y, double z, float maxTurn) {
         }
         
         return willSpawn;
+    }
+
+    @Override
+    public boolean isFood(ItemStack stack) {
+        return false;
     }
 }

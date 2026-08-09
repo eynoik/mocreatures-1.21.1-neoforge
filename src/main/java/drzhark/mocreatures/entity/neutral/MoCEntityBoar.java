@@ -127,8 +127,6 @@ public class MoCEntityBoar extends MoCEntityAnimal {
         }
         return getMoCAge() * 0.01F;
     }
-
-    @Override
     protected float getStandingEyeHeight(Pose poseIn, EntityDimensions sizeIn) {
         return this.getBbHeight() * 0.75F;
     }

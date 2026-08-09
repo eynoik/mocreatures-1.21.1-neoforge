@@ -192,14 +192,12 @@ public class MoCEntityWWolf extends MoCEntityMob {
             double dist = 0.1D;
             double newPosX = this.getX() + (dist * Math.sin(this.getYRot() / 57.29578F));
             double newPosZ = this.getZ() - (dist * Math.cos(this.getYRot() / 57.29578F));
-            double newPosY = this.getY() + this.getPassengersRidingOffset() + passenger.getMyRidingOffset();
+            double newPosY = this.getY() + this.getPassengersRidingOffset() + 0.0D;
             
             moveFunction.accept(passenger, newPosX, newPosY, newPosZ);
             passenger.setYRot(this.getYRot());
         }
     }
-
-    @Override
     public double getPassengersRidingOffset() {
         return (this.getBbHeight() * 0.75D) - 0.1D;
     }
@@ -217,8 +215,6 @@ public class MoCEntityWWolf extends MoCEntityMob {
             }
         }
     }
-
-    @Override
     protected float getStandingEyeHeight(Pose poseIn, EntityDimensions sizeIn) {
         return this.getBbHeight() * 0.945F;
     }
@@ -239,8 +235,6 @@ public class MoCEntityWWolf extends MoCEntityMob {
                 return super.canContinueToUse();
             }
         }
-
-        @Override
         protected double getAttackReachSqr(LivingEntity attackTarget) {
             return 4.0F + attackTarget.getBbWidth();
         }

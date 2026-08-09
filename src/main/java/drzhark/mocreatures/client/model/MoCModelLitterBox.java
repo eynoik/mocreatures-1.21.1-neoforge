@@ -175,26 +175,17 @@ public class MoCModelLitterBox<T extends MoCEntityLitterBox> extends EntityModel
      * Render all parts. If `usedlitter == true`, draw LitterUsed; else draw Litter.
      */
     @Override
-    public void renderToBuffer(
-            PoseStack        poseStack,
-            VertexConsumer   buffer,
-            int              packedLight,
-            int              packedOverlay,
-            float            red,
-            float            green,
-            float            blue,
-            float            alpha
-    ) {
-        this.Table1.render(poseStack, buffer, packedLight, packedOverlay, color);
-        this.Table3.render(poseStack, buffer, packedLight, packedOverlay, color);
-        this.Table2.render(poseStack, buffer, packedLight, packedOverlay, color);
-        this.Table4.render(poseStack, buffer, packedLight, packedOverlay, color);
-        this.Bottom.render(poseStack, buffer, packedLight, packedOverlay, color);
+    public void renderToBuffer(PoseStack poseStack, VertexConsumer buffer, int packedLight, int packedOverlay, int packedColor) {
+        this.Table1.render(poseStack, buffer, packedLight, packedOverlay, packedColor);
+        this.Table3.render(poseStack, buffer, packedLight, packedOverlay, packedColor);
+        this.Table2.render(poseStack, buffer, packedLight, packedOverlay, packedColor);
+        this.Table4.render(poseStack, buffer, packedLight, packedOverlay, packedColor);
+        this.Bottom.render(poseStack, buffer, packedLight, packedOverlay, packedColor);
 
         if (this.usedlitter) {
-            this.LitterUsed.render(poseStack, buffer, packedLight, packedOverlay, color);
+            this.LitterUsed.render(poseStack, buffer, packedLight, packedOverlay, packedColor);
         } else {
-            this.Litter.render(poseStack, buffer, packedLight, packedOverlay, color);
+            this.Litter.render(poseStack, buffer, packedLight, packedOverlay, packedColor);
         }
     }
 }

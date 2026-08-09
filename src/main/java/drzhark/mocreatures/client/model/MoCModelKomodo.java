@@ -455,27 +455,20 @@ public class MoCModelKomodo<T extends MoCEntityKomodo> extends EntityModel<T> {
     }
 
     @Override
-    public void renderToBuffer(PoseStack poseStack,
-                               VertexConsumer buffer,
-                               int packedLight,
-                               int packedOverlay,
-                               float red,
-                               float green,
-                               float blue,
-                               float alpha) {
-        tail.render(poseStack, buffer, packedLight, packedOverlay, color);
-        head.render(poseStack, buffer, packedLight, packedOverlay, color);
-        chest.render(poseStack, buffer, packedLight, packedOverlay, color);
-        legFrontLeft.render(poseStack, buffer, packedLight, packedOverlay, color);
-        legBackLeft.render(poseStack, buffer, packedLight, packedOverlay, color);
-        legFrontRight.render(poseStack, buffer, packedLight, packedOverlay, color);
-        legBackRight.render(poseStack, buffer, packedLight, packedOverlay, color);
-        abdomen.render(poseStack, buffer, packedLight, packedOverlay, color);
+    public void renderToBuffer(PoseStack poseStack, VertexConsumer buffer, int packedLight, int packedOverlay, int packedColor) {
+        tail.render(poseStack, buffer, packedLight, packedOverlay, packedColor);
+        head.render(poseStack, buffer, packedLight, packedOverlay, packedColor);
+        chest.render(poseStack, buffer, packedLight, packedOverlay, packedColor);
+        legFrontLeft.render(poseStack, buffer, packedLight, packedOverlay, packedColor);
+        legBackLeft.render(poseStack, buffer, packedLight, packedOverlay, packedColor);
+        legFrontRight.render(poseStack, buffer, packedLight, packedOverlay, packedColor);
+        legBackRight.render(poseStack, buffer, packedLight, packedOverlay, packedColor);
+        abdomen.render(poseStack, buffer, packedLight, packedOverlay, packedColor);
 
         if (isRideable) {
-            saddleA.render(poseStack, buffer, packedLight, packedOverlay, color);
-            saddleC.render(poseStack, buffer, packedLight, packedOverlay, color);
-            saddleB.render(poseStack, buffer, packedLight, packedOverlay, color);
+            saddleA.render(poseStack, buffer, packedLight, packedOverlay, packedColor);
+            saddleC.render(poseStack, buffer, packedLight, packedOverlay, packedColor);
+            saddleB.render(poseStack, buffer, packedLight, packedOverlay, packedColor);
         }
     }
 }

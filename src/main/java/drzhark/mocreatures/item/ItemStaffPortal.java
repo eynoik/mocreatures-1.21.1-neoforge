@@ -297,8 +297,6 @@ public class ItemStaffPortal extends MoCItem {
         nbt.putInt("portalPosZ", this.portalPosZ);
         nbt.putString("portalDimension", this.portalDimension.location().toString());
     }
-
-    @Override
     public boolean canApplyAtEnchantingTable(ItemStack stack, Enchantment enchantment) {
         return false;
     }

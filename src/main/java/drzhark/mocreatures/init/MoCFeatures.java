@@ -3,6 +3,7 @@
  */
 package drzhark.mocreatures.init;
 
+import net.minecraft.core.registries.Registries;
 import java.util.function.Supplier;
 
 import drzhark.mocreatures.MoCConstants;
@@ -15,14 +16,13 @@ import net.minecraft.world.level.levelgen.feature.configurations.NoneFeatureConf
 import net.neoforged.bus.api.IEventBus;
 import net.neoforged.fml.event.lifecycle.FMLCommonSetupEvent;
 import net.neoforged.neoforge.registries.DeferredRegister;
-import net.neoforged.neoforge.registries.ForgeRegistries;
 import net.neoforged.bus.api.SubscribeEvent;
-import net.neoforged.fml.common.Mod;
+import net.neoforged.fml.common.EventBusSubscriber;
 
-@Mod.EventBusSubscriber(modid = MoCConstants.MOD_ID, bus = Mod.EventBusSubscriber.Bus.MOD)
+@EventBusSubscriber(modid = MoCConstants.MOD_ID, bus = EventBusSubscriber.Bus.MOD)
 public class MoCFeatures {
 
-    public static final DeferredRegister<Feature<?>> FEATURES = DeferredRegister.create(ForgeRegistries.FEATURES, MoCConstants.MOD_ID);
+    public static final DeferredRegister<Feature<?>> FEATURES = DeferredRegister.create(Registries.FEATURE, MoCConstants.MOD_ID);
 
     public static final Supplier<Feature<NoneFeatureConfiguration>> FIRESTONE_CLUSTER = 
             FEATURES.register("firestone_cluster", 

@@ -24,12 +24,12 @@ public class MoCItemSword extends SwordItem {
     private final int specialWeaponType;
 
     public MoCItemSword(Item.Properties properties, Tier material) {
-        super(material, 3, -2.4F, properties);
+        super(material, properties.attributes(SwordItem.createAttributes(material, 3, -2.4F)));
         this.specialWeaponType = 0;
     }
 
     public MoCItemSword(Item.Properties properties, Tier material, int damageType) {
-        super(material, 3, -2.4F, properties);
+        super(material, properties.attributes(SwordItem.createAttributes(material, 3, -2.4F)));
         this.specialWeaponType = damageType;
     }
 

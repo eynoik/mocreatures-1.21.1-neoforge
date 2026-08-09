@@ -140,17 +140,15 @@ public class MoCEntityMouse extends MoCEntityAnimal {
     public boolean causeFallDamage(float distance, float damageMultiplier, DamageSource source) {
         return false;
     }
-
-    @Override
     public double getMyRidingOffset() {
         if (this.getVehicle() instanceof Player && this.getVehicle() == MoCreatures.proxy.getPlayer() && this.level().isClientSide()) {
-            return (super.getMyRidingOffset() - 0.7F);
+            return (0.0D - 0.7F);
         }
 
         if ((this.getVehicle() instanceof Player) && this.level().isClientSide()) {
-            return (super.getMyRidingOffset() - 0.1F);
+            return (0.0D - 0.1F);
         } else {
-            return super.getMyRidingOffset();
+            return 0.0D;
         }
     }
 
@@ -210,8 +208,6 @@ public class MoCEntityMouse extends MoCEntityAnimal {
     public Fallsounds getFallSounds() {
         return new Fallsounds(SoundEvents.EMPTY, SoundEvents.EMPTY);
     }
-
-    @Override
     protected float getStandingEyeHeight(Pose poseIn, EntityDimensions sizeIn) {
         return this.getBbHeight() * 0.575F;
     }

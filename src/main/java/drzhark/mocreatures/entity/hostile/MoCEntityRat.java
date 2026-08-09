@@ -203,8 +203,6 @@ public class MoCEntityRat extends MoCEntityMob {
     public void setBesideClimbableBlock(boolean climbing) {
         this.entityData.set(CLIMBING, climbing);
     }
-
-    @Override
     protected float getStandingEyeHeight(Pose poseIn, EntityDimensions sizeIn) {
         return this.getBbHeight() * 0.5F;
     }
@@ -225,8 +223,6 @@ public class MoCEntityRat extends MoCEntityMob {
                 return super.canContinueToUse();
             }
         }
-
-        @Override
         protected double getAttackReachSqr(LivingEntity attackTarget) {
             return 4.0F + attackTarget.getBbWidth();
         }

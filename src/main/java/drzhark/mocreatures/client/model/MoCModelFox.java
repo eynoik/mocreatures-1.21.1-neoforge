@@ -78,25 +78,16 @@ public class MoCModelFox<T extends MoCEntityFox> extends EntityModel<T> {
     }
 
     @Override
-    public void renderToBuffer(
-            PoseStack poseStack,
-            VertexConsumer vertexConsumer,
-            int packedLight,
-            int packedOverlay,
-            float red,
-            float green,
-            float blue,
-            float alpha
-    ) {
-        this.body.render(poseStack, vertexConsumer, packedLight, packedOverlay, color);
-        this.leg1.render(poseStack, vertexConsumer, packedLight, packedOverlay, color);
-        this.leg2.render(poseStack, vertexConsumer, packedLight, packedOverlay, color);
-        this.leg3.render(poseStack, vertexConsumer, packedLight, packedOverlay, color);
-        this.leg4.render(poseStack, vertexConsumer, packedLight, packedOverlay, color);
-        this.head.render(poseStack, vertexConsumer, packedLight, packedOverlay, color);
-        this.snout.render(poseStack, vertexConsumer, packedLight, packedOverlay, color);
-        this.tail.render(poseStack, vertexConsumer, packedLight, packedOverlay, color);
-        this.ears.render(poseStack, vertexConsumer, packedLight, packedOverlay, color);
+    public void renderToBuffer(PoseStack poseStack, VertexConsumer vertexConsumer, int packedLight, int packedOverlay, int packedColor) {
+        this.body.render(poseStack, vertexConsumer, packedLight, packedOverlay, packedColor);
+        this.leg1.render(poseStack, vertexConsumer, packedLight, packedOverlay, packedColor);
+        this.leg2.render(poseStack, vertexConsumer, packedLight, packedOverlay, packedColor);
+        this.leg3.render(poseStack, vertexConsumer, packedLight, packedOverlay, packedColor);
+        this.leg4.render(poseStack, vertexConsumer, packedLight, packedOverlay, packedColor);
+        this.head.render(poseStack, vertexConsumer, packedLight, packedOverlay, packedColor);
+        this.snout.render(poseStack, vertexConsumer, packedLight, packedOverlay, packedColor);
+        this.tail.render(poseStack, vertexConsumer, packedLight, packedOverlay, packedColor);
+        this.ears.render(poseStack, vertexConsumer, packedLight, packedOverlay, packedColor);
     }
 
     /**

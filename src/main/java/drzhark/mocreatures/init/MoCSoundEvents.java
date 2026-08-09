@@ -3,6 +3,7 @@
  */
 package drzhark.mocreatures.init;
 
+import net.minecraft.core.registries.Registries;
 import java.util.function.Supplier;
 
 import drzhark.mocreatures.MoCConstants;
@@ -10,10 +11,9 @@ import net.minecraft.resources.ResourceLocation;
 import net.minecraft.sounds.SoundEvent;
 
 import net.neoforged.neoforge.registries.DeferredRegister;
-import net.neoforged.neoforge.registries.ForgeRegistries;
 
 public class MoCSoundEvents {
-    public static final DeferredRegister<SoundEvent> SOUND_DEFERRED = DeferredRegister.create(ForgeRegistries.SOUND_EVENTS, MoCConstants.MOD_ID);
+    public static final DeferredRegister<SoundEvent> SOUND_DEFERRED = DeferredRegister.create(Registries.SOUND_EVENT, MoCConstants.MOD_ID);
     public static final Supplier<SoundEvent> ENTITY_BEAR_AMBIENT = createSoundEvent("beargrunt");
     public static final Supplier<SoundEvent> ENTITY_BEAR_DEATH = createSoundEvent("beardeath");
     public static final Supplier<SoundEvent> ENTITY_BEAR_HURT = createSoundEvent("bearhurt");

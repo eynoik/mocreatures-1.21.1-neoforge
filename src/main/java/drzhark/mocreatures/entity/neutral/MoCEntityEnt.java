@@ -39,14 +39,14 @@ import java.util.List;
 
 public class MoCEntityEnt extends MoCEntityAnimal {
 
-    private static final Block[] tallgrass = new Block[]{Blocks.GRASS, Blocks.FERN};
+    private static final Block[] tallgrass = new Block[]{Blocks.SHORT_GRASS, Blocks.FERN};
     private static final Block[] double_plant = new Block[]{Blocks.SUNFLOWER, Blocks.LILAC, Blocks.ROSE_BUSH, Blocks.PEONY, Blocks.TALL_GRASS, Blocks.LARGE_FERN};
     private static final Block[] red_flower = new Block[]{Blocks.POPPY, Blocks.BLUE_ORCHID, Blocks.ALLIUM, Blocks.AZURE_BLUET, Blocks.RED_TULIP, Blocks.ORANGE_TULIP, Blocks.WHITE_TULIP, Blocks.PINK_TULIP, Blocks.OXEYE_DAISY};
     
     public MoCEntityEnt(EntityType<? extends MoCEntityEnt> type, Level world) {
         super(type, world);
         //setSize(1.4F, 7F);
-        setMaxUpStep(2F);
+        this.getAttribute(Attributes.STEP_HEIGHT).setBaseValue(2F);
         this.xpReward = 10;
     }
 
@@ -264,7 +264,7 @@ public class MoCEntityEnt extends MoCEntityAnimal {
             case 19:
                 return Blocks.ACACIA_SAPLING.defaultBlockState();
             default:
-                return Blocks.GRASS.defaultBlockState();
+                return Blocks.SHORT_GRASS.defaultBlockState();
         }
     }
 
@@ -279,11 +279,8 @@ public class MoCEntityEnt extends MoCEntityAnimal {
             super.push(entityIn);
         }
     }
-
-    @Override
     public void doEnchantDamageEffects(LivingEntity entityLivingBaseIn, Entity entityIn) {
-        super.doEnchantDamageEffects(entityLivingBaseIn, entityIn);
-    }
+}
 
     @Override
     public boolean isNotScared() {
@@ -294,8 +291,6 @@ public class MoCEntityEnt extends MoCEntityAnimal {
     protected boolean isImmobile() {
         return false;
     }
-
-    @Override
     protected float getStandingEyeHeight(Pose poseIn, EntityDimensions sizeIn) {
         return this.getBbHeight() * 0.9F;
     }

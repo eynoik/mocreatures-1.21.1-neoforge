@@ -120,8 +120,6 @@ public class MoCEntityLiger extends MoCEntityBigCat {
     public boolean isFlyer() {
         return this.getTypeMoC() == 2;
     }
-
-    @Override
     protected float getStandingEyeHeight(Pose poseIn, EntityDimensions sizeIn) {
         return this.getBbHeight() * 0.92F;
     }

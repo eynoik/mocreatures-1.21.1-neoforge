@@ -20,6 +20,7 @@ import drzhark.mocreatures.proxy.MoCProxy;
 import drzhark.mocreatures.proxy.MoCProxyClient;
 import drzhark.mocreatures.registry.MoCPOI;
 import drzhark.mocreatures.world.MoCSpawnBiomeModifier;
+import drzhark.mocreatures.util.MoCArmorMaterial;
 import it.unimi.dsi.fastutil.ints.Int2ObjectOpenHashMap;
 import it.unimi.dsi.fastutil.objects.Object2ObjectLinkedOpenHashMap;
 import it.unimi.dsi.fastutil.objects.Object2ObjectOpenHashMap;
@@ -30,7 +31,6 @@ import net.minecraft.world.level.Level;
 import net.neoforged.neoforge.common.NeoForge;
 import net.neoforged.neoforge.common.world.BiomeModifier;
 import net.neoforged.bus.api.IEventBus;
-import net.neoforged.fml.DistExecutor;
 import net.neoforged.fml.common.Mod;
 import net.neoforged.fml.event.lifecycle.FMLCommonSetupEvent;
 
@@ -66,7 +66,7 @@ public class MoCreatures {
         instance = this;
 
         // Register for config events
-        this.proxy = DistExecutor.unsafeRunForDist(() -> MoCProxyClient::new, () -> MoCProxy::new);
+        this.proxy = net.neoforged.fml.loading.FMLEnvironment.dist == net.neoforged.api.distmarker.Dist.CLIENT ? new MoCProxyClient() : new MoCProxy();
         eventBus.addListener(MoCMessageHandler::register);
         eventBus.addListener(this::setup);
         NeoForge.EVENT_BUS.register(new MoCEventHooks());
@@ -138,6 +138,7 @@ public class MoCreatures {
         MoCBlocks.ITEMS.register(modBus);
         MoCEntities.ENTITY_TYPES.register(modBus);
         MoCSpawnEggs.SPAWN_EGGS.register(modBus);
+        MoCArmorMaterial.ARMOR_MATERIALS.register(modBus);
         MoCItems.ITEMS.register(modBus);
         MoCFeatures.FEATURES.register(modBus);
         MoCCreativeTabs.register(modBus);

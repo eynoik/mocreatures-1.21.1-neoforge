@@ -2,97 +2,69 @@ package drzhark.mocreatures.util;
 
 import drzhark.mocreatures.MoCConstants;
 import drzhark.mocreatures.init.MoCItems;
+import net.minecraft.Util;
+import net.minecraft.core.Holder;
+import net.minecraft.core.registries.Registries;
+import net.minecraft.resources.ResourceLocation;
 import net.minecraft.sounds.SoundEvent;
 import net.minecraft.sounds.SoundEvents;
-import net.minecraft.util.LazyLoadedValue;
+import net.minecraft.world.item.ArmorItem;
 import net.minecraft.world.item.ArmorMaterial;
-import net.minecraft.world.item.ArmorItem.Type;
 import net.minecraft.world.item.crafting.Ingredient;
+import net.neoforged.neoforge.registries.DeferredRegister;
 
 import java.util.EnumMap;
+import java.util.List;
 import java.util.Map;
 import java.util.function.Supplier;
 
-public enum MoCArmorMaterial implements ArmorMaterial {
+public final class MoCArmorMaterial {
+    public static final DeferredRegister<ArmorMaterial> ARMOR_MATERIALS =
+            DeferredRegister.create(Registries.ARMOR_MATERIAL, MoCConstants.MOD_ID);
 
-    CROC("croc", 10, baseStats(1, 3, 4, 1), 17, SoundEvents.ARMOR_EQUIP_LEATHER, 1.0F, 0.0F, () -> Ingredient.of(MoCItems.REPTILE_HIDE.get())),
-    FUR("fur", 4, baseStats(1, 2, 2, 1), 15, SoundEvents.ARMOR_EQUIP_LEATHER, 0.0F, 0.0F, () -> Ingredient.of(MoCItems.FUR.get())),
-    HIDE("hide", 8, baseStats(1, 3, 3, 1), 18, SoundEvents.ARMOR_EQUIP_LEATHER, 0.0F, 0.0F, () -> Ingredient.of(MoCItems.ANIMALHIDE.get())),
-    SCORPD("scorpd", 18, baseStats(2, 6, 7, 2), 16, SoundEvents.ARMOR_EQUIP_GOLD, 2.0F, 0.0F, () -> Ingredient.of(MoCItems.CHITIN.get())),
-    SCORPF("scorpf", 18, baseStats(2, 6, 7, 2), 16, SoundEvents.ARMOR_EQUIP_GOLD, 2.0F, 0.0F, () -> Ingredient.of(MoCItems.CHITINFROST.get())),
-    SCORPN("scorpn", 18, baseStats(2, 6, 7, 2), 16, SoundEvents.ARMOR_EQUIP_GOLD, 2.0F, 0.0F, () -> Ingredient.of(MoCItems.CHITINNETHER.get())),
-    SCORPC("scorpc", 18, baseStats(2, 6, 7, 2), 16, SoundEvents.ARMOR_EQUIP_GOLD, 2.0F, 0.0F, () -> Ingredient.of(MoCItems.CHITINCAVE.get())),
-    SCORPU("scorpu", 18, baseStats(2, 6, 7, 2), 16, SoundEvents.ARMOR_EQUIP_GOLD, 2.0F, 0.0F, () -> Ingredient.of(MoCItems.CHITINUNDEAD.get())),
-    SILVER("silver", 15, baseStats(2, 6, 5, 2), 22, SoundEvents.ARMOR_EQUIP_GOLD, 1.5F, 0.0F, () -> Ingredient.of(MoCItems.ANCIENTSILVERINGOT.get()));
+    public static final Holder<ArmorMaterial> CROC = register("croc", stats(1, 3, 4, 1), 17,
+            SoundEvents.ARMOR_EQUIP_LEATHER, () -> Ingredient.of(MoCItems.REPTILE_HIDE.get()), 1.0F, 0.0F);
+    public static final Holder<ArmorMaterial> FUR = register("fur", stats(1, 2, 2, 1), 15,
+            SoundEvents.ARMOR_EQUIP_LEATHER, () -> Ingredient.of(MoCItems.FUR.get()), 0.0F, 0.0F);
+    public static final Holder<ArmorMaterial> HIDE = register("hide", stats(1, 3, 3, 1), 18,
+            SoundEvents.ARMOR_EQUIP_LEATHER, () -> Ingredient.of(MoCItems.ANIMALHIDE.get()), 0.0F, 0.0F);
+    public static final Holder<ArmorMaterial> SCORPD = register("scorpd", stats(2, 6, 7, 2), 16,
+            SoundEvents.ARMOR_EQUIP_GOLD, () -> Ingredient.of(MoCItems.CHITIN.get()), 2.0F, 0.0F);
+    public static final Holder<ArmorMaterial> SCORPF = register("scorpf", stats(2, 6, 7, 2), 16,
+            SoundEvents.ARMOR_EQUIP_GOLD, () -> Ingredient.of(MoCItems.CHITINFROST.get()), 2.0F, 0.0F);
+    public static final Holder<ArmorMaterial> SCORPN = register("scorpn", stats(2, 6, 7, 2), 16,
+            SoundEvents.ARMOR_EQUIP_GOLD, () -> Ingredient.of(MoCItems.CHITINNETHER.get()), 2.0F, 0.0F);
+    public static final Holder<ArmorMaterial> SCORPC = register("scorpc", stats(2, 6, 7, 2), 16,
+            SoundEvents.ARMOR_EQUIP_GOLD, () -> Ingredient.of(MoCItems.CHITINCAVE.get()), 2.0F, 0.0F);
+    public static final Holder<ArmorMaterial> SCORPU = register("scorpu", stats(2, 6, 7, 2), 16,
+            SoundEvents.ARMOR_EQUIP_GOLD, () -> Ingredient.of(MoCItems.CHITINUNDEAD.get()), 2.0F, 0.0F);
+    public static final Holder<ArmorMaterial> SILVER = register("silver", stats(2, 6, 5, 2), 22,
+            SoundEvents.ARMOR_EQUIP_GOLD, () -> Ingredient.of(MoCItems.ANCIENTSILVERINGOT.get()), 1.5F, 0.0F);
 
-    private static final int[] BASE_DURABILITIES = new int[]{13, 15, 16, 11};
+    private MoCArmorMaterial() {}
 
-    private final String name;
-    private final int durabilityMultiplier;
-    private final Map<Type, Integer> protection;
-    private final int enchantmentValue;
-    private final SoundEvent equipSound;
-    private final float toughness;
-    private final float knockbackResistance;
-    private final LazyLoadedValue<Ingredient> repairIngredient;
-
-    MoCArmorMaterial(String name, int durabilityMultiplier, Map<Type, Integer> protection, int enchantmentValue, SoundEvent equipSound, float toughness, float knockbackResistance, Supplier<Ingredient> repairIngredient) {
-        this.name = name;
-        this.durabilityMultiplier = durabilityMultiplier;
-        this.protection = protection;
-        this.enchantmentValue = enchantmentValue;
-        this.equipSound = equipSound;
-        this.toughness = toughness;
-        this.knockbackResistance = knockbackResistance;
-        this.repairIngredient = new LazyLoadedValue<>(repairIngredient);
+    private static Holder<ArmorMaterial> register(String name, Map<ArmorItem.Type, Integer> defense,
+                                                   int enchantmentValue, Holder<SoundEvent> equipSound,
+                                                   Supplier<Ingredient> repairIngredient,
+                                                   float toughness, float knockbackResistance) {
+        return ARMOR_MATERIALS.register(name, () -> new ArmorMaterial(
+                defense,
+                enchantmentValue,
+                equipSound,
+                repairIngredient,
+                List.of(new ArmorMaterial.Layer(ResourceLocation.fromNamespaceAndPath(MoCConstants.MOD_ID, name))),
+                toughness,
+                knockbackResistance
+        ));
     }
 
-    @Override
-    public int getDurabilityForType(Type type) {
-        return BASE_DURABILITIES[type.getSlot().getIndex()] * durabilityMultiplier;
-    }
-
-    @Override
-    public int getDefenseForType(Type type) {
-        return protection.getOrDefault(type, 0);
-    }
-
-    @Override
-    public int getEnchantmentValue() {
-        return enchantmentValue;
-    }
-
-    @Override
-    public SoundEvent getEquipSound() {
-        return equipSound;
-    }
-
-    @Override
-    public Ingredient getRepairIngredient() {
-        return repairIngredient.get();
-    }
-
-    @Override
-    public String getName() {
-        return MoCConstants.MOD_ID + ":" + name;
-    }
-
-    @Override
-    public float getToughness() {
-        return toughness;
-    }
-
-    @Override
-    public float getKnockbackResistance() {
-        return knockbackResistance;
-    }
-
-    private static Map<Type, Integer> baseStats(int boots, int leggings, int chestplate, int helmet) {
-        Map<Type, Integer> map = new EnumMap<>(Type.class);
-        map.put(Type.BOOTS, boots);
-        map.put(Type.LEGGINGS, leggings);
-        map.put(Type.CHESTPLATE, chestplate);
-        map.put(Type.HELMET, helmet);
-        return map;
+    private static Map<ArmorItem.Type, Integer> stats(int boots, int leggings, int chestplate, int helmet) {
+        return Util.make(new EnumMap<>(ArmorItem.Type.class), map -> {
+            map.put(ArmorItem.Type.BOOTS, boots);
+            map.put(ArmorItem.Type.LEGGINGS, leggings);
+            map.put(ArmorItem.Type.CHESTPLATE, chestplate);
+            map.put(ArmorItem.Type.HELMET, helmet);
+            map.put(ArmorItem.Type.BODY, chestplate);
+        });
     }
 }

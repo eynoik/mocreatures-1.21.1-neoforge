@@ -411,16 +411,7 @@ public class MoCModelSnake<T extends MoCEntitySnake> extends EntityModel<T> {
      * Main render loop: exact copy of 1.16.5 render method logic
      */
     @Override
-    public void renderToBuffer(
-            PoseStack poseStack,
-            VertexConsumer buffer,
-            int packedLight,
-            int packedOverlay,
-            float red,
-            float green,
-            float blue,
-            float alpha
-    ) {
+    public void renderToBuffer(PoseStack poseStack, VertexConsumer buffer, int packedLight, int packedOverlay, int packedColor) {
         float sidef;
 
         // Exact copy of 1.16.5 wave calculation comments and variables
@@ -504,25 +495,25 @@ public class MoCModelSnake<T extends MoCEntitySnake> extends EntityModel<T> {
             }
 
             // Render this body segment
-            this.bodySnake[i].render(poseStack, buffer, packedLight, packedOverlay, color);
+            this.bodySnake[i].render(poseStack, buffer, packedLight, packedOverlay, packedColor);
 
             // i == 0 ⇒ also render head, nose, teeth, tongue - exact copy of 1.16.5
             if (i == 0) {
-                this.head.render(poseStack, buffer, packedLight, packedOverlay, color);
-                this.nose.render(poseStack, buffer, packedLight, packedOverlay, color);
-                this.lNose.render(poseStack, buffer, packedLight, packedOverlay, color);
-                this.teethUR.render(poseStack, buffer, packedLight, packedOverlay, color);
-                this.teethUL.render(poseStack, buffer, packedLight, packedOverlay, color);
+                this.head.render(poseStack, buffer, packedLight, packedOverlay, packedColor);
+                this.nose.render(poseStack, buffer, packedLight, packedOverlay, packedColor);
+                this.lNose.render(poseStack, buffer, packedLight, packedOverlay, packedColor);
+                this.teethUR.render(poseStack, buffer, packedLight, packedOverlay, packedColor);
+                this.teethUL.render(poseStack, buffer, packedLight, packedOverlay, packedColor);
 
                 // Tongue logic - exact copy of 1.16.5
                 if (this.tongueOff != 0.0F) {
                     if (this.mouthOff != 0.0F || this.tongueOff < 2.0F || this.tongueOff > 7.0F) {
-                        this.tongue1.render(poseStack, buffer, packedLight, packedOverlay, color);
+                        this.tongue1.render(poseStack, buffer, packedLight, packedOverlay, packedColor);
                     } else {
-                        this.tongue.render(poseStack, buffer, packedLight, packedOverlay, color);
+                        this.tongue.render(poseStack, buffer, packedLight, packedOverlay, packedColor);
                     }
                 } else {
-                    this.tongue0.render(poseStack, buffer, packedLight, packedOverlay, color);
+                    this.tongue0.render(poseStack, buffer, packedLight, packedOverlay, packedColor);
                 }
             }
 
@@ -530,29 +521,29 @@ public class MoCModelSnake<T extends MoCEntitySnake> extends EntityModel<T> {
             if (this.typeI == 6 && this.nearPlayer)//cobra
             {
                 if (i == 1) {
-                    this.wing1L.render(poseStack, buffer, packedLight, packedOverlay, color);
-                    this.wing1R.render(poseStack, buffer, packedLight, packedOverlay, color);
+                    this.wing1L.render(poseStack, buffer, packedLight, packedOverlay, packedColor);
+                    this.wing1R.render(poseStack, buffer, packedLight, packedOverlay, packedColor);
                 }
                 if (i == 2) {
-                    this.wing2L.render(poseStack, buffer, packedLight, packedOverlay, color);
-                    this.wing2R.render(poseStack, buffer, packedLight, packedOverlay, color);
+                    this.wing2L.render(poseStack, buffer, packedLight, packedOverlay, packedColor);
+                    this.wing2R.render(poseStack, buffer, packedLight, packedOverlay, packedColor);
                 }
                 if (i == 3) {
-                    this.wing3L.render(poseStack, buffer, packedLight, packedOverlay, color);
-                    this.wing3R.render(poseStack, buffer, packedLight, packedOverlay, color);
+                    this.wing3L.render(poseStack, buffer, packedLight, packedOverlay, packedColor);
+                    this.wing3R.render(poseStack, buffer, packedLight, packedOverlay, packedColor);
                 }
                 if (i == 4) {
-                    this.wing4L.render(poseStack, buffer, packedLight, packedOverlay, color);
-                    this.wing4R.render(poseStack, buffer, packedLight, packedOverlay, color);
+                    this.wing4L.render(poseStack, buffer, packedLight, packedOverlay, packedColor);
+                    this.wing4R.render(poseStack, buffer, packedLight, packedOverlay, packedColor);
                 }
                 if (i == 5) {
-                    this.wing5L.render(poseStack, buffer, packedLight, packedOverlay, color);
-                    this.wing5R.render(poseStack, buffer, packedLight, packedOverlay, color);
+                    this.wing5L.render(poseStack, buffer, packedLight, packedOverlay, packedColor);
+                    this.wing5R.render(poseStack, buffer, packedLight, packedOverlay, packedColor);
                 }
             }
 
             if (i == BODY_PARTS - 1 && this.typeI == 7) {
-                this.tail.render(poseStack, buffer, packedLight, packedOverlay, color);
+                this.tail.render(poseStack, buffer, packedLight, packedOverlay, packedColor);
             }
 
             poseStack.popPose();

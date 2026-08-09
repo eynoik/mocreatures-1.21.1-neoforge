@@ -266,30 +266,21 @@ public class MoCModelMole<T extends MoCEntityMole> extends EntityModel<T> {
      * Render all parts, applying the Y offset before drawing.
      */
     @Override
-    public void renderToBuffer(
-            PoseStack        poseStack,
-            VertexConsumer   buffer,
-            int              packedLight,
-            int              packedOverlay,
-            float            red,
-            float            green,
-            float            blue,
-            float            alpha
-    ) {
+    public void renderToBuffer(PoseStack poseStack, VertexConsumer buffer, int packedLight, int packedOverlay, int packedColor) {
         poseStack.pushPose();
         poseStack.translate(0.0F, this.yOffset, 0.0F);
 
-        this.Nose.render(poseStack, buffer, packedLight, packedOverlay, color);
-        this.Head.render(poseStack, buffer, packedLight, packedOverlay, color);
-        this.Body.render(poseStack, buffer, packedLight, packedOverlay, color);
-        this.Back.render(poseStack, buffer, packedLight, packedOverlay, color);
-        this.Tail.render(poseStack, buffer, packedLight, packedOverlay, color);
-        this.LLeg.render(poseStack, buffer, packedLight, packedOverlay, color);
-        this.LFingers.render(poseStack, buffer, packedLight, packedOverlay, color);
-        this.RLeg.render(poseStack, buffer, packedLight, packedOverlay, color);
-        this.RFingers.render(poseStack, buffer, packedLight, packedOverlay, color);
-        this.LRearLeg.render(poseStack, buffer, packedLight, packedOverlay, color);
-        this.RRearLeg.render(poseStack, buffer, packedLight, packedOverlay, color);
+        this.Nose.render(poseStack, buffer, packedLight, packedOverlay, packedColor);
+        this.Head.render(poseStack, buffer, packedLight, packedOverlay, packedColor);
+        this.Body.render(poseStack, buffer, packedLight, packedOverlay, packedColor);
+        this.Back.render(poseStack, buffer, packedLight, packedOverlay, packedColor);
+        this.Tail.render(poseStack, buffer, packedLight, packedOverlay, packedColor);
+        this.LLeg.render(poseStack, buffer, packedLight, packedOverlay, packedColor);
+        this.LFingers.render(poseStack, buffer, packedLight, packedOverlay, packedColor);
+        this.RLeg.render(poseStack, buffer, packedLight, packedOverlay, packedColor);
+        this.RFingers.render(poseStack, buffer, packedLight, packedOverlay, packedColor);
+        this.LRearLeg.render(poseStack, buffer, packedLight, packedOverlay, packedColor);
+        this.RRearLeg.render(poseStack, buffer, packedLight, packedOverlay, packedColor);
 
         poseStack.popPose();
     }

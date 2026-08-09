@@ -104,8 +104,7 @@ public class MoCRenderWerewolf<M extends EntityModel<MoCEntityWerewolf>> extends
                 poseStack.scale(1.0F, 1.0F, 1.0F); // Adjust if needed
 
                 VertexConsumer vertexConsumer = buffer.getBuffer(RenderType.entityCutoutNoCull(texture));
-                humanModel.renderToBuffer(poseStack, vertexConsumer, packedLightIn, OverlayTexture.NO_OVERLAY,
-                        1.0F, 1.0F, 1.0F, 1.0F);
+                humanModel.renderToBuffer(poseStack, vertexConsumer, packedLightIn, OverlayTexture.NO_OVERLAY, 0xFFFFFFFF);
 
                 poseStack.popPose();
             } catch (Exception e) {

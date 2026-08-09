@@ -223,10 +223,8 @@ public class MoCEntityKitty extends MoCEntityTameableAnimal {
     public void setSwinging(boolean var1) {
         this.isSwinging = var1;
     }
-
-    @Override
     protected float getStandingEyeHeight(Pose poseIn, EntityDimensions sizeIn) {
-        return sizeIn.height * 0.8F;
+        return sizeIn.height() * 0.8F;
     }
 
     @Override
@@ -426,21 +424,19 @@ public class MoCEntityKitty extends MoCEntityTameableAnimal {
         }
         return obj;
     }
-
-    @Override
     public double getPassengersRidingOffset() {
         if (this.getVehicle() instanceof Player && this.level().isClientSide()) {
             if (getKittyState() == 10) {
-                return super.getPassengersRidingOffset() + 0.4F;
+                return (this.getBbHeight() * 0.75D) + 0.4F;
             }
             if (upsideDown()) {
-                return super.getPassengersRidingOffset() - 0.1F;
+                return (this.getBbHeight() * 0.75D) - 0.1F;
             }
             if (onMaBack()) {
-                return super.getPassengersRidingOffset() + 0.1F;
+                return (this.getBbHeight() * 0.75D) + 0.1F;
             }
         }
-        return super.getPassengersRidingOffset();
+        return (this.getBbHeight() * 0.75D);
     }
 
     @Override

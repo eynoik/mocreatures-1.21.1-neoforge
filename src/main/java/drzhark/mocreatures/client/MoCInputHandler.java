@@ -11,30 +11,29 @@ import drzhark.mocreatures.network.message.MoCMessageEntityJump;
 import drzhark.mocreatures.proxy.MoCProxyClient;
 import net.neoforged.api.distmarker.Dist;
 import net.neoforged.api.distmarker.OnlyIn;
-import net.neoforged.neoforge.event.TickEvent;
+import net.neoforged.neoforge.event.tick.PlayerTickEvent;
 import net.neoforged.bus.api.SubscribeEvent;
-import net.neoforged.fml.common.Mod;
+import net.neoforged.fml.common.EventBusSubscriber;
 
 @OnlyIn(Dist.CLIENT)
-@Mod.EventBusSubscriber(modid = MoCConstants.MOD_ID, value = Dist.CLIENT)
+@EventBusSubscriber(modid = MoCConstants.MOD_ID, value = Dist.CLIENT)
 public class MoCInputHandler {
 
     @SubscribeEvent
-    public static void onInput(TickEvent.PlayerTickEvent e) {
-        if (e.phase != TickEvent.Phase.END) return;
+    public static void onInput(PlayerTickEvent.Post e) {
 
         boolean kbJump = MoCProxyClient.mc.options.keyJump.isDown();
         boolean kbDive = MoCKeyHandler.diveBinding.isDown();
 
-        if (kbJump && e.player.getVehicle() != null && e.player.getVehicle() instanceof IMoCEntity) {
+        if (kbJump && e.getEntity().getVehicle() != null && e.getEntity().getVehicle() instanceof IMoCEntity) {
             // jump code needs to be executed client/server simultaneously to take
-            ((IMoCEntity) e.player.getVehicle()).makeEntityJump();
+            ((IMoCEntity) e.getEntity().getVehicle()).makeEntityJump();
             MoCMessageHandler.INSTANCE.sendToServer(new MoCMessageEntityJump());
         }
 
-        if (kbDive && e.player.getVehicle() != null && e.player.getVehicle() instanceof IMoCEntity) {
+        if (kbDive && e.getEntity().getVehicle() != null && e.getEntity().getVehicle() instanceof IMoCEntity) {
             // dive code needs to be executed client/server simultaneously to take
-            ((IMoCEntity) e.player.getVehicle()).makeEntityDive();
+            ((IMoCEntity) e.getEntity().getVehicle()).makeEntityDive();
             MoCMessageHandler.INSTANCE.sendToServer(new MoCMessageEntityDive());
         }
     }

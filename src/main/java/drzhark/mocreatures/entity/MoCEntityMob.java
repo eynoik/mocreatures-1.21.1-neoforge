@@ -478,8 +478,7 @@ public abstract class MoCEntityMob extends Monster implements IMoCEntity {
     public boolean doHurtTarget(Entity target) {
         boolean flag = target.hurt(this.damageSources().mobAttack(this), (float) this.getAttributeValue(Attributes.ATTACK_DAMAGE));
         if (flag) {
-            this.doEnchantDamageEffects(this, target);
-        }
+}
         return flag;
     }
 

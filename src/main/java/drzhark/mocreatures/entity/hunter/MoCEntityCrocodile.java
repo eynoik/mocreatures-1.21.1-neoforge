@@ -48,7 +48,7 @@ public class MoCEntityCrocodile extends MoCEntityTameableAnimal {
         setMoCAge(80);
         setTamed(false);
         this.xpReward = 5;
-        this.setMaxUpStep(1.0F);
+        this.getAttribute(Attributes.STEP_HEIGHT).setBaseValue(1.0F);
     }
 
     @Override
@@ -308,7 +308,7 @@ public class MoCEntityCrocodile extends MoCEntityTameableAnimal {
         double dist = getMoCAge() * 0.01F + passenger.getBbWidth() - 0.4D;
         double newPosX = this.getX() - (dist * Math.cos((MoCTools.realAngle(this.getYRot() - 90F)) / 57.29578F));
         double newPosZ = this.getZ() - (dist * Math.sin((MoCTools.realAngle(this.getYRot() - 90F)) / 57.29578F));
-        moveFunction.accept(passenger, newPosX, this.getY() + getPassengersRidingOffset() + passenger.getMyRidingOffset(), newPosZ);
+        moveFunction.accept(passenger, newPosX, this.getY() + getPassengersRidingOffset() + 0.0D, newPosZ);
 
         if (this.spinInt > 40) {
             direction = -1;
@@ -321,8 +321,6 @@ public class MoCEntityCrocodile extends MoCEntityTameableAnimal {
             ((LivingEntity) passenger).yHeadRot = this.getYRot() * direction;
         }
     }
-
-    @Override
     public double getPassengersRidingOffset() {
         return this.getBbHeight() * 0.35D;
     }
@@ -391,9 +389,7 @@ public class MoCEntityCrocodile extends MoCEntityTameableAnimal {
     public boolean isReadyToHunt() {
         return this.isNotScared() && !this.isMovementCeased() && !this.isVehicle() && !this.getHasCaughtPrey();
     }
-
-    @Override
     protected float getStandingEyeHeight(Pose poseIn, EntityDimensions sizeIn) {
-        return sizeIn.height * 0.8F;
+        return sizeIn.height() * 0.8F;
     }
 }

@@ -3,13 +3,14 @@ package drzhark.mocreatures.init;
 import drzhark.mocreatures.MoCConstants;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Items;
+import net.minecraft.world.item.trading.ItemCost;
 import net.minecraft.world.item.trading.MerchantOffer;
 import net.minecraft.world.entity.npc.VillagerProfession;
 import net.neoforged.neoforge.event.village.VillagerTradesEvent;
 import net.neoforged.bus.api.SubscribeEvent;
-import net.neoforged.fml.common.Mod;
+import net.neoforged.fml.common.EventBusSubscriber;
 
-@Mod.EventBusSubscriber(modid = MoCConstants.MOD_ID)
+@EventBusSubscriber(modid = MoCConstants.MOD_ID)
 public class MoCVillagerTrades {
 
     @SubscribeEvent
@@ -39,7 +40,7 @@ public class MoCVillagerTrades {
         }
 
         if (VillagerProfession.LIBRARIAN.equals(event.getType())) {
-            trades.get(1).add((e, r) -> new MerchantOffer(new ItemStack(Items.PAPER), new ItemStack(Items.FEATHER), new ItemStack(MoCItems.SCROLLFREEDOM.get()), 12, 10, 0.1F));
+            trades.get(1).add((e, r) -> new MerchantOffer(new ItemCost(Items.PAPER), java.util.Optional.of(new ItemCost(Items.FEATHER)), new ItemStack(MoCItems.SCROLLFREEDOM.get()), 12, 10, 0.1F));
         }
 
         if (VillagerProfession.TOOLSMITH.equals(event.getType()) ||
@@ -51,6 +52,6 @@ public class MoCVillagerTrades {
     }
 
     private static MerchantOffer offer(ItemStack in, ItemStack out, int maxUses, int xp, float priceMult) {
-        return new MerchantOffer(in, out, maxUses, xp, priceMult);
+        return new MerchantOffer(new ItemCost(in.getItem(), in.getCount()), out, maxUses, xp, priceMult);
     }
 }

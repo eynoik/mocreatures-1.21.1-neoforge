@@ -52,7 +52,7 @@ public class MoCEntityKomodo extends MoCEntityTameableAnimal {
         this.texture = "komodo_dragon.png";
         setTamed(false);
         setAdult(true);
-        setMaxUpStep(1.0F);
+        this.getAttribute(Attributes.STEP_HEIGHT).setBaseValue(1.0F);
         // Note: stepHeight is now called maxUpStep and is accessed differently in 1.20.1
 
         // TODO: Make hitboxes adjust depending on size
@@ -245,10 +245,6 @@ public class MoCEntityKomodo extends MoCEntityTameableAnimal {
         return (-50 + (getMoCAge() / 2));
     }
 
-    @Override
-    public boolean canBreatheUnderwater() {
-        return true;
-    }
 
     @Override
     public void addAdditionalSaveData(CompoundTag nbttagcompound) {
@@ -261,8 +257,6 @@ public class MoCEntityKomodo extends MoCEntityTameableAnimal {
         super.readAdditionalSaveData(nbttagcompound);
         setRideable(nbttagcompound.getBoolean("Saddle"));
     }
-
-    @Override
     public double getPassengersRidingOffset() {
         double yOff = 0.15F;
         if (getIsAdult()) {
@@ -334,12 +328,9 @@ public class MoCEntityKomodo extends MoCEntityTameableAnimal {
     public boolean isNotScared() {
         return getMoCAge() > 70;
     }
-
-    @Override
     public void doEnchantDamageEffects(LivingEntity entityLivingBaseIn, Entity entityIn) {
         ((LivingEntity) entityIn).addEffect(new MobEffectInstance(MobEffects.POISON, 150, 0));
-        super.doEnchantDamageEffects(entityLivingBaseIn, entityIn);
-    }
+}
 
     @Override
     public boolean isReadyToHunt() {

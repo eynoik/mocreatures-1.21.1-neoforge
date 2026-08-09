@@ -64,7 +64,7 @@ public class MoCRenderFirefly extends MoCRenderInsect<MoCEntityFirefly, MoCModel
             
             // Use the parent model directly - it will have already been set up with the right properties
             this.getParentModel().renderToBuffer(poseStack, vertexConsumer, packedLightIn, 
-                    OverlayTexture.NO_OVERLAY, 1.0F, 1.0F, 1.0F, 1.0F);
+                    OverlayTexture.NO_OVERLAY, 0xFFFFFFFF);
         }
 
         protected void setTailBrightness(PoseStack poseStack, MoCEntityFirefly entityliving, float partialTicks) {

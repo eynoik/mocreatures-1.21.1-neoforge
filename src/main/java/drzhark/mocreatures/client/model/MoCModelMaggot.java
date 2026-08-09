@@ -136,16 +136,7 @@ public class MoCModelMaggot<T extends MoCEntityMaggot> extends EntityModel<T> {
      * with blending enabled exactly as in the old render(...) method.
      */
     @Override
-    public void renderToBuffer(
-            PoseStack        poseStack,
-            VertexConsumer   buffer,
-            int              packedLight,
-            int              packedOverlay,
-            float            red,
-            float            green,
-            float            blue,
-            float            alpha
-    ) {
+    public void renderToBuffer(PoseStack poseStack, VertexConsumer buffer, int packedLight, int packedOverlay, int packedColor) {
         poseStack.pushPose();
 
         // Mirror the old RenderSystem.enableBlend() / defaultBlendFunc() calls:
@@ -158,10 +149,10 @@ public class MoCModelMaggot<T extends MoCEntityMaggot> extends EntityModel<T> {
         poseStack.scale(1.0F, 1.0F, 1.0F + f9);
 
         // Render each part with the same light/overlay/colour
-        this.Head.render(poseStack, buffer, packedLight, packedOverlay, color);
-        this.Body.render(poseStack, buffer, packedLight, packedOverlay, color);
-        this.Tail.render(poseStack, buffer, packedLight, packedOverlay, color);
-        this.Tailtip.render(poseStack, buffer, packedLight, packedOverlay, color);
+        this.Head.render(poseStack, buffer, packedLight, packedOverlay, packedColor);
+        this.Body.render(poseStack, buffer, packedLight, packedOverlay, packedColor);
+        this.Tail.render(poseStack, buffer, packedLight, packedOverlay, packedColor);
+        this.Tailtip.render(poseStack, buffer, packedLight, packedOverlay, packedColor);
 
         // Disable blending and pop
         RenderSystem.disableBlend();

@@ -155,7 +155,7 @@ public class WyvernNestFeature extends Feature<NoneFeatureConfiguration> {
         level.setBlock(chestPos, Blocks.CHEST.defaultBlockState().setValue(ChestBlock.FACING, Direction.NORTH), 2);
         BlockEntity tile = level.getBlockEntity(chestPos);
         if (tile instanceof ChestBlockEntity) {
-            ((ChestBlockEntity) tile).setLootTable(ResourceLocation.parse("mocreatures:chests/wyvern_nest"), random.nextLong());
+            ((ChestBlockEntity) tile).setLootTable(ResourceKey.create(Registries.LOOT_TABLE, ResourceLocation.parse("mocreatures:chests/wyvern_nest")), random.nextLong());
         }
 
         if (MoCreatures.proxy.debug) {

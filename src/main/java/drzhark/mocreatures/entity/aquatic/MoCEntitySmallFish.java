@@ -231,8 +231,6 @@ public class MoCEntitySmallFish extends MoCEntityTameableAquatic {
         }
         return 0F;
     }
-
-    @Override
     protected float getStandingEyeHeight(Pose poseIn, EntityDimensions sizeIn) {
         return this.getBbHeight() * 0.45F;
     }

@@ -141,8 +141,6 @@ public class MoCEntityGrizzlyBear extends MoCEntityBear {
     public boolean compatibleMate(Entity mate) {
         return mate instanceof MoCEntityGrizzlyBear;
     }
-
-    @Override
     protected float getStandingEyeHeight(Pose poseIn, EntityDimensions sizeIn) {
         return this.getBbHeight() * 0.76F;
     }

@@ -134,8 +134,6 @@ public class MoCEntityButterfly extends MoCEntityInsect {
     protected ResourceKey<LootTable> getDefaultLootTable() {
         return MoCLootTables.BUTTERFLY;
     }
-
-    @Override
     public float getStandingEyeHeight(Pose poseIn, EntityDimensions sizeIn) {
         return 0.1F;
     }

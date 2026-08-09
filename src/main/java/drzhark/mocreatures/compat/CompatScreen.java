@@ -39,7 +39,7 @@ public class CompatScreen extends Screen {
 
     @Override
     public void render(GuiGraphics graphics, int mouseX, int mouseY, float partialTicks) {
-        this.renderBackground(graphics);
+        this.renderBackground(graphics, mouseX, mouseY, partialTicks);
         int i = this.height / 2 - this.textHeight / 2;
         for (Component line : this.messages) {
             graphics.drawCenteredString(this.font, line, this.width / 2, i, 0xFFFFFF);

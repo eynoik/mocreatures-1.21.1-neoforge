@@ -76,70 +76,61 @@ public class MoCModelHorseMob<T extends MoCEntityHorseMob> extends MoCModelAbstr
      * Omits any saddle-specific parts and adjusts for hostile-only features.
      */
     @Override
-    public void renderToBuffer(
-            PoseStack poseStack,
-            VertexConsumer buffer,
-            int packedLight,
-            int packedOverlay,
-            float red,
-            float green,
-            float blue,
-            float alpha
-    ) {
+    public void renderToBuffer(PoseStack poseStack, VertexConsumer buffer, int packedLight, int packedOverlay, int packedColor) {
         // Ears (always render)
-        this.ear1.render(poseStack, buffer, packedLight, packedOverlay, color);
-        this.ear2.render(poseStack, buffer, packedLight, packedOverlay, color);
+        this.ear1.render(poseStack, buffer, packedLight, packedOverlay, packedColor);
+        this.ear2.render(poseStack, buffer, packedLight, packedOverlay, packedColor);
 
         // Neck and head
-        this.neck.render(poseStack, buffer, packedLight, packedOverlay, color);
-        this.head.render(poseStack, buffer, packedLight, packedOverlay, color);
+        this.neck.render(poseStack, buffer, packedLight, packedOverlay, packedColor);
+        this.head.render(poseStack, buffer, packedLight, packedOverlay, packedColor);
 
         // Mouth (open or closed)
         if (openMouth) {
-            this.uMouth2.render(poseStack, buffer, packedLight, packedOverlay, color);
-            this.lMouth2.render(poseStack, buffer, packedLight, packedOverlay, color);
+            this.uMouth2.render(poseStack, buffer, packedLight, packedOverlay, packedColor);
+            this.lMouth2.render(poseStack, buffer, packedLight, packedOverlay, packedColor);
         } else {
-            this.uMouth.render(poseStack, buffer, packedLight, packedOverlay, color);
-            this.lMouth.render(poseStack, buffer, packedLight, packedOverlay, color);
+            this.uMouth.render(poseStack, buffer, packedLight, packedOverlay, packedColor);
+            this.lMouth.render(poseStack, buffer, packedLight, packedOverlay, packedColor);
         }
 
         // Mane, body, and tail segments
-        this.mane.render(poseStack, buffer, packedLight, packedOverlay, color);
-        this.body.render(poseStack, buffer, packedLight, packedOverlay, color);
-        this.tailA.render(poseStack, buffer, packedLight, packedOverlay, color);
-        this.tailB.render(poseStack, buffer, packedLight, packedOverlay, color);
-        this.tailC.render(poseStack, buffer, packedLight, packedOverlay, color);
+        this.mane.render(poseStack, buffer, packedLight, packedOverlay, packedColor);
+        this.body.render(poseStack, buffer, packedLight, packedOverlay, packedColor);
+        this.tailA.render(poseStack, buffer, packedLight, packedOverlay, packedColor);
+        this.tailB.render(poseStack, buffer, packedLight, packedOverlay, packedColor);
+        this.tailC.render(poseStack, buffer, packedLight, packedOverlay, packedColor);
 
         // Legs (each in three segments)
-        this.leg1A.render(poseStack, buffer, packedLight, packedOverlay, color);
-        this.leg1B.render(poseStack, buffer, packedLight, packedOverlay, color);
-        this.leg1C.render(poseStack, buffer, packedLight, packedOverlay, color);
+        this.leg1A.render(poseStack, buffer, packedLight, packedOverlay, packedColor);
+        this.leg1B.render(poseStack, buffer, packedLight, packedOverlay, packedColor);
+        this.leg1C.render(poseStack, buffer, packedLight, packedOverlay, packedColor);
 
-        this.leg2A.render(poseStack, buffer, packedLight, packedOverlay, color);
-        this.leg2B.render(poseStack, buffer, packedLight, packedOverlay, color);
-        this.leg2C.render(poseStack, buffer, packedLight, packedOverlay, color);
+        this.leg2A.render(poseStack, buffer, packedLight, packedOverlay, packedColor);
+        this.leg2B.render(poseStack, buffer, packedLight, packedOverlay, packedColor);
+        this.leg2C.render(poseStack, buffer, packedLight, packedOverlay, packedColor);
 
-        this.leg3A.render(poseStack, buffer, packedLight, packedOverlay, color);
-        this.leg3B.render(poseStack, buffer, packedLight, packedOverlay, color);
-        this.leg3C.render(poseStack, buffer, packedLight, packedOverlay, color);
+        this.leg3A.render(poseStack, buffer, packedLight, packedOverlay, packedColor);
+        this.leg3B.render(poseStack, buffer, packedLight, packedOverlay, packedColor);
+        this.leg3C.render(poseStack, buffer, packedLight, packedOverlay, packedColor);
 
-        this.leg4A.render(poseStack, buffer, packedLight, packedOverlay, color);
-        this.leg4B.render(poseStack, buffer, packedLight, packedOverlay, color);
-        this.leg4C.render(poseStack, buffer, packedLight, packedOverlay, color);
+        this.leg4A.render(poseStack, buffer, packedLight, packedOverlay, packedColor);
+        this.leg4B.render(poseStack, buffer, packedLight, packedOverlay, packedColor);
+        this.leg4C.render(poseStack, buffer, packedLight, packedOverlay, packedColor);
 
         // Unicorn horn (if applicable)
         if (isUnicorned) {
-            this.unicorn.render(poseStack, buffer, packedLight, packedOverlay, color);
+            this.unicorn.render(poseStack, buffer, packedLight, packedOverlay, packedColor);
         }
 
         // Pegasus wings (only if flyer and not specific mob types 34 or 36)
         if (flyer && typeMob != 34 && typeMob != 36) {
-            this.midWing.render(poseStack, buffer, packedLight, packedOverlay, color);
-            this.innerWing.render(poseStack, buffer, packedLight, packedOverlay, color);
-            this.outerWing.render(poseStack, buffer, packedLight, packedOverlay, color);
-            this.innerWingR.render(poseStack, buffer, packedLight, packedOverlay, color);
-            this.midWingR.render(poseStack, buffer, packedLight, packedOverlay, color);
-            this.outerWingR.render(poseStack, buffer, packedLight, packedOverlay, color);
+            this.midWing.render(poseStack, buffer, packedLight, packedOverlay, packedColor);
+            this.innerWing.render(poseStack, buffer, packedLight, packedOverlay, packedColor);
+            this.outerWing.render(poseStack, buffer, packedLight, packedOverlay, packedColor);
+            this.innerWingR.render(poseStack, buffer, packedLight, packedOverlay, packedColor);
+            this.midWingR.render(poseStack, buffer, packedLight, packedOverlay, packedColor);
+            this.outerWingR.render(poseStack, buffer, packedLight, packedOverlay, packedColor);
         }
     }
 

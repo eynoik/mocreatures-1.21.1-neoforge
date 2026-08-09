@@ -10,9 +10,9 @@ import net.minecraft.resources.ResourceLocation;
 import net.neoforged.api.distmarker.Dist;
 import net.neoforged.neoforge.client.event.TextureStitchEvent;
 import net.neoforged.bus.api.SubscribeEvent;
-import net.neoforged.fml.common.Mod;
+import net.neoforged.fml.common.EventBusSubscriber;
 
-@Mod.EventBusSubscriber(modid = "mocreatures", bus = Mod.EventBusSubscriber.Bus.MOD, value = Dist.CLIENT)
+@EventBusSubscriber(modid = "mocreatures", bus = EventBusSubscriber.Bus.MOD, value = Dist.CLIENT)
 public class MoCTextureStitcher {
     @SubscribeEvent
     public static void onTextureStitch(TextureStitchEvent.Pre event) {

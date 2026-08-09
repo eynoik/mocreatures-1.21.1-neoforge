@@ -330,37 +330,28 @@ public class MoCModelMiniGolem<T extends MoCEntityMiniGolem> extends EntityModel
      * Render everything, toggling Head/Body vs. HeadRed/BodyRed based on angry flag.
      */
     @Override
-    public void renderToBuffer(
-            PoseStack        poseStack,
-            VertexConsumer   buffer,
-            int              packedLight,
-            int              packedOverlay,
-            float            red,
-            float            green,
-            float            blue,
-            float            alpha
-    ) {
+    public void renderToBuffer(PoseStack poseStack, VertexConsumer buffer, int packedLight, int packedOverlay, int packedColor) {
         // First, choose which head/body to render
         if (this.angry) {
-            this.HeadRed.render(poseStack, buffer, packedLight, packedOverlay, color);
-            this.BodyRed.render(poseStack, buffer, packedLight, packedOverlay, color);
+            this.HeadRed.render(poseStack, buffer, packedLight, packedOverlay, packedColor);
+            this.BodyRed.render(poseStack, buffer, packedLight, packedOverlay, packedColor);
         } else {
-            this.Head.render(poseStack, buffer, packedLight, packedOverlay, color);
-            this.Body.render(poseStack, buffer, packedLight, packedOverlay, color);
+            this.Head.render(poseStack, buffer, packedLight, packedOverlay, packedColor);
+            this.Body.render(poseStack, buffer, packedLight, packedOverlay, packedColor);
         }
 
         // Then all the other parts
-        this.LeftShoulder.render(poseStack, buffer, packedLight, packedOverlay, color);
-        this.LeftArm.render(poseStack, buffer, packedLight, packedOverlay, color);
-        this.LeftArmRingA.render(poseStack, buffer, packedLight, packedOverlay, color);
-        this.LeftArmRingB.render(poseStack, buffer, packedLight, packedOverlay, color);
-        this.RightShoulder.render(poseStack, buffer, packedLight, packedOverlay, color);
-        this.RightArm.render(poseStack, buffer, packedLight, packedOverlay, color);
-        this.RightArmRingA.render(poseStack, buffer, packedLight, packedOverlay, color);
-        this.RightArmRingB.render(poseStack, buffer, packedLight, packedOverlay, color);
-        this.RightLeg.render(poseStack, buffer, packedLight, packedOverlay, color);
-        this.RightFoot.render(poseStack, buffer, packedLight, packedOverlay, color);
-        this.LeftLeg.render(poseStack, buffer, packedLight, packedOverlay, color);
-        this.LeftFoot.render(poseStack, buffer, packedLight, packedOverlay, color);
+        this.LeftShoulder.render(poseStack, buffer, packedLight, packedOverlay, packedColor);
+        this.LeftArm.render(poseStack, buffer, packedLight, packedOverlay, packedColor);
+        this.LeftArmRingA.render(poseStack, buffer, packedLight, packedOverlay, packedColor);
+        this.LeftArmRingB.render(poseStack, buffer, packedLight, packedOverlay, packedColor);
+        this.RightShoulder.render(poseStack, buffer, packedLight, packedOverlay, packedColor);
+        this.RightArm.render(poseStack, buffer, packedLight, packedOverlay, packedColor);
+        this.RightArmRingA.render(poseStack, buffer, packedLight, packedOverlay, packedColor);
+        this.RightArmRingB.render(poseStack, buffer, packedLight, packedOverlay, packedColor);
+        this.RightLeg.render(poseStack, buffer, packedLight, packedOverlay, packedColor);
+        this.RightFoot.render(poseStack, buffer, packedLight, packedOverlay, packedColor);
+        this.LeftLeg.render(poseStack, buffer, packedLight, packedOverlay, packedColor);
+        this.LeftFoot.render(poseStack, buffer, packedLight, packedOverlay, packedColor);
     }
 }

@@ -3,9 +3,10 @@
  */
 package drzhark.mocreatures.block;
 
+import com.mojang.serialization.MapCodec;
+
 import drzhark.mocreatures.init.MoCBlocks;
 import net.minecraft.core.BlockPos;
-import net.minecraft.core.Direction;
 import net.minecraft.world.level.BlockGetter;
 import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.block.FallingBlock;
@@ -14,9 +15,15 @@ import net.minecraft.world.level.block.state.BlockBehaviour;
 import net.minecraft.world.level.block.state.BlockState;
 import net.neoforged.api.distmarker.Dist;
 import net.neoforged.api.distmarker.OnlyIn;
-import net.neoforged.neoforge.common.IPlantable;
 
 public class MoCBlockSand extends FallingBlock {
+
+    public static final MapCodec<MoCBlockSand> CODEC = simpleCodec(MoCBlockSand::new);
+
+    @Override
+    protected MapCodec<? extends FallingBlock> codec() {
+        return CODEC;
+    }
 
     public MoCBlockSand(BlockBehaviour.Properties properties) {
         super(properties
@@ -29,10 +36,4 @@ public class MoCBlockSand extends FallingBlock {
         return 12107978;
     }
 
-    @Override
-    public boolean canSustainPlant(BlockState state, BlockGetter world, BlockPos pos, Direction direction, IPlantable plantable) {
-        BlockState plant = plantable.getPlant(world, pos.relative(direction));
-        return (plant.getBlock() == Blocks.CACTUS || plant.getBlock() == Blocks.DEAD_BUSH) && this == MoCBlocks.silverSand.get()
-                || super.canSustainPlant(state, world, pos, direction, plantable);
-    }
 }

@@ -602,8 +602,6 @@ public class MoCEntityGoat extends MoCEntityTameableAnimal {
     public float getSpeed() {
         return 0.15F;
     }
-
-    @Override
     public float getStandingEyeHeight(Pose poseIn, EntityDimensions sizeIn) {
         return this.getBbHeight() * 0.945F;
     }

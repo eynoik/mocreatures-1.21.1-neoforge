@@ -227,18 +227,9 @@ public class MoCModelBee<T extends MoCEntityBee> extends EntityModel<T> implemen
      * Render all parts using the new transparency system.
      */
     @Override
-    public void renderToBuffer(
-            PoseStack poseStack,
-            VertexConsumer buffer,
-            int packedLight,
-            int packedOverlay,
-            float red,
-            float green,
-            float blue,
-            float alpha
-    ) {
+    public void renderToBuffer(PoseStack poseStack, VertexConsumer buffer, int packedLight, int packedOverlay, int packedColor) {
         // Render opaque parts first
-        renderOpaqueParts(poseStack, buffer, packedLight, packedOverlay, color);
+        renderOpaqueParts(poseStack, buffer, packedLight, packedOverlay, packedColor);
         
         // Render transparent parts with blending if needed
         if (shouldRenderPartialTransparency()) {
@@ -247,36 +238,36 @@ public class MoCModelBee<T extends MoCEntityBee> extends EntityModel<T> implemen
             RenderSystem.defaultBlendFunc();
             RenderSystem.clearColor(getTransparencyColor()[0], getTransparencyColor()[1], getTransparencyColor()[2], getTransparencyValue());
             
-            renderTransparentParts(poseStack, buffer, packedLight, packedOverlay, color);
+            renderTransparentParts(poseStack, buffer, packedLight, packedOverlay, packedColor);
             
             RenderSystem.disableBlend();
             poseStack.popPose();
         } else {
             // Render folded wings as opaque when not flying
-            this.foldedWings.render(poseStack, buffer, packedLight, packedOverlay, color);
+            this.foldedWings.render(poseStack, buffer, packedLight, packedOverlay, packedColor);
         }
     }
     
     @Override
-    public void renderOpaqueParts(PoseStack poseStack, VertexConsumer buffer, int packedLight, int packedOverlay, int color) {
+    public void renderOpaqueParts(PoseStack poseStack, VertexConsumer buffer, int packedLight, int packedOverlay, int packedColor) {
         // Draw static geometry:
-        this.abdomen.render(poseStack, buffer, packedLight, packedOverlay, color);
-        this.frontLegs.render(poseStack, buffer, packedLight, packedOverlay, color);
-        this.rAntenna.render(poseStack, buffer, packedLight, packedOverlay, color);
-        this.lAntenna.render(poseStack, buffer, packedLight, packedOverlay, color);
-        this.rearLegs.render(poseStack, buffer, packedLight, packedOverlay, color);
-        this.midLegs.render(poseStack, buffer, packedLight, packedOverlay, color);
-        this.head.render(poseStack, buffer, packedLight, packedOverlay, color);
-        this.mouth.render(poseStack, buffer, packedLight, packedOverlay, color);
-        this.tail.render(poseStack, buffer, packedLight, packedOverlay, color);
-        this.thorax.render(poseStack, buffer, packedLight, packedOverlay, color);
+        this.abdomen.render(poseStack, buffer, packedLight, packedOverlay, packedColor);
+        this.frontLegs.render(poseStack, buffer, packedLight, packedOverlay, packedColor);
+        this.rAntenna.render(poseStack, buffer, packedLight, packedOverlay, packedColor);
+        this.lAntenna.render(poseStack, buffer, packedLight, packedOverlay, packedColor);
+        this.rearLegs.render(poseStack, buffer, packedLight, packedOverlay, packedColor);
+        this.midLegs.render(poseStack, buffer, packedLight, packedOverlay, packedColor);
+        this.head.render(poseStack, buffer, packedLight, packedOverlay, packedColor);
+        this.mouth.render(poseStack, buffer, packedLight, packedOverlay, packedColor);
+        this.tail.render(poseStack, buffer, packedLight, packedOverlay, packedColor);
+        this.thorax.render(poseStack, buffer, packedLight, packedOverlay, packedColor);
     }
     
     @Override
-    public void renderTransparentParts(PoseStack poseStack, VertexConsumer buffer, int packedLight, int packedOverlay, int color) {
+    public void renderTransparentParts(PoseStack poseStack, VertexConsumer buffer, int packedLight, int packedOverlay, int packedColor) {
         // Render unfolded wings with transparency
-        this.leftWing.render(poseStack, buffer, packedLight, packedOverlay, color);
-        this.rightWing.render(poseStack, buffer, packedLight, packedOverlay, color);
+        this.leftWing.render(poseStack, buffer, packedLight, packedOverlay, packedColor);
+        this.rightWing.render(poseStack, buffer, packedLight, packedOverlay, packedColor);
     }
     
     @Override

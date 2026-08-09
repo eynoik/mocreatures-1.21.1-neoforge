@@ -207,8 +207,6 @@ public class MoCEntityOgre extends MoCEntityMob {
         startArmSwingAttack();
         return super.doHurtTarget(target);
     }
-
-    @Override
     protected float getStandingEyeHeight(Pose poseIn, EntityDimensions dimensions) {
         return this.getBbHeight() * 0.91F;
     }
@@ -229,8 +227,6 @@ public class MoCEntityOgre extends MoCEntityMob {
                 return super.canContinueToUse();
             }
         }
-
-        @Override
         protected double getAttackReachSqr(LivingEntity attackTarget) {
             return 4.0F + attackTarget.getBbWidth();
         }

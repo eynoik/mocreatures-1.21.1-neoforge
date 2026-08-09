@@ -60,7 +60,6 @@ import net.minecraft.world.level.LevelAccessor;
 import net.minecraft.world.entity.EntityDimensions;
 import net.minecraft.world.entity.Pose;
 import net.minecraft.world.entity.LivingEntity;
-import net.minecraft.world.entity.MobType;
 import net.minecraft.world.inventory.ChestMenu;
 import net.minecraft.world.SimpleMenuProvider;
 import net.minecraft.network.chat.Component;
@@ -95,7 +94,7 @@ public class MoCEntityWyvern extends MoCEntityTameableAnimal {
         //setSize(1.45F, 1.55F);
         setAdult(true);
         setTamed(false);
-        this.setMaxUpStep(1.0F);
+        this.getAttribute(Attributes.STEP_HEIGHT).setBaseValue(1.0F);
 
         // TODO: Make hitboxes adjust depending on size
         /*if (this.random.nextInt(6) == 0) {
@@ -794,8 +793,6 @@ public class MoCEntityWyvern extends MoCEntityTameableAnimal {
     public boolean causeFallDamage(float distance, float damageMultiplier, DamageSource source) {
         return false;
     }
-
-    @Override
     public double getPassengersRidingOffset() {
         return this.getBbHeight() * 0.85 * getSizeFactor();
     }
@@ -808,7 +805,7 @@ public class MoCEntityWyvern extends MoCEntityTameableAnimal {
             double newPosZ = this.getZ() - (dist * Math.sin((Mth.wrapDegrees(this.getYRot() - 90F)) / 57.29578F));
             
             moveFunction.accept(passenger, newPosX, 
-                this.getY() + this.getPassengersRidingOffset() + passenger.getMyRidingOffset(), 
+                this.getY() + this.getPassengersRidingOffset() + 0.0D, 
                 newPosZ);
         }
     }
@@ -862,7 +859,7 @@ public class MoCEntityWyvern extends MoCEntityTameableAnimal {
                 if (!this.localstack.isEmpty()) {
                     CompoundTag nbttagcompound1 = new CompoundTag();
                     nbttagcompound1.putByte("Slot", (byte) i);
-                    this.localstack.save(nbttagcompound1);
+                    nbttagcompound1.merge((CompoundTag) this.localstack.save(this.registryAccess()));
                     nbttaglist.add(nbttagcompound1);
                 }
             }
@@ -885,7 +882,7 @@ public class MoCEntityWyvern extends MoCEntityTameableAnimal {
                 CompoundTag nbttagcompound1 = nbttaglist.getCompound(i);
                 int j = nbttagcompound1.getByte("Slot") & 0xff;
                 if (j < this.localchest.getContainerSize()) {
-                    this.localchest.setItem(j, ItemStack.of(nbttagcompound1));
+                    this.localchest.setItem(j, ItemStack.parseOptional(this.registryAccess(), nbttagcompound1));
                 }
             }
         }
@@ -1006,14 +1003,6 @@ public class MoCEntityWyvern extends MoCEntityTameableAnimal {
             return 160;
         }
         return 120;
-    }
-
-    @Override
-    public MobType getMobType() {
-        if (getTypeMoC() == 6 || getIsGhost()) {
-            return MobType.UNDEAD;
-        }
-        return super.getMobType();
     }
 
     @Override

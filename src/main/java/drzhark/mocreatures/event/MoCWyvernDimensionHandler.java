@@ -17,7 +17,7 @@ import net.neoforged.neoforge.event.server.ServerAboutToStartEvent;
 import net.neoforged.bus.api.Event;
 import net.neoforged.bus.api.EventPriority;
 import net.neoforged.bus.api.SubscribeEvent;
-import net.neoforged.fml.common.Mod;
+import net.neoforged.fml.common.EventBusSubscriber;
 
 import java.util.Arrays;
 import java.util.List;
@@ -26,7 +26,7 @@ import java.util.function.Supplier;
 /**
  * Event handler specifically for managing the Wyvern dimension mob spawning
  */
-@Mod.EventBusSubscriber(modid = MoCConstants.MOD_ID)
+@EventBusSubscriber(modid = MoCConstants.MOD_ID)
 public class MoCWyvernDimensionHandler {
 
     // Use suppliers to delay initialization until the entities are actually registered
@@ -48,43 +48,6 @@ public class MoCWyvernDimensionHandler {
     /**
      * Handle mob spawning - use lower priority to allow other systems to work first
      */
-    @SubscribeEvent(priority = EventPriority.LOW)
-    public static void onCheckSpawn(MobSpawnEvent.FinalizeSpawn event) {
-        LivingEntity entity = event.getEntity();
-        
-        // Check if we're in the Wyvern dimension
-        if (entity.level() != null && 
-            entity.level().dimension().location().toString().equals("mocreatures:wyvernlairworld")) {
-            
-            if (MoCreatures.proxy.debug) {
-                MoCreatures.LOGGER.info("MoCWyvernDimensionHandler: Checking spawn for {} in Wyvern dimension", 
-                    entity.getType().getDescriptionId());
-            }
-            
-            // If this is an explicitly allowed entity type, force allow it
-            if (getAllowedEntities().contains(entity.getType())) {
-                if (MoCreatures.proxy.debug) {
-                    MoCreatures.LOGGER.info("MoCWyvernDimensionHandler: Allowing {} to spawn in Wyvern dimension", 
-                        entity.getType().getDescriptionId());
-                }
-                event.setResult(Event.Result.ALLOW);
-                return;
-            }
-            
-            // If this is a player, allow it
-            if (entity instanceof Player) {
-                event.setResult(Event.Result.DEFAULT);
-                return;
-            }
-            
-            // For other entities, log but don't interfere - let JSON modifiers handle it
-            if (MoCreatures.proxy.debug) {
-                MoCreatures.LOGGER.info("MoCWyvernDimensionHandler: Non-allowed entity {} attempted to spawn, letting JSON modifiers handle it", 
-                    entity.getType().getDescriptionId());
-            }
-            event.setResult(Event.Result.DEFAULT);
-        }
-    }
 
     // @SubscribeEvent
     // public static void onServerAboutToStart(ServerAboutToStartEvent event) {

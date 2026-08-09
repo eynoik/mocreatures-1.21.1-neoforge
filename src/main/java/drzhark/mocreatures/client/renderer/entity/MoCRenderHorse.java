@@ -64,7 +64,7 @@ public class MoCRenderHorse extends MoCRenderMoC<MoCEntityHorse, MoCModelHorse<M
             float headRotDelta = headRot - bodyRot;
             float pitch = Mth.lerp(partialTicks, entityHorse.xRotO, entityHorse.getXRot());
 
-            setupRotations(entityHorse, poseStack, entityHorse.tickCount + partialTicks, bodyRot, partialTicks);
+            setupRotations(entityHorse, poseStack, entityHorse.tickCount + partialTicks, bodyRot, partialTicks, 1.0F);
             model.prepareMobModel(entityHorse, 0, 0, partialTicks);
             model.setupAnim(entityHorse, 0, 0, entityHorse.tickCount + partialTicks, headRotDelta, pitch);
 

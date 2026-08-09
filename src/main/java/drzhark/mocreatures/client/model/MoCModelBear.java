@@ -966,18 +966,9 @@ public class MoCModelBear<T extends MoCEntityBear> extends EntityModel<T> {
     }
 
     @Override
-    public void renderToBuffer(
-            @NotNull PoseStack poseStack,
-            @NotNull VertexConsumer buffer,
-            int packedLight,
-            int packedOverlay,
-            float red,
-            float green,
-            float blue,
-            float alpha
-    ) {
+    public void renderToBuffer(@NotNull PoseStack poseStack, @NotNull VertexConsumer buffer, int packedLight, int packedOverlay, int packedColor) {
         // Simply render every child of root; invisible parts will skip themselves.
-        this.root.render(poseStack, buffer, packedLight, packedOverlay, color);
+        this.root.render(poseStack, buffer, packedLight, packedOverlay, packedColor);
     }
 
     /**

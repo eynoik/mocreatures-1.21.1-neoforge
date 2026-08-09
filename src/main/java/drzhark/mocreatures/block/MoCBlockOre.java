@@ -18,8 +18,6 @@ public class MoCBlockOre extends Block {
     public MoCBlockOre(BlockBehaviour.Properties properties) {
         super(properties.sound(SoundType.STONE));
     }
-
-    @Override
     public int getExpDrop(BlockState state, LevelReader level, RandomSource randomSource, BlockPos pos, int fortuneLevel, int silkTouchLevel) {
         return silkTouchLevel == 0 ? getExperience(randomSource) : 0;
     }

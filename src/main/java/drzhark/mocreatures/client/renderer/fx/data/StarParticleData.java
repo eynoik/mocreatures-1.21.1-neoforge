@@ -1,30 +1,32 @@
 package drzhark.mocreatures.client.renderer.fx.data;
 
-import com.mojang.brigadier.StringReader;
-import com.mojang.brigadier.exceptions.CommandSyntaxException;
+import com.mojang.serialization.Codec;
+import com.mojang.serialization.MapCodec;
+import com.mojang.serialization.codecs.RecordCodecBuilder;
 import drzhark.mocreatures.client.renderer.fx.MoCParticles;
 import net.minecraft.core.particles.ParticleOptions;
 import net.minecraft.core.particles.ParticleType;
-import net.minecraft.network.FriendlyByteBuf;
-
-import java.util.Locale;
+import net.minecraft.network.RegistryFriendlyByteBuf;
+import net.minecraft.network.codec.StreamCodec;
 
 public class StarParticleData implements ParticleOptions {
-    public static final ParticleOptions.Deserializer<StarParticleData> DESERIALIZER = new ParticleOptions.Deserializer<StarParticleData>() {
+    public static final MapCodec<StarParticleData> CODEC = RecordCodecBuilder.mapCodec(instance -> instance.group(
+            Codec.FLOAT.fieldOf("red").forGetter(v -> v.red),
+            Codec.FLOAT.fieldOf("green").forGetter(v -> v.green),
+            Codec.FLOAT.fieldOf("blue").forGetter(v -> v.blue)
+    ).apply(instance, StarParticleData::new));
+
+    public static final StreamCodec<RegistryFriendlyByteBuf, StarParticleData> STREAM_CODEC = new StreamCodec<>() {
         @Override
-        public StarParticleData fromCommand(ParticleType<StarParticleData> type, StringReader reader) throws CommandSyntaxException {
-            reader.expect(' ');
-            float r = reader.readFloat();
-            reader.expect(' ');
-            float g = reader.readFloat();
-            reader.expect(' ');
-            float b = reader.readFloat();
-            return new StarParticleData(r, g, b);
+        public StarParticleData decode(RegistryFriendlyByteBuf buf) {
+            return new StarParticleData(buf.readFloat(), buf.readFloat(), buf.readFloat());
         }
 
         @Override
-        public StarParticleData fromNetwork(ParticleType<StarParticleData> type, FriendlyByteBuf buffer) {
-            return new StarParticleData(buffer.readFloat(), buffer.readFloat(), buffer.readFloat());
+        public void encode(RegistryFriendlyByteBuf buf, StarParticleData value) {
+            buf.writeFloat(value.red);
+            buf.writeFloat(value.green);
+            buf.writeFloat(value.blue);
         }
     };
 
@@ -34,18 +36,6 @@ public class StarParticleData implements ParticleOptions {
         this.red = red;
         this.green = green;
         this.blue = blue;
-    }
-
-    @Override
-    public void writeToNetwork(FriendlyByteBuf buffer) {
-        buffer.writeFloat(red);
-        buffer.writeFloat(green);
-        buffer.writeFloat(blue);
-    }
-
-    @Override
-    public String writeToString() {
-        return String.format(Locale.ROOT, "%s %.2f %.2f %.2f", getType(), red, green, blue);
     }
 
     @Override

@@ -97,11 +97,6 @@ public class MoCEntityWraith extends MoCEntityMob//MoCEntityFlyerMob
     }
 
     @Override
-    public MobType getMobType() {
-        return MobType.UNDEAD;
-    }
-
-    @Override
     public boolean isFlyer() {
         return true;
     }
@@ -167,8 +162,6 @@ public class MoCEntityWraith extends MoCEntityMob//MoCEntityFlyerMob
     protected boolean isDaylightSensitive() {
         return true;
     }
-
-    @Override
     protected float getStandingEyeHeight(Pose poseIn, EntityDimensions sizeIn) {
         return this.getBbHeight() * 0.86F;
     }

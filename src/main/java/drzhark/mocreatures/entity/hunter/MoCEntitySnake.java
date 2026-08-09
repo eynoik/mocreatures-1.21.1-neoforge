@@ -223,13 +223,6 @@ public class MoCEntitySnake extends MoCEntityTameableAnimal {
     public int getMovInt() {
         return this.movInt;
     }
-
-    @Override
-    public boolean canBreatheUnderwater() {
-        return true;
-    }
-
-    @Override
     public double getPassengersRidingOffset() {
         if (this.getVehicle() instanceof Player) {
             return 0.1F;
@@ -687,14 +680,11 @@ public class MoCEntitySnake extends MoCEntityTameableAnimal {
     public boolean isReadyToHunt() {
         return this.getIsAdult() && !this.isMovementCeased();
     }
-
-    @Override
     public void doEnchantDamageEffects(LivingEntity entityLivingBaseIn, Entity entityIn) {
         if (isVenomous() && entityIn instanceof LivingEntity) {
             ((LivingEntity) entityIn).addEffect(new MobEffectInstance(MobEffects.POISON, 150, 2));
         }
-        super.doEnchantDamageEffects(entityLivingBaseIn, entityIn);
-    }
+}
 
     private boolean isVenomous() {
         return getTypeMoC() == 3 || getTypeMoC() == 4 || getTypeMoC() == 5 || getTypeMoC() == 6 || getTypeMoC() == 7 || getTypeMoC() == 9;

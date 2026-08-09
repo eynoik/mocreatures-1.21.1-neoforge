@@ -5,7 +5,6 @@ package drzhark.mocreatures.block;
 
 import drzhark.mocreatures.init.MoCBlocks;
 import net.minecraft.core.BlockPos;
-import net.minecraft.core.Direction;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.tags.BlockTags;
 import net.minecraft.util.RandomSource;
@@ -20,8 +19,6 @@ import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.levelgen.feature.ConfiguredFeature;
 import net.minecraft.world.level.material.MapColor;
 import net.minecraft.world.level.block.BonemealableBlock;
-import net.minecraft.world.level.block.MushroomBlock;
-import net.neoforged.neoforge.common.IPlantable;
 
 import java.util.List;
 
@@ -63,8 +60,6 @@ public class MoCBlockGrass extends GrassBlock implements BonemealableBlock {
             }
         }
     }
-
-    @Override
     public boolean isValidBonemealTarget(LevelReader world, BlockPos pos, BlockState state, boolean isClient) {
         return true;
     }
@@ -116,14 +111,14 @@ public class MoCBlockGrass extends GrassBlock implements BonemealableBlock {
                             BlockState afterState = world.getBlockState(spawnPos);
                             
                             // If vanilla features replaced with something we don't want, use our block instead
-                            if (afterState.is(Blocks.GRASS) || afterState.is(Blocks.TALL_GRASS)) {
+                            if (afterState.is(Blocks.SHORT_GRASS) || afterState.is(Blocks.TALL_GRASS)) {
                                 world.setBlock(spawnPos, MoCBlocks.tallWyvgrass.get().defaultBlockState(), 3);
                             }
                         }
                     } else {
                         // Mostly tall wyvgrass
                         BlockState tallState = MoCBlocks.tallWyvgrass.get().defaultBlockState();
-                        if (((MoCBlockTallGrass) MoCBlocks.tallWyvgrass.get()).canSurvive(tallState, world, spawnPos)) {
+                        if (tallState.canSurvive(world, spawnPos)) {
                             world.setBlock(spawnPos, tallState, 3);
                         }
                     }
@@ -133,12 +128,4 @@ public class MoCBlockGrass extends GrassBlock implements BonemealableBlock {
     }
     
     // Allow mushrooms to grow on this block
-    @Override
-    public boolean canSustainPlant(BlockState state, BlockGetter world, BlockPos pos, Direction facing, IPlantable plantable) {
-        BlockState plantState = plantable.getPlant(world, pos.relative(facing));
-        if (plantState.getBlock() instanceof MushroomBlock) {
-            return true;
-        }
-        return super.canSustainPlant(state, world, pos, facing, plantable);
-    }
 }

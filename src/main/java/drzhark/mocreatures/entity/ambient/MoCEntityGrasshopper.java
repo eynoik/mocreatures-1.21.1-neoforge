@@ -127,8 +127,6 @@ public class MoCEntityGrasshopper extends MoCEntityInsect {
         }
         return 0.15F;
     }
-
-    @Override
     public float getStandingEyeHeight(Pose poseIn, EntityDimensions sizeIn) {
         return 0.15F;
     }

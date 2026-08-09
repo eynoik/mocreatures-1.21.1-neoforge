@@ -10,7 +10,6 @@ import drzhark.mocreatures.entity.ai.EntityAIWanderMoC2;
 import drzhark.mocreatures.entity.tameable.MoCEntityTameableAnimal;
 import drzhark.mocreatures.init.MoCLootTables;
 import drzhark.mocreatures.init.MoCSoundEvents;
-import net.minecraft.world.entity.MobType;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.ai.attributes.AttributeSupplier;
@@ -127,19 +126,10 @@ public class MoCEntityCrab extends MoCEntityTameableAnimal {
         return 0.7F * getMoCAge() * 0.01F;
     }
 
-    @Override
-    public boolean canBreatheUnderwater() {
-        return true;
-    }
 
     @OnlyIn(Dist.CLIENT)
     public boolean isFleeing() {
         return MoCTools.getMyMovementSpeed(this) > 0.09F;
-    }
-
-    @Override
-    public MobType getMobType() {
-        return MobType.ARTHROPOD;
     }
 
     @Override

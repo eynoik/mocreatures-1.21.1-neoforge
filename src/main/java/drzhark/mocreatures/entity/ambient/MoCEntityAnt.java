@@ -148,8 +148,6 @@ public class MoCEntityAnt extends MoCEntityAmbient {
     protected ResourceKey<LootTable> getDefaultLootTable() {
         return MoCLootTables.ANT;
     }
-
-    @Override
     protected float getStandingEyeHeight(Pose poseIn, EntityDimensions sizeIn) {
         return 0.1F;
     }

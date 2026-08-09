@@ -100,10 +100,6 @@ public class MoCEntityKittyBed extends Mob {
         return !this.isRemoved();
     }
 
-    @Override
-    public boolean canBreatheUnderwater() {
-        return true;
-    }
 
     @Override
     public boolean removeWhenFarAway(double distanceToClosestPlayer) {
@@ -130,8 +126,6 @@ public class MoCEntityKittyBed extends Mob {
     protected float getSoundVolume() {
         return 0.0F;
     }
-
-    @Override
     public double getPassengersRidingOffset() {
         return 0.0D;
     }

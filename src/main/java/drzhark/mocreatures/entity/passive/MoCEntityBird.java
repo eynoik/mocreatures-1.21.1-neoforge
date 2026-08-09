@@ -67,7 +67,7 @@ public class MoCEntityBird extends MoCEntityTameableAnimal {
         this.fleeing = false;
         this.textureSet = false;
         setTamed(false);
-        setMaxUpStep(1.0F);
+        this.getAttribute(Attributes.STEP_HEIGHT).setBaseValue(1.0F);
     }
 
     @Override
@@ -296,8 +296,6 @@ public class MoCEntityBird extends MoCEntityTameableAnimal {
     protected ResourceKey<LootTable> getDefaultLootTable() {
         return MoCLootTables.BIRD;
     }
-
-    @Override
     public double getPassengersRidingOffset() {
         if (this.getVehicle() instanceof Player) {
             return this.getVehicle().isCrouching() ? 0.2 : 0.45F;
@@ -529,9 +527,7 @@ public class MoCEntityBird extends MoCEntityTameableAnimal {
     public boolean canRidePlayer() {
         return true;
     }
-
-    @Override
     protected float getStandingEyeHeight(Pose poseIn, EntityDimensions sizeIn) {
-        return sizeIn.height * 0.8F;
+        return sizeIn.height() * 0.8F;
     }
 }

@@ -1,25 +1,25 @@
 package drzhark.mocreatures.init;
 
+import net.minecraft.core.registries.Registries;
 import drzhark.mocreatures.MoCConstants;
 import drzhark.mocreatures.MoCreatures;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.Mob;
 import net.minecraft.world.item.Item;
-import net.neoforged.neoforge.common.ForgeSpawnEggItem;
+import net.neoforged.neoforge.common.DeferredSpawnEggItem;
 import net.neoforged.bus.api.SubscribeEvent;
-import net.neoforged.fml.common.Mod;
+import net.neoforged.fml.common.EventBusSubscriber;
 import net.neoforged.fml.event.lifecycle.FMLCommonSetupEvent;
 import net.neoforged.neoforge.registries.DeferredRegister;
-import net.neoforged.neoforge.registries.ForgeRegistries;
 
 import java.util.function.Supplier;
 
 /**
  * Handles spawn egg registration statically during the registry phase
  */
-@Mod.EventBusSubscriber(modid = MoCConstants.MOD_ID, bus = Mod.EventBusSubscriber.Bus.MOD)
+@EventBusSubscriber(modid = MoCConstants.MOD_ID, bus = EventBusSubscriber.Bus.MOD)
 public class MoCSpawnEggs {
-    public static final DeferredRegister<Item> SPAWN_EGGS = DeferredRegister.create(ForgeRegistries.ITEMS, MoCConstants.MOD_ID);
+    public static final DeferredRegister<Item> SPAWN_EGGS = DeferredRegister.create(Registries.ITEM, MoCConstants.MOD_ID);
     
     // Animal entities
     public static final Supplier<Item> BIRD_SPAWN_EGG = registerSpawnEgg("bird", 
@@ -295,7 +295,7 @@ public class MoCSpawnEggs {
     private static Supplier<Item> registerSpawnEgg(String entityName, 
             Supplier<EntityType<? extends Mob>> entityTypeSupplier, int primaryColor, int secondaryColor) {
         return SPAWN_EGGS.register(entityName + "_spawn_egg", 
-                () -> new ForgeSpawnEggItem(entityTypeSupplier, primaryColor, secondaryColor, new Item.Properties()));
+                () -> new DeferredSpawnEggItem(entityTypeSupplier, primaryColor, secondaryColor, new Item.Properties()));
     }
     
     /**

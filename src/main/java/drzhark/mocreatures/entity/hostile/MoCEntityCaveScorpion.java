@@ -42,8 +42,6 @@ public class MoCEntityCaveScorpion extends MoCEntityScorpion {
     public ResourceLocation getTexture() {
         return MoCreatures.proxy.getModelTexture("scorpion_cave.png");
     }
-
-    @Override
     public void doEnchantDamageEffects(LivingEntity attacker, Entity target) {
         if (!getIsPoisoning() && this.random.nextInt(5) == 0 && target instanceof LivingEntity livingTarget) {
             setPoisoning(true);
@@ -52,8 +50,7 @@ public class MoCEntityCaveScorpion extends MoCEntityScorpion {
         } else {
             swingArm();
         }
-        super.doEnchantDamageEffects(attacker, target);
-    }
+}
 
     public static boolean getCanSpawnHere(EntityType<? extends MoCEntityMob> type, ServerLevel world, MobSpawnType reason, BlockPos pos, Random randomIn) {
         return MoCEntityScorpion.getCanSpawnHere(type, world, reason, pos, randomIn) && !world.canSeeSky(pos) && (pos.getY() < 50.0D);

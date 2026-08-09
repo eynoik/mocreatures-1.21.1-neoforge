@@ -291,14 +291,12 @@ public class MoCEntityBunny extends MoCEntityTameableAnimal {
     public boolean isNotScared() {
         return getIsTamed();
     }
-
-    @Override
     public double getMyRidingOffset() {
         if (this.getVehicle() instanceof Player) {
             return this.getVehicle().isCrouching() ? 0.25 : 0.5F;
         }
 
-        return super.getMyRidingOffset();
+        return 0.0D;
     }
 
     @Override
@@ -310,8 +308,6 @@ public class MoCEntityBunny extends MoCEntityTameableAnimal {
     public boolean canRidePlayer() {
         return true;
     }
-
-    @Override
     protected float getStandingEyeHeight(Pose poseIn, EntityDimensions sizeIn) {
         return this.getBbHeight() * 0.675F;
     }

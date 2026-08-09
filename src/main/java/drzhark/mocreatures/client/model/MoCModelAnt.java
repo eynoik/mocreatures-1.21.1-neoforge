@@ -186,17 +186,8 @@ public class MoCModelAnt<T extends MoCEntityAnt> extends EntityModel<T> {
     }
 
     @Override
-    public void renderToBuffer(
-            @NotNull PoseStack poseStack,
-            @NotNull VertexConsumer buffer,
-            int packedLight,
-            int packedOverlay,
-            float red,
-            float green,
-            float blue,
-            float alpha
-    ) {
+    public void renderToBuffer(@NotNull PoseStack poseStack, @NotNull VertexConsumer buffer, int packedLight, int packedOverlay, int packedColor) {
         // Just render the root; it will draw all nine children.
-        this.root.render(poseStack, buffer, packedLight, packedOverlay, color);
+        this.root.render(poseStack, buffer, packedLight, packedOverlay, packedColor);
     }
 }

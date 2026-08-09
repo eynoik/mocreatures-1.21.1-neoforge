@@ -3,6 +3,7 @@
  */
 package drzhark.mocreatures;
 
+import net.minecraft.core.component.DataComponents;
 import drzhark.mocreatures.util.MoCItemData;
 
 import drzhark.mocreatures.entity.IMoCEntity;
@@ -644,7 +645,8 @@ public class MoCTools {
                 if (!state.isAir()) {
                     BlockEvent.BreakEvent breakEvent = new BlockEvent.BreakEvent(serverLevel, pos, state,
                             FakePlayerFactory.get(serverLevel, MoCreatures.MOCFAKEPLAYER));
-                    if (!NeoForge.EVENT_BUS.post(breakEvent)) {
+                    NeoForge.EVENT_BUS.post(breakEvent);
+                    if (!breakEvent.isCanceled()) {
                         level.removeBlock(pos, false);
                         Explosion explosion = new Explosion(level, entity, pos.getX(), pos.getY(), pos.getZ(), 3f, false, Explosion.BlockInteraction.KEEP);
                         state.onBlockExploded(level, pos, explosion);
@@ -660,7 +662,8 @@ public class MoCTools {
                     ServerLevel serverLevel = (ServerLevel) level;
                     BlockEvent.BreakEvent breakEvent = new BlockEvent.BreakEvent(serverLevel, pos, Blocks.AIR.defaultBlockState(),
                             FakePlayerFactory.get(serverLevel, MoCreatures.MOCFAKEPLAYER));
-                    if (!NeoForge.EVENT_BUS.post(breakEvent)) {
+                    NeoForge.EVENT_BUS.post(breakEvent);
+                    if (!breakEvent.isCanceled()) {
                         level.setBlock(pos, Blocks.FIRE.defaultBlockState(), 3);
                     }
                 }
@@ -1126,7 +1129,7 @@ public class MoCTools {
             return true;
         }
 
-        CompoundTag tag = entity.serializeNBT();
+        CompoundTag tag = entity.serializeNBT(entity.registryAccess());
         if (tag.contains("Owner") && !tag.getString("Owner").isEmpty()) {
             return true;
         }
@@ -1196,7 +1199,7 @@ public class MoCTools {
      * List of edible foods
      */
     public static boolean isItemEdible(Item item) {
-        return item.isEdible()
+        return new ItemStack(item).has(DataComponents.FOOD)
                 || item.builtInRegistryHolder().is(Tags.Items.SEEDS)
                 || item == Items.WHEAT
                 || item == Items.SUGAR

@@ -3,12 +3,12 @@
  */
 package drzhark.mocreatures.block;
 
-import net.minecraft.world.level.block.GlassBlock;
+import net.minecraft.world.level.block.TransparentBlock;
 import net.minecraft.world.level.block.SoundType;
 import net.minecraft.world.level.block.state.BlockBehaviour;
 import net.minecraft.world.level.material.MapColor;
 
-public class MoCBlockGlass extends GlassBlock {
+public class MoCBlockGlass extends TransparentBlock {
 
     public MoCBlockGlass(BlockBehaviour.Properties properties) {
         super(properties

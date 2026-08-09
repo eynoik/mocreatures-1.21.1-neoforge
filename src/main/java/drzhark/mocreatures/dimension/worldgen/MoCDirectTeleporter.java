@@ -2,6 +2,7 @@ package drzhark.mocreatures.dimension.worldgen;
 
 import drzhark.mocreatures.registry.MoCPOI;
 import net.minecraft.core.BlockPos;
+import net.minecraft.core.registries.Registries;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.entity.ai.village.poi.PoiManager;
@@ -70,6 +71,9 @@ public final class MoCDirectTeleporter {
     private static void registerPortalPOI(ServerLevel world, BlockPos pos) {
         PoiManager poiManager = world.getPoiManager();
         poiManager.ensureLoadedAndValid(world, pos, 8);
-        MoCPOI.WYVERN_PORTAL.getHolder().ifPresent(holder -> poiManager.add(pos, holder));
+        world.registryAccess()
+                .registryOrThrow(Registries.POINT_OF_INTEREST_TYPE)
+                .getHolder(MoCPOI.WYVERN_PORTAL_KEY)
+                .ifPresent(holder -> poiManager.add(pos, holder));
     }
 }

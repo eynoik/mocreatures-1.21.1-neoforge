@@ -159,8 +159,6 @@ public class MoCEntityJellyFish extends MoCEntityTameableAquatic {
     protected boolean canBeTrappedInNet() {
         return true;
     }
-
-    @Override
     protected float getStandingEyeHeight(Pose poseIn, EntityDimensions sizeIn) {
         return this.getBbHeight() * 0.85F;
     }

@@ -162,37 +162,30 @@ public class MoCModelKittyBed<T extends MoCEntityKittyBed> extends EntityModel<T
     }
 
     @Override
-    public void renderToBuffer(PoseStack matrixStackIn,
-                               VertexConsumer bufferIn,
-                               int packedLightIn,
-                               int packedOverlayIn,
-                               float red,
-                               float green,
-                               float blue,
-                               float alpha) {
+    public void renderToBuffer(PoseStack matrixStackIn, VertexConsumer bufferIn, int packedLightIn, int packedOverlayIn, int packedColor) {
         // Always render table surfaces and bottom
-        this.TableL.render(matrixStackIn, bufferIn, packedLightIn, packedOverlayIn, color);
-        this.TableR.render(matrixStackIn, bufferIn, packedLightIn, packedOverlayIn, color);
-        this.Table_B.render(matrixStackIn, bufferIn, packedLightIn, packedOverlayIn, color);
-        this.Bottom.render(matrixStackIn, bufferIn, packedLightIn, packedOverlayIn, color);
+        this.TableL.render(matrixStackIn, bufferIn, packedLightIn, packedOverlayIn, packedColor);
+        this.TableR.render(matrixStackIn, bufferIn, packedLightIn, packedOverlayIn, packedColor);
+        this.Table_B.render(matrixStackIn, bufferIn, packedLightIn, packedOverlayIn, packedColor);
+        this.Bottom.render(matrixStackIn, bufferIn, packedLightIn, packedOverlayIn, packedColor);
 
         if (!this.pickedUp) {
             // Render food tray and sides
-            this.FoodT.render(matrixStackIn, bufferIn, packedLightIn, packedOverlayIn, color);
-            this.FoodTraySide.render(matrixStackIn, bufferIn, packedLightIn, packedOverlayIn, color);
-            this.FoodTraySideB.render(matrixStackIn, bufferIn, packedLightIn, packedOverlayIn, color);
-            this.FoodTraySideC.render(matrixStackIn, bufferIn, packedLightIn, packedOverlayIn, color);
-            this.FoodTraySideD.render(matrixStackIn, bufferIn, packedLightIn, packedOverlayIn, color);
+            this.FoodT.render(matrixStackIn, bufferIn, packedLightIn, packedOverlayIn, packedColor);
+            this.FoodTraySide.render(matrixStackIn, bufferIn, packedLightIn, packedOverlayIn, packedColor);
+            this.FoodTraySideB.render(matrixStackIn, bufferIn, packedLightIn, packedOverlayIn, packedColor);
+            this.FoodTraySideC.render(matrixStackIn, bufferIn, packedLightIn, packedOverlayIn, packedColor);
+            this.FoodTraySideD.render(matrixStackIn, bufferIn, packedLightIn, packedOverlayIn, packedColor);
 
             // If milk present, adjust Milk pivot Y and render
             if (this.hasMilk) {
                 this.Milk.y = 21F + this.milklevel;
-                this.Milk.render(matrixStackIn, bufferIn, packedLightIn, packedOverlayIn, color);
+                this.Milk.render(matrixStackIn, bufferIn, packedLightIn, packedOverlayIn, packedColor);
             }
             // If pet food present, adjust PetFood pivot Y and render
             if (this.hasFood) {
                 this.PetFood.y = 21F + this.milklevel;
-                this.PetFood.render(matrixStackIn, bufferIn, packedLightIn, packedOverlayIn, color);
+                this.PetFood.render(matrixStackIn, bufferIn, packedLightIn, packedOverlayIn, packedColor);
             }
         }
     }

@@ -12,14 +12,13 @@ import net.minecraft.world.entity.ai.village.poi.PoiTypes;
 import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.block.state.BlockState;
 import net.neoforged.neoforge.registries.DeferredRegister;
-import net.neoforged.neoforge.registries.ForgeRegistries;
 
 import java.util.Set;
 
 import drzhark.mocreatures.MoCConstants;
 
 public class MoCPOI {
-    public static final DeferredRegister<PoiType> POI_TYPES = DeferredRegister.create(ForgeRegistries.POI_TYPES, MoCConstants.MOD_ID);
+    public static final DeferredRegister<PoiType> POI_TYPES = DeferredRegister.create(Registries.POINT_OF_INTEREST_TYPE, MoCConstants.MOD_ID);
 
     // Wyvern Portal POI used for teleportation targeting
     public static final ResourceKey<PoiType> WYVERN_PORTAL_KEY = ResourceKey.create(

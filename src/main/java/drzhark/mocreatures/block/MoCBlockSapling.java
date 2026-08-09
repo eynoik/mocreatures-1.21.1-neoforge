@@ -17,7 +17,7 @@ import net.minecraft.world.level.material.PushReaction;
 public class MoCBlockSapling extends SaplingBlock {
 
     public MoCBlockSapling(BlockBehaviour.Properties properties) {
-        super(new WyvwoodTreeGrower(), properties
+        super(WyvwoodTreeGrower.GROWER, properties
                 .noCollission()
                 .randomTicks()
                 .strength(0.0F)

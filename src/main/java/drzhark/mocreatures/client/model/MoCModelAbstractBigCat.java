@@ -1233,16 +1233,7 @@ public abstract class MoCModelAbstractBigCat<T extends Entity> extends EntityMod
     // renderToBuffer → exactly reproduce the old render(...) logic
     // ------------------------------------------------------------
     @Override
-    public void renderToBuffer(
-            PoseStack        poseStack,
-            VertexConsumer   buffer,
-            int              packedLight,
-            int              packedOverlay,
-            float            red,
-            float            green,
-            float            blue,
-            float            alpha
-    ) {
+    public void renderToBuffer(PoseStack poseStack, VertexConsumer buffer, int packedLight, int packedOverlay, int packedColor) {
         // 1) toggle on/off various sub‐parts
         renderSaddle(this.isSaddled);
         renderMane(this.hasMane);
@@ -1261,33 +1252,33 @@ public abstract class MoCModelAbstractBigCat<T extends Entity> extends EntityMod
         }
 
         // 2) Draw the main Chest (all its children go automatically)
-        this.Chest.render(poseStack, buffer, packedLight, packedOverlay, color);
+        this.Chest.render(poseStack, buffer, packedLight, packedOverlay, packedColor);
 
         // 3) Wings if flying
         if (this.isFlyer) {
-            this.InnerWing.render(poseStack, buffer, packedLight, packedOverlay, color);
-            this.MidWing.render(poseStack, buffer, packedLight, packedOverlay, color);
-            this.OuterWing.render(poseStack, buffer, packedLight, packedOverlay, color);
-            this.InnerWingR.render(poseStack, buffer, packedLight, packedOverlay, color);
-            this.MidWingR.render(poseStack, buffer, packedLight, packedOverlay, color);
-            this.OuterWingR.render(poseStack, buffer, packedLight, packedOverlay, color);
+            this.InnerWing.render(poseStack, buffer, packedLight, packedOverlay, packedColor);
+            this.MidWing.render(poseStack, buffer, packedLight, packedOverlay, packedColor);
+            this.OuterWing.render(poseStack, buffer, packedLight, packedOverlay, packedColor);
+            this.InnerWingR.render(poseStack, buffer, packedLight, packedOverlay, packedColor);
+            this.MidWingR.render(poseStack, buffer, packedLight, packedOverlay, packedColor);
+            this.OuterWingR.render(poseStack, buffer, packedLight, packedOverlay, packedColor);
         }
 
         // 4) Stinger parts if hasStinger
         if (this.hasStinger) {
-            this.STailRoot.render(poseStack, buffer, packedLight, packedOverlay, color);
-            this.STail2.render(poseStack, buffer, packedLight, packedOverlay, color);
-            this.STail3.render(poseStack, buffer, packedLight, packedOverlay, color);
-            this.STail4.render(poseStack, buffer, packedLight, packedOverlay, color);
-            this.STail5.render(poseStack, buffer, packedLight, packedOverlay, color);
-            this.StingerLump.render(poseStack, buffer, packedLight, packedOverlay, color);
-            this.Stinger.render(poseStack, buffer, packedLight, packedOverlay, color);
+            this.STailRoot.render(poseStack, buffer, packedLight, packedOverlay, packedColor);
+            this.STail2.render(poseStack, buffer, packedLight, packedOverlay, packedColor);
+            this.STail3.render(poseStack, buffer, packedLight, packedOverlay, packedColor);
+            this.STail4.render(poseStack, buffer, packedLight, packedOverlay, packedColor);
+            this.STail5.render(poseStack, buffer, packedLight, packedOverlay, packedColor);
+            this.StingerLump.render(poseStack, buffer, packedLight, packedOverlay, packedColor);
+            this.Stinger.render(poseStack, buffer, packedLight, packedOverlay, packedColor);
         }
 
         // 5) Harness rings if ridden
         if (this.isSaddled && this.isRidden) {
-            this.LeftHarness.render(poseStack, buffer, packedLight, packedOverlay, color);
-            this.RightHarness.render(poseStack, buffer, packedLight, packedOverlay, color);
+            this.LeftHarness.render(poseStack, buffer, packedLight, packedOverlay, packedColor);
+            this.RightHarness.render(poseStack, buffer, packedLight, packedOverlay, packedColor);
         }
 
         if (this.isGhost) {

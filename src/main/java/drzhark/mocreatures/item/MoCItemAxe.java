@@ -24,12 +24,12 @@ public class MoCItemAxe extends AxeItem {
     private final int specialWeaponType;
 
     public MoCItemAxe(Item.Properties properties, Tier material, float damage, float speed) {
-        super(material, damage - 1.0F, speed - 4.0F, properties);
+        super(material, properties.attributes(AxeItem.createAttributes(material, damage - 1.0F, speed - 4.0F)));
         this.specialWeaponType = 0;
     }
 
     public MoCItemAxe(Item.Properties properties, Tier material, float damage, float speed, int damageType) {
-        super(material, damage - 1.0F, speed - 4.0F, properties);
+        super(material, properties.attributes(AxeItem.createAttributes(material, damage - 1.0F, speed - 4.0F)));
         this.specialWeaponType = damageType;
     }
 

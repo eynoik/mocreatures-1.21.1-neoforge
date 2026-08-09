@@ -12,8 +12,6 @@ public class MoCItemFood extends MoCItem {
         super(builder.properties.food(builder.foodBuilder.build()));
         this.itemUseDuration = builder.itemUseDuration;
     }
-
-    @Override
     public int getUseDuration(ItemStack stack) {
         return itemUseDuration == 0 ? 32 : itemUseDuration;
     }
@@ -34,15 +32,14 @@ public class MoCItemFood extends MoCItem {
 
         public Builder(Item.Properties properties, int amount, float saturation, boolean isWolfFood, int eatingSpeed) {
             this.properties = properties;
-            this.foodBuilder = new FoodProperties.Builder().nutrition(amount).saturationMod(saturation);
+            this.foodBuilder = new FoodProperties.Builder().nutrition(amount).saturationModifier(saturation);
             if (isWolfFood) {
-                this.foodBuilder.meat();
             }
             this.itemUseDuration = eatingSpeed;
         }
 
         public Builder setAlwaysEdible() {
-            this.foodBuilder.alwaysEat();
+            this.foodBuilder.alwaysEdible();
             return this;
         }
 

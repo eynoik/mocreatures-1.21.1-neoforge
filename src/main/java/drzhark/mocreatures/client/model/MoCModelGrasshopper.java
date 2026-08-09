@@ -109,18 +109,9 @@ public class MoCModelGrasshopper<T extends MoCEntityGrasshopper> extends EntityM
     }
 
     @Override
-    public void renderToBuffer(
-            PoseStack poseStack,
-            VertexConsumer vertexConsumer,
-            int packedLight,
-            int packedOverlay,
-            float red,
-            float green,
-            float blue,
-            float alpha
-    ) {
+    public void renderToBuffer(PoseStack poseStack, VertexConsumer vertexConsumer, int packedLight, int packedOverlay, int packedColor) {
         // Render opaque parts first
-        renderOpaqueParts(poseStack, vertexConsumer, packedLight, packedOverlay, color);
+        renderOpaqueParts(poseStack, vertexConsumer, packedLight, packedOverlay, packedColor);
         
         // Render transparent parts with blending if needed
         if (shouldRenderPartialTransparency()) {
@@ -129,49 +120,49 @@ public class MoCModelGrasshopper<T extends MoCEntityGrasshopper> extends EntityM
             RenderSystem.defaultBlendFunc();
             RenderSystem.clearColor(getTransparencyColor()[0], getTransparencyColor()[1], getTransparencyColor()[2], getTransparencyValue());
             
-            renderTransparentParts(poseStack, vertexConsumer, packedLight, packedOverlay, color);
+            renderTransparentParts(poseStack, vertexConsumer, packedLight, packedOverlay, packedColor);
             
             RenderSystem.disableBlend();
             poseStack.popPose();
         } else {
             // Render folded wings as opaque when not flying
-            this.foldedWings.render(poseStack, vertexConsumer, packedLight, packedOverlay, color);
+            this.foldedWings.render(poseStack, vertexConsumer, packedLight, packedOverlay, packedColor);
         }
     }
     
     @Override
-    public void renderOpaqueParts(PoseStack poseStack, VertexConsumer buffer, int packedLight, int packedOverlay, int color) {
+    public void renderOpaqueParts(PoseStack poseStack, VertexConsumer buffer, int packedLight, int packedOverlay, int packedColor) {
         // Render head and body
-        this.head.render(poseStack, buffer, packedLight, packedOverlay, color);
-        this.antenna.render(poseStack, buffer, packedLight, packedOverlay, color);
-        this.antennaB.render(poseStack, buffer, packedLight, packedOverlay, color);
-        this.thorax.render(poseStack, buffer, packedLight, packedOverlay, color);
-        this.abdomen.render(poseStack, buffer, packedLight, packedOverlay, color);
-        this.tailA.render(poseStack, buffer, packedLight, packedOverlay, color);
-        this.tailB.render(poseStack, buffer, packedLight, packedOverlay, color);
-        this.frontLegs.render(poseStack, buffer, packedLight, packedOverlay, color);
-        this.midLegs.render(poseStack, buffer, packedLight, packedOverlay, color);
+        this.head.render(poseStack, buffer, packedLight, packedOverlay, packedColor);
+        this.antenna.render(poseStack, buffer, packedLight, packedOverlay, packedColor);
+        this.antennaB.render(poseStack, buffer, packedLight, packedOverlay, packedColor);
+        this.thorax.render(poseStack, buffer, packedLight, packedOverlay, packedColor);
+        this.abdomen.render(poseStack, buffer, packedLight, packedOverlay, packedColor);
+        this.tailA.render(poseStack, buffer, packedLight, packedOverlay, packedColor);
+        this.tailB.render(poseStack, buffer, packedLight, packedOverlay, packedColor);
+        this.frontLegs.render(poseStack, buffer, packedLight, packedOverlay, packedColor);
+        this.midLegs.render(poseStack, buffer, packedLight, packedOverlay, packedColor);
 
         if (!this.flying) {
             // Grounded pose
-            this.thighLeft.render(poseStack, buffer, packedLight, packedOverlay, color);
-            this.thighRight.render(poseStack, buffer, packedLight, packedOverlay, color);
-            this.legLeft.render(poseStack, buffer, packedLight, packedOverlay, color);
-            this.legRight.render(poseStack, buffer, packedLight, packedOverlay, color);
+            this.thighLeft.render(poseStack, buffer, packedLight, packedOverlay, packedColor);
+            this.thighRight.render(poseStack, buffer, packedLight, packedOverlay, packedColor);
+            this.legLeft.render(poseStack, buffer, packedLight, packedOverlay, packedColor);
+            this.legRight.render(poseStack, buffer, packedLight, packedOverlay, packedColor);
         } else {
             // Flying pose
-            this.thighLeftB.render(poseStack, buffer, packedLight, packedOverlay, color);
-            this.thighRightB.render(poseStack, buffer, packedLight, packedOverlay, color);
-            this.legLeftB.render(poseStack, buffer, packedLight, packedOverlay, color);
-            this.legRightB.render(poseStack, buffer, packedLight, packedOverlay, color);
+            this.thighLeftB.render(poseStack, buffer, packedLight, packedOverlay, packedColor);
+            this.thighRightB.render(poseStack, buffer, packedLight, packedOverlay, packedColor);
+            this.legLeftB.render(poseStack, buffer, packedLight, packedOverlay, packedColor);
+            this.legRightB.render(poseStack, buffer, packedLight, packedOverlay, packedColor);
         }
     }
     
     @Override
-    public void renderTransparentParts(PoseStack poseStack, VertexConsumer buffer, int packedLight, int packedOverlay, int color) {
+    public void renderTransparentParts(PoseStack poseStack, VertexConsumer buffer, int packedLight, int packedOverlay, int packedColor) {
         // Render wings with transparency
-        this.leftWing.render(poseStack, buffer, packedLight, packedOverlay, color);
-        this.rightWing.render(poseStack, buffer, packedLight, packedOverlay, color);
+        this.leftWing.render(poseStack, buffer, packedLight, packedOverlay, packedColor);
+        this.rightWing.render(poseStack, buffer, packedLight, packedOverlay, packedColor);
     }
     
     @Override

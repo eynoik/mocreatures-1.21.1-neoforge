@@ -1,5 +1,6 @@
 package drzhark.mocreatures.world;
 
+import net.minecraft.core.registries.Registries;
 import java.util.function.Supplier;
 
 import com.mojang.serialization.MapCodec;

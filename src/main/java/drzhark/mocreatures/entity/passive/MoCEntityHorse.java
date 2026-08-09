@@ -3,6 +3,7 @@
  */
 package drzhark.mocreatures.entity.passive;
 
+import net.minecraft.core.component.DataComponents;
 import drzhark.mocreatures.MoCTools;
 import drzhark.mocreatures.MoCreatures;
 import drzhark.mocreatures.entity.ai.EntityAIFollowAdult;
@@ -47,7 +48,6 @@ import net.minecraft.core.BlockPos;
 import net.minecraft.util.Mth;
 import net.minecraft.world.level.Level;
 import net.minecraft.server.level.ServerLevel;
-import net.minecraft.world.entity.MobType;
 import net.minecraft.resources.ResourceKey;
 import net.minecraft.world.damagesource.DamageSource;
 import net.minecraft.world.InteractionResult;
@@ -100,7 +100,7 @@ public class MoCEntityHorse extends MoCEntityTameableAnimal {
         this.isImmuneToFire = false;
         setMoCAge(50);
         setIsChested(false);
-        this.setMaxUpStep(1.0F);
+        this.getAttribute(Attributes.STEP_HEIGHT).setBaseValue(1.0F);
 
         if (!this.level().isClientSide) {
             setAdult(this.random.nextInt(5) != 0);
@@ -1467,7 +1467,7 @@ public class MoCEntityHorse extends MoCEntityTameableAnimal {
         }
 
         // zebra easter egg
-        if (!stack.isEmpty() && (this.getTypeMoC() == 60) && stack.getItem() instanceof RecordItem && MoCreatures.proxy.easterEggs) {
+        if (!stack.isEmpty() && (this.getTypeMoC() == 60) && stack.has(DataComponents.JUKEBOX_PLAYABLE) && MoCreatures.proxy.easterEggs) {
             player.setItemInHand(hand, ItemStack.EMPTY);
             if (!this.level().isClientSide) {
                 ItemEntity entityitem1 = new ItemEntity(this.level(), this.getX(), this.getY(), this.getZ(), new ItemStack(MoCItems.RECORD_SHUFFLE.get(), 1));
@@ -1764,7 +1764,7 @@ public class MoCEntityHorse extends MoCEntityTameableAnimal {
         boolean flag = false;
         JukeboxBlockEntity jukebox = MoCTools.nearJukeBoxRecord(this, 6D);
         if (jukebox != null) {
-            ItemStack recordStack = jukebox.getFirstItem();
+            ItemStack recordStack = jukebox.getTheItem();
             Item shuffleRecord = MoCItems.RECORD_SHUFFLE.get();
             if (recordStack.getItem() == shuffleRecord) {
                 flag = true;
@@ -2289,7 +2289,7 @@ public class MoCEntityHorse extends MoCEntityTameableAnimal {
                 if (!this.localStack.isEmpty()) {
                     CompoundTag nbttagcompound1 = new CompoundTag();
                     nbttagcompound1.putByte("Slot", (byte) i);
-                    this.localStack.save(nbttagcompound1);
+                    nbttagcompound1.merge((CompoundTag) this.localStack.save(this.registryAccess()));
                     nbttaglist.add(nbttagcompound1);
                 }
             }
@@ -2313,7 +2313,7 @@ public class MoCEntityHorse extends MoCEntityTameableAnimal {
                 CompoundTag nbttagcompound1 = nbttaglist.getCompound(i);
                 int j = nbttagcompound1.getByte("Slot") & 0xff;
                 if (j < this.localChest.getContainerSize()) {
-                    this.localChest.setItem(j, ItemStack.of(nbttagcompound1));
+                    this.localChest.setItem(j, ItemStack.parseOptional(this.registryAccess(), nbttagcompound1));
                 }
             }
         }
@@ -2342,12 +2342,6 @@ public class MoCEntityHorse extends MoCEntityTameableAnimal {
     }
 
     @Override
-    public MobType getMobType() {
-        if (isUndead()) return MobType.UNDEAD;
-        return super.getMobType();
-    }
-
-    @Override
     protected boolean canBeTrappedInNet() {
         return getIsTamed() && !isAmuletHorse();
     }
@@ -2360,12 +2354,16 @@ public class MoCEntityHorse extends MoCEntityTameableAnimal {
         super.setTypeMoC(i);
     }
 
+    public double getPassengersRidingOffset() {
+        return (this.getBbHeight() * 0.75D) - 0.1D;
+    }
+
     @Override
     protected void positionRider(Entity passenger, Entity.MoveFunction moveFunction) {
         double dist = getSizeFactor() * (0.25D);
         double newPosX = this.getX() + (dist * Math.sin(this.yBodyRot / 57.29578F));
         double newPosZ = this.getZ() - (dist * Math.cos(this.yBodyRot / 57.29578F));
-        moveFunction.accept(passenger, newPosX, this.getY() + this.getPassengersRidingOffset() + passenger.getMyRidingOffset(), newPosZ);
+        moveFunction.accept(passenger, newPosX, this.getY() + this.getPassengersRidingOffset() + 0.0D, newPosZ);
     }
 
     @Override

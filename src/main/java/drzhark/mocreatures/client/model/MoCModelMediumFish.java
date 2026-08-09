@@ -346,16 +346,7 @@ public class MoCModelMediumFish<T extends MoCEntityMediumFish> extends EntityMod
      * Render all parts, applying entity‐specific offsets and a 90° Y rotation.
      */
     @Override
-    public void renderToBuffer(
-            PoseStack        poseStack,
-            VertexConsumer   buffer,
-            int              packedLight,
-            int              packedOverlay,
-            float            red,
-            float            green,
-            float            blue,
-            float            alpha
-    ) {
+    public void renderToBuffer(PoseStack poseStack, VertexConsumer buffer, int packedLight, int packedOverlay, int packedColor) {
         // Get the adjusted offsets from the entity (same as old getAdjustedX/Y/ZOffset)
         float yOffset = this.mediumFish.getAdjustedYOffset();
         float xOffset = this.mediumFish.getAdjustedXOffset();
@@ -368,22 +359,22 @@ public class MoCModelMediumFish<T extends MoCEntityMediumFish> extends EntityMod
         poseStack.mulPose(Axis.YP.rotationDegrees(90.0F));
 
         // Render each part
-        this.Head.render(poseStack, buffer, packedLight, packedOverlay, color);
-        this.LowerHead.render(poseStack, buffer, packedLight, packedOverlay, color);
-        this.Nose.render(poseStack, buffer, packedLight, packedOverlay, color);
-        this.MouthBottom.render(poseStack, buffer, packedLight, packedOverlay, color);
-        this.MouthBottomB.render(poseStack, buffer, packedLight, packedOverlay, color);
-        this.Body.render(poseStack, buffer, packedLight, packedOverlay, color);
-        this.BackUp.render(poseStack, buffer, packedLight, packedOverlay, color);
-        this.BackDown.render(poseStack, buffer, packedLight, packedOverlay, color);
-        this.Tail.render(poseStack, buffer, packedLight, packedOverlay, color);
-        this.TailFin.render(poseStack, buffer, packedLight, packedOverlay, color);
-        this.RightPectoralFin.render(poseStack, buffer, packedLight, packedOverlay, color);
-        this.LeftPectoralFin.render(poseStack, buffer, packedLight, packedOverlay, color);
-        this.UpperFin.render(poseStack, buffer, packedLight, packedOverlay, color);
-        this.LowerFin.render(poseStack, buffer, packedLight, packedOverlay, color);
-        this.RightLowerFin.render(poseStack, buffer, packedLight, packedOverlay, color);
-        this.LeftLowerFin.render(poseStack, buffer, packedLight, packedOverlay, color);
+        this.Head.render(poseStack, buffer, packedLight, packedOverlay, packedColor);
+        this.LowerHead.render(poseStack, buffer, packedLight, packedOverlay, packedColor);
+        this.Nose.render(poseStack, buffer, packedLight, packedOverlay, packedColor);
+        this.MouthBottom.render(poseStack, buffer, packedLight, packedOverlay, packedColor);
+        this.MouthBottomB.render(poseStack, buffer, packedLight, packedOverlay, packedColor);
+        this.Body.render(poseStack, buffer, packedLight, packedOverlay, packedColor);
+        this.BackUp.render(poseStack, buffer, packedLight, packedOverlay, packedColor);
+        this.BackDown.render(poseStack, buffer, packedLight, packedOverlay, packedColor);
+        this.Tail.render(poseStack, buffer, packedLight, packedOverlay, packedColor);
+        this.TailFin.render(poseStack, buffer, packedLight, packedOverlay, packedColor);
+        this.RightPectoralFin.render(poseStack, buffer, packedLight, packedOverlay, packedColor);
+        this.LeftPectoralFin.render(poseStack, buffer, packedLight, packedOverlay, packedColor);
+        this.UpperFin.render(poseStack, buffer, packedLight, packedOverlay, packedColor);
+        this.LowerFin.render(poseStack, buffer, packedLight, packedOverlay, packedColor);
+        this.RightLowerFin.render(poseStack, buffer, packedLight, packedOverlay, packedColor);
+        this.LeftLowerFin.render(poseStack, buffer, packedLight, packedOverlay, packedColor);
 
         poseStack.popPose();
     }

@@ -61,13 +61,13 @@ public class MoCRenderKittyBed extends MobRenderer<MoCEntityKittyBed, MoCModelKi
         public void render(PoseStack poseStack, MultiBufferSource buffer, int packedLightIn, MoCEntityKittyBed entitykittybed, float limbSwing, float limbSwingAmount, float partialTicks, float ageInTicks, float netHeadYaw, float headPitch) {
             int j = this.mocRenderer.mycolor;
             
-            float[] rgb = DyeColor.byId(j).getTextureDiffuseColors();
+            int packedColor = DyeColor.byId(j).getTextureDiffuseColor();
             
             // Render colored overlay model
             this.getParentModel().copyPropertiesTo(this.mocModel);
             this.mocModel.renderToBuffer(poseStack, buffer.getBuffer(
                     RenderType.entityCutoutNoCull(this.getTextureLocation(entitykittybed))),
-                    packedLightIn, OverlayTexture.NO_OVERLAY, rgb[0], rgb[1], rgb[2], 1.0F);
+                    packedLightIn, OverlayTexture.NO_OVERLAY, packedColor);
         }
     }
 }

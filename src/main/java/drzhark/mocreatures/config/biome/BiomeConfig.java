@@ -7,7 +7,6 @@ package drzhark.mocreatures.config.biome;
 import net.minecraft.core.Holder;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.level.biome.Biome;
-import net.neoforged.neoforge.registries.ForgeRegistries;
 import org.apache.commons.lang3.tuple.Pair;
 
 import drzhark.mocreatures.MoCreatures;
@@ -219,6 +218,6 @@ public class BiomeConfig {
 	}
 
 	public static boolean test(Pair<String, SpawnBiomeData> spawns, Holder<Biome> biome) {
-		return test(spawns, biome, ForgeRegistries.BIOMES.getKey(biome.value()));
+		return biome.unwrapKey().map(key -> test(spawns, biome, key.location())).orElse(false);
 	}
 }

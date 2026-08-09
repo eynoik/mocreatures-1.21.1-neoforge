@@ -30,8 +30,6 @@ public class MoCEntityDirtScorpion extends MoCEntityScorpion {
                 .add(Attributes.ATTACK_DAMAGE, 4.0D)
                 .add(Attributes.ARMOR, 3.0D);
     }
-
-    @Override
     public void doEnchantDamageEffects(LivingEntity attacker, Entity target) {
         if (!getIsPoisoning() && this.random.nextInt(5) == 0 && target instanceof LivingEntity livingTarget) {
             setPoisoning(true);
@@ -39,8 +37,7 @@ public class MoCEntityDirtScorpion extends MoCEntityScorpion {
         } else {
             swingArm();
         }
-        super.doEnchantDamageEffects(attacker, target);
-    }
+}
 
     @Override
     protected ResourceKey<LootTable> getDefaultLootTable() {

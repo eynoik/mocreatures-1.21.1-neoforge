@@ -134,14 +134,6 @@ public class MoCEntityFilchLizard extends MoCEntityAnimal {
         return true;
     }
 
-    @Override
-    public EntityDimensions getDimensions(Pose poseIn) {
-        if (!this.getMainHandItem().isEmpty()) {
-            return super.getDimensions(poseIn).scale(1.0F, 2.5F);
-        } else {
-            return super.getDimensions(poseIn);
-        }
-    }
 
     @Override
     public int getBaseExperienceReward() {
@@ -197,13 +189,13 @@ public class MoCEntityFilchLizard extends MoCEntityAnimal {
     @Nullable
     protected ResourceLocation getSpawnLootTable() {
         // Reference to loot_tables/entities/filch_lizard/filch_lizard_spawn.json
-        return MoCLootTables.FILCH_LIZARD_SPAWN;
+        return MoCLootTables.FILCH_LIZARD_SPAWN.location();
     }
 
     @Nullable
     protected ResourceLocation getStealLootTable() {
         // Reference to loot_tables/entities/filch_lizard/filch_lizard_steal.json
-        return MoCLootTables.FILCH_LIZARD_STEAL;
+        return MoCLootTables.FILCH_LIZARD_STEAL.location();
     }
 
     static class AIAvoidWhenNasty extends AvoidEntityGoal<Player> {

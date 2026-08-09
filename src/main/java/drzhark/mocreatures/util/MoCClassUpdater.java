@@ -3,6 +3,7 @@
  */
 package drzhark.mocreatures.util;
 
+import net.minecraft.network.syncher.SynchedEntityData;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.Mob;
 import net.minecraft.world.level.Level;

@@ -207,28 +207,19 @@ public class MoCModelGoat<T extends MoCEntityGoat> extends EntityModel<T> {
     }
 
     @Override
-    public void renderToBuffer(
-            PoseStack poseStack,
-            VertexConsumer vertexConsumer,
-            int packedLight,
-            int packedOverlay,
-            float red,
-            float green,
-            float blue,
-            float alpha
-    ) {
+    public void renderToBuffer(PoseStack poseStack, VertexConsumer vertexConsumer, int packedLight, int packedOverlay, int packedColor) {
         // Draw legs and body
-        this.leg1.render(poseStack, vertexConsumer, packedLight, packedOverlay, color);
-        this.leg2.render(poseStack, vertexConsumer, packedLight, packedOverlay, color);
-        this.leg3.render(poseStack, vertexConsumer, packedLight, packedOverlay, color);
-        this.leg4.render(poseStack, vertexConsumer, packedLight, packedOverlay, color);
-        this.body.render(poseStack, vertexConsumer, packedLight, packedOverlay, color);
-        this.tail.render(poseStack, vertexConsumer, packedLight, packedOverlay, color);
-        this.neck.render(poseStack, vertexConsumer, packedLight, packedOverlay, color);
+        this.leg1.render(poseStack, vertexConsumer, packedLight, packedOverlay, packedColor);
+        this.leg2.render(poseStack, vertexConsumer, packedLight, packedOverlay, packedColor);
+        this.leg3.render(poseStack, vertexConsumer, packedLight, packedOverlay, packedColor);
+        this.leg4.render(poseStack, vertexConsumer, packedLight, packedOverlay, packedColor);
+        this.body.render(poseStack, vertexConsumer, packedLight, packedOverlay, packedColor);
+        this.tail.render(poseStack, vertexConsumer, packedLight, packedOverlay, packedColor);
+        this.neck.render(poseStack, vertexConsumer, packedLight, packedOverlay, packedColor);
 
         // Tits for certain goat types (1 < typeInt < 5)
         if (this.typeInt > 1 && this.typeInt < 5) {
-            this.tits.render(poseStack, vertexConsumer, packedLight, packedOverlay, color);
+            this.tits.render(poseStack, vertexConsumer, packedLight, packedOverlay, packedColor);
         }
 
         poseStack.pushPose();
@@ -240,36 +231,36 @@ public class MoCModelGoat<T extends MoCEntityGoat> extends EntityModel<T> {
         }
 
         // Ears, head, nose
-        this.lEar.render(poseStack, vertexConsumer, packedLight, packedOverlay, color);
-        this.rEar.render(poseStack, vertexConsumer, packedLight, packedOverlay, color);
-        this.head.render(poseStack, vertexConsumer, packedLight, packedOverlay, color);
-        this.nose.render(poseStack, vertexConsumer, packedLight, packedOverlay, color);
+        this.lEar.render(poseStack, vertexConsumer, packedLight, packedOverlay, packedColor);
+        this.rEar.render(poseStack, vertexConsumer, packedLight, packedOverlay, packedColor);
+        this.head.render(poseStack, vertexConsumer, packedLight, packedOverlay, packedColor);
+        this.nose.render(poseStack, vertexConsumer, packedLight, packedOverlay, packedColor);
 
         // Horns for typeInt > 1
         if (this.typeInt > 1) {
             if (this.age > 0.7F) {
-                this.rHorn1.render(poseStack, vertexConsumer, packedLight, packedOverlay, color);
-                this.lHorn1.render(poseStack, vertexConsumer, packedLight, packedOverlay, color);
+                this.rHorn1.render(poseStack, vertexConsumer, packedLight, packedOverlay, packedColor);
+                this.lHorn1.render(poseStack, vertexConsumer, packedLight, packedOverlay, packedColor);
             }
             if (this.age > 0.8F) {
-                this.rHorn2.render(poseStack, vertexConsumer, packedLight, packedOverlay, color);
-                this.lHorn2.render(poseStack, vertexConsumer, packedLight, packedOverlay, color);
+                this.rHorn2.render(poseStack, vertexConsumer, packedLight, packedOverlay, packedColor);
+                this.lHorn2.render(poseStack, vertexConsumer, packedLight, packedOverlay, packedColor);
             }
         }
 
         // Extra horns for typeInt > 4
         if (this.typeInt > 4) {
             if (this.age > 0.8F) {
-                this.rHorn3.render(poseStack, vertexConsumer, packedLight, packedOverlay, color);
-                this.lHorn3.render(poseStack, vertexConsumer, packedLight, packedOverlay, color);
+                this.rHorn3.render(poseStack, vertexConsumer, packedLight, packedOverlay, packedColor);
+                this.lHorn3.render(poseStack, vertexConsumer, packedLight, packedOverlay, packedColor);
             }
             if (this.age > 0.85F) {
-                this.rHorn4.render(poseStack, vertexConsumer, packedLight, packedOverlay, color);
-                this.lHorn4.render(poseStack, vertexConsumer, packedLight, packedOverlay, color);
+                this.rHorn4.render(poseStack, vertexConsumer, packedLight, packedOverlay, packedColor);
+                this.lHorn4.render(poseStack, vertexConsumer, packedLight, packedOverlay, packedColor);
             }
             if (this.age > 0.9F) {
-                this.rHorn5.render(poseStack, vertexConsumer, packedLight, packedOverlay, color);
-                this.lHorn5.render(poseStack, vertexConsumer, packedLight, packedOverlay, color);
+                this.rHorn5.render(poseStack, vertexConsumer, packedLight, packedOverlay, packedColor);
+                this.lHorn5.render(poseStack, vertexConsumer, packedLight, packedOverlay, packedColor);
             }
         }
 
@@ -280,12 +271,12 @@ public class MoCModelGoat<T extends MoCEntityGoat> extends EntityModel<T> {
 
         // Goatie for highest horn types
         if (this.typeInt > 4 && this.age > 0.9F) {
-            this.goatie.render(poseStack, vertexConsumer, packedLight, packedOverlay, color);
+            this.goatie.render(poseStack, vertexConsumer, packedLight, packedOverlay, packedColor);
         }
 
         // Tongue and mouth
-        this.tongue.render(poseStack, vertexConsumer, packedLight, packedOverlay, color);
-        this.mouth.render(poseStack, vertexConsumer, packedLight, packedOverlay, color);
+        this.tongue.render(poseStack, vertexConsumer, packedLight, packedOverlay, packedColor);
+        this.mouth.render(poseStack, vertexConsumer, packedLight, packedOverlay, packedColor);
 
         poseStack.popPose();
     }

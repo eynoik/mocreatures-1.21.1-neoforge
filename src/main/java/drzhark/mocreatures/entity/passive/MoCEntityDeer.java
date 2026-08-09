@@ -191,9 +191,7 @@ public class MoCEntityDeer extends MoCEntityTameableAnimal {
         }
         return getMoCAge() * 0.01F;
     }
-
-    @Override
     protected float getStandingEyeHeight(Pose poseIn, EntityDimensions sizeIn) {
-        return sizeIn.height * 0.945F;
+        return sizeIn.height() * 0.945F;
     }
 }

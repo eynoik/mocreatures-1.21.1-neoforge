@@ -7,9 +7,9 @@ import drzhark.mocreatures.MoCConstants;
 import net.minecraft.world.item.Item;
 import net.neoforged.neoforge.event.furnace.FurnaceFuelBurnTimeEvent;
 import net.neoforged.bus.api.SubscribeEvent;
-import net.neoforged.fml.common.Mod;
+import net.neoforged.fml.common.EventBusSubscriber;
 
-@Mod.EventBusSubscriber(modid = MoCConstants.MOD_ID)
+@EventBusSubscriber(modid = MoCConstants.MOD_ID)
 public class MoCRecipes {
 
     @SubscribeEvent

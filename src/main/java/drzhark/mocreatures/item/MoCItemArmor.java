@@ -10,6 +10,7 @@ import net.minecraft.world.entity.EquipmentSlot;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ArmorItem;
 import net.minecraft.world.item.ArmorMaterial;
+import net.minecraft.core.Holder;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.TooltipFlag;
@@ -24,12 +25,11 @@ import java.util.function.Consumer;
 
 public class MoCItemArmor extends ArmorItem {
 
-    public MoCItemArmor(Item.Properties properties, ArmorMaterial materialIn, Type type) {
+    public MoCItemArmor(Item.Properties properties, Holder<ArmorMaterial> materialIn, Type type) {
         super(materialIn, type, properties);
     }
 
     @SuppressWarnings("removal")
-    @Override
     public void onArmorTick(ItemStack itemStack, Level world, Player player) {
         if (player.tickCount % 40 == 0) {
             ItemStack stack = player.getItemBySlot(EquipmentSlot.FEET);

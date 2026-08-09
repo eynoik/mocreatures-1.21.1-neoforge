@@ -228,47 +228,40 @@ public class MoCModelRay<T extends MoCEntityRay> extends EntityModel<T> {
     }
 
     @Override
-    public void renderToBuffer(PoseStack stack,
-                               VertexConsumer builder,
-                               int packedLight,
-                               int packedOverlay,
-                               float red,
-                               float green,
-                               float blue,
-                               float alpha) {
+    public void renderToBuffer(PoseStack stack, VertexConsumer builder, int packedLight, int packedOverlay, int packedColor) {
 
         // Always draw these (body + “core” parts + tail)
-        tail.render(stack, builder, packedLight, packedOverlay, color);
-        body.render(stack, builder, packedLight, packedOverlay, color);
-        bodyU.render(stack, builder, packedLight, packedOverlay, color);
-        bodyTail.render(stack, builder, packedLight, packedOverlay, color);
+        tail.render(stack, builder, packedLight, packedOverlay, packedColor);
+        body.render(stack, builder, packedLight, packedOverlay, packedColor);
+        bodyU.render(stack, builder, packedLight, packedOverlay, packedColor);
+        bodyTail.render(stack, builder, packedLight, packedOverlay, packedColor);
 
         // Wings part A & B are drawn in both manta & non‐manta (they form the broad base)
-        rWingA.render(stack, builder, packedLight, packedOverlay, color);
-        rWingB.render(stack, builder, packedLight, packedOverlay, color);
-        lWingA.render(stack, builder, packedLight, packedOverlay, color);
-        lWingB.render(stack, builder, packedLight, packedOverlay, color);
+        rWingA.render(stack, builder, packedLight, packedOverlay, packedColor);
+        rWingB.render(stack, builder, packedLight, packedOverlay, packedColor);
+        lWingA.render(stack, builder, packedLight, packedOverlay, packedColor);
+        lWingB.render(stack, builder, packedLight, packedOverlay, packedColor);
 
         if (this.isMantaRay) {
             // Draw manta‐only detail: the “fins” (right & left), and the entire wing chain C→G
-            right.render(stack, builder, packedLight, packedOverlay, color);
-            left.render(stack, builder, packedLight, packedOverlay, color);
+            right.render(stack, builder, packedLight, packedOverlay, packedColor);
+            left.render(stack, builder, packedLight, packedOverlay, packedColor);
 
-            rWingC.render(stack, builder, packedLight, packedOverlay, color);
-            rWingD.render(stack, builder, packedLight, packedOverlay, color);
-            rWingE.render(stack, builder, packedLight, packedOverlay, color);
-            rWingF.render(stack, builder, packedLight, packedOverlay, color);
-            rWingG.render(stack, builder, packedLight, packedOverlay, color);
+            rWingC.render(stack, builder, packedLight, packedOverlay, packedColor);
+            rWingD.render(stack, builder, packedLight, packedOverlay, packedColor);
+            rWingE.render(stack, builder, packedLight, packedOverlay, packedColor);
+            rWingF.render(stack, builder, packedLight, packedOverlay, packedColor);
+            rWingG.render(stack, builder, packedLight, packedOverlay, packedColor);
 
-            lWingC.render(stack, builder, packedLight, packedOverlay, color);
-            lWingD.render(stack, builder, packedLight, packedOverlay, color);
-            lWingE.render(stack, builder, packedLight, packedOverlay, color);
-            lWingF.render(stack, builder, packedLight, packedOverlay, color);
-            lWingG.render(stack, builder, packedLight, packedOverlay, color);
+            lWingC.render(stack, builder, packedLight, packedOverlay, packedColor);
+            lWingD.render(stack, builder, packedLight, packedOverlay, packedColor);
+            lWingE.render(stack, builder, packedLight, packedOverlay, packedColor);
+            lWingF.render(stack, builder, packedLight, packedOverlay, packedColor);
+            lWingG.render(stack, builder, packedLight, packedOverlay, packedColor);
         } else {
             // Draw non‐manta “eyes” only
-            rEye.render(stack, builder, packedLight, packedOverlay, color);
-            lEye.render(stack, builder, packedLight, packedOverlay, color);
+            rEye.render(stack, builder, packedLight, packedOverlay, packedColor);
+            lEye.render(stack, builder, packedLight, packedOverlay, packedColor);
         }
     }
 

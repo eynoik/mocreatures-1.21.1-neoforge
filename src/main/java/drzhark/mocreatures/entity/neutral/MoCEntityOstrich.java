@@ -109,7 +109,7 @@ public class MoCEntityOstrich extends MoCEntityTameableAnimal {
         setMoCAge(35);
         this.eggCounter = this.random.nextInt(1000) + 1000;
         // stepHeight renamed to maxUpStep in 1.20.1
-        setMaxUpStep(1.0F);
+        this.getAttribute(Attributes.STEP_HEIGHT).setBaseValue(1.0F);
     }
 
     @Override
@@ -302,8 +302,6 @@ public class MoCEntityOstrich extends MoCEntityTameableAnimal {
     public boolean isPushable() {
         return !this.isVehicle();
     }
-
-    @Override
     public double getPassengersRidingOffset() {
         return (this.getBbHeight() * 0.75D) - 0.4D;
     }
@@ -863,7 +861,7 @@ public class MoCEntityOstrich extends MoCEntityTameableAnimal {
                 if (!this.localstack.isEmpty()) {
                     CompoundTag nbttagcompound1 = new CompoundTag();
                     nbttagcompound1.putByte("Slot", (byte) i);
-                    this.localstack.save(nbttagcompound1);
+                    nbttagcompound1.merge((CompoundTag) this.localstack.save(this.registryAccess()));
                     nbttaglist.add(nbttagcompound1);
                 }
             }
@@ -889,7 +887,7 @@ public class MoCEntityOstrich extends MoCEntityTameableAnimal {
                 CompoundTag nbttagcompound1 = nbttaglist.getCompound(i);
                 int j = nbttagcompound1.getByte("Slot") & 0xff;
                 if (j < this.localchest.getContainerSize()) {
-                    this.localchest.setItem(j, ItemStack.of(nbttagcompound1));
+                    this.localchest.setItem(j, ItemStack.parseOptional(this.registryAccess(), nbttagcompound1));
                 }
             }
         }
@@ -992,14 +990,6 @@ public class MoCEntityOstrich extends MoCEntityTameableAnimal {
             this.jumpPending = true;
             this.jumpCounter = 1;
         }
-    }
-
-    @Override
-    public MobType getMobType() {
-        if (getTypeMoC() == 7) {
-            return MobType.UNDEAD;
-        }
-        return super.getMobType();
     }
 
     @Override

@@ -487,15 +487,13 @@ public class MoCEntityDolphin extends MoCEntityTameableAquatic {
             double dist = (0.8D);
             double newPosX = this.getX() + (dist * Math.sin(this.yBodyRot / 57.29578F));
             double newPosZ = this.getZ() - (dist * Math.cos(this.yBodyRot / 57.29578F));
-            moveFunction.accept(passenger, newPosX, this.getY() + getMountedYOffset() + passenger.getMyRidingOffset(), newPosZ);
+            moveFunction.accept(passenger, newPosX, this.getY() + getMountedYOffset() + 0.0D, newPosZ);
         }
     }
 
     public double getMountedYOffset() {
         return this.getMoCAge() * 0.01F * (this.getBbHeight() * 0.3D);
     }
-
-    @Override
     protected float getStandingEyeHeight(Pose poseIn, EntityDimensions sizeIn) {
         return this.getBbHeight() * 0.315F;
     }

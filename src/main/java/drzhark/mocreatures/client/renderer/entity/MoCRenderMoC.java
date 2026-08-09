@@ -98,16 +98,19 @@ public class MoCRenderMoC<T extends Mob, M extends EntityModel<T>> extends MobRe
         float headRotDelta = headRot - bodyRot;
         float pitch = Mth.lerp(partialTicks, entityIn.xRotO, entityIn.getXRot());
 
-        setupRotations(entityIn, poseStack, entityIn.tickCount + partialTicks, bodyRot, partialTicks);
+        setupRotations(entityIn, poseStack, entityIn.tickCount + partialTicks, bodyRot, partialTicks, 1.0F);
         model.prepareMobModel(entityIn, 0, 0, partialTicks);
         model.setupAnim(entityIn, 0, 0, entityIn.tickCount + partialTicks, headRotDelta, pitch);
 
         // Get color tint
         float[] color = getTransparencyColor(entityIn);
 
-        // Render with transparency
-        model.renderToBuffer(poseStack, vertexConsumer, packedLight, OverlayTexture.NO_OVERLAY, 
-                color[0], color[1], color[2], transparency);
+        // Render with transparency using the 1.21 packed ARGB model color.
+        int packedColor = ((int) (transparency * 255.0F) << 24)
+                | ((int) (color[0] * 255.0F) << 16)
+                | ((int) (color[1] * 255.0F) << 8)
+                | (int) (color[2] * 255.0F);
+        model.renderToBuffer(poseStack, vertexConsumer, packedLight, OverlayTexture.NO_OVERLAY, packedColor);
 
         poseStack.popPose();
 

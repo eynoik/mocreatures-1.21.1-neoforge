@@ -296,16 +296,7 @@ public class MoCModelTurkey<T extends MoCEntityTurkey> extends EntityModel<T> {
      * Renders all parts. Exact port of 1.16.5 render method.
      */
     @Override
-    public void renderToBuffer(
-            PoseStack poseStack,
-            VertexConsumer buffer,
-            int packedLight,
-            int packedOverlay,
-            float red,
-            float green,
-            float blue,
-            float alpha
-    ) {
+    public void renderToBuffer(PoseStack poseStack, VertexConsumer buffer, int packedLight, int packedOverlay, int packedColor) {
         if (this.young) {
             // All children rendered as "female" - exact same as 1.16.5
             poseStack.pushPose();
@@ -316,46 +307,46 @@ public class MoCModelTurkey<T extends MoCEntityTurkey> extends EntityModel<T> {
             poseStack.translate(0.0F, 24.0F, 0.0F);
 
             // render head/neck/wings/tail/legs/feet
-            this.beak.render(poseStack, buffer, packedLight, packedOverlay, color);
-            this.head.render(poseStack, buffer, packedLight, packedOverlay, color);
-            this.neck.render(poseStack, buffer, packedLight, packedOverlay, color);
-            this.rWing.render(poseStack, buffer, packedLight, packedOverlay, color);
-            this.lWing.render(poseStack, buffer, packedLight, packedOverlay, color);
-            this.tail.render(poseStack, buffer, packedLight, packedOverlay, color);
-            this.rLeg.render(poseStack, buffer, packedLight, packedOverlay, color);
-            this.rFoot.render(poseStack, buffer, packedLight, packedOverlay, color);
-            this.lLeg.render(poseStack, buffer, packedLight, packedOverlay, color);
-            this.lFoot.render(poseStack, buffer, packedLight, packedOverlay, color);
+            this.beak.render(poseStack, buffer, packedLight, packedOverlay, packedColor);
+            this.head.render(poseStack, buffer, packedLight, packedOverlay, packedColor);
+            this.neck.render(poseStack, buffer, packedLight, packedOverlay, packedColor);
+            this.rWing.render(poseStack, buffer, packedLight, packedOverlay, packedColor);
+            this.lWing.render(poseStack, buffer, packedLight, packedOverlay, packedColor);
+            this.tail.render(poseStack, buffer, packedLight, packedOverlay, packedColor);
+            this.rLeg.render(poseStack, buffer, packedLight, packedOverlay, packedColor);
+            this.rFoot.render(poseStack, buffer, packedLight, packedOverlay, packedColor);
+            this.lLeg.render(poseStack, buffer, packedLight, packedOverlay, packedColor);
+            this.lFoot.render(poseStack, buffer, packedLight, packedOverlay, packedColor);
 
             poseStack.pushPose();
             poseStack.scale(0.8F, 0.8F, 1F);
-            this.body.render(poseStack, buffer, packedLight, packedOverlay, color);
-            this.chest.render(poseStack, buffer, packedLight, packedOverlay, color);
+            this.body.render(poseStack, buffer, packedLight, packedOverlay, packedColor);
+            this.chest.render(poseStack, buffer, packedLight, packedOverlay, packedColor);
             poseStack.popPose();
 
             poseStack.popPose();
         } else {
             // Adult rendering - exact same as 1.16.5
-            this.beak.render(poseStack, buffer, packedLight, packedOverlay, color);
-            this.head.render(poseStack, buffer, packedLight, packedOverlay, color);
-            this.neck.render(poseStack, buffer, packedLight, packedOverlay, color);
-            this.rWing.render(poseStack, buffer, packedLight, packedOverlay, color);
-            this.lWing.render(poseStack, buffer, packedLight, packedOverlay, color);
-            this.tail.render(poseStack, buffer, packedLight, packedOverlay, color);
-            this.rLeg.render(poseStack, buffer, packedLight, packedOverlay, color);
-            this.rFoot.render(poseStack, buffer, packedLight, packedOverlay, color);
-            this.lLeg.render(poseStack, buffer, packedLight, packedOverlay, color);
-            this.lFoot.render(poseStack, buffer, packedLight, packedOverlay, color);
+            this.beak.render(poseStack, buffer, packedLight, packedOverlay, packedColor);
+            this.head.render(poseStack, buffer, packedLight, packedOverlay, packedColor);
+            this.neck.render(poseStack, buffer, packedLight, packedOverlay, packedColor);
+            this.rWing.render(poseStack, buffer, packedLight, packedOverlay, packedColor);
+            this.lWing.render(poseStack, buffer, packedLight, packedOverlay, packedColor);
+            this.tail.render(poseStack, buffer, packedLight, packedOverlay, packedColor);
+            this.rLeg.render(poseStack, buffer, packedLight, packedOverlay, packedColor);
+            this.rFoot.render(poseStack, buffer, packedLight, packedOverlay, packedColor);
+            this.lLeg.render(poseStack, buffer, packedLight, packedOverlay, packedColor);
+            this.lFoot.render(poseStack, buffer, packedLight, packedOverlay, packedColor);
 
             if (male) {
-                this.uBody.render(poseStack, buffer, packedLight, packedOverlay, color);
-                this.body.render(poseStack, buffer, packedLight, packedOverlay, color);
-                this.chest.render(poseStack, buffer, packedLight, packedOverlay, color);
+                this.uBody.render(poseStack, buffer, packedLight, packedOverlay, packedColor);
+                this.body.render(poseStack, buffer, packedLight, packedOverlay, packedColor);
+                this.chest.render(poseStack, buffer, packedLight, packedOverlay, packedColor);
             } else {
                 poseStack.pushPose();
                 poseStack.scale(0.8F, 0.8F, 1F);
-                this.body.render(poseStack, buffer, packedLight, packedOverlay, color);
-                this.chest.render(poseStack, buffer, packedLight, packedOverlay, color);
+                this.body.render(poseStack, buffer, packedLight, packedOverlay, packedColor);
+                this.chest.render(poseStack, buffer, packedLight, packedOverlay, packedColor);
                 poseStack.popPose();
             }
         }

@@ -1047,8 +1047,7 @@ public boolean isPushedByFluid(FluidType type) {
         }
         boolean flag = ((LivingEntity) target).hurt(this.damageSources().mobAttack(this), (float) this.getAttributeValue(Attributes.ATTACK_DAMAGE));
         if (flag) {
-            this.doEnchantDamageEffects(this, target);
-        }
+}
         return flag;
     }
 
@@ -1062,10 +1061,8 @@ public boolean isPushedByFluid(FluidType type) {
                 return;
             }
         }
-        super.canBeLeashed((Player) entity);
+        // Ownership check handled by interaction path in 1.21.1.
     }
-
-    @Override
     public boolean canChangeDimensions() {
         return !this.isVehicle();
     }

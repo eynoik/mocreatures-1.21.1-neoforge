@@ -146,7 +146,7 @@ public class MoCEntitySnail extends MoCEntityAmbient {
     }
 
     @Override
-    protected void jumpFromGround() {
+    public void jumpFromGround() {
         // Prevent jumping
     }
 }

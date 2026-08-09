@@ -41,8 +41,6 @@ public class MoCEntityFireScorpion extends MoCEntityScorpion {
     public ResourceLocation getTexture() {
         return MoCreatures.proxy.getModelTexture("scorpion_fire.png");
     }
-
-    @Override
     public void doEnchantDamageEffects(LivingEntity attacker, Entity target) {
         if (!getIsPoisoning() && this.random.nextInt(5) == 0 && target instanceof LivingEntity) {
             setPoisoning(true);
@@ -50,8 +48,7 @@ public class MoCEntityFireScorpion extends MoCEntityScorpion {
         } else {
             swingArm();
         }
-        super.doEnchantDamageEffects(attacker, target);
-    }
+}
 
     @Override
     protected ResourceKey<LootTable> getDefaultLootTable() {

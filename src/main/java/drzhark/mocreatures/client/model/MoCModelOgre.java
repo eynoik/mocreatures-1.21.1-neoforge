@@ -1256,84 +1256,75 @@ public class MoCModelOgre<T extends MoCEntityOgre> extends EntityModel<T> {
      * Render all parts. Toggle visibility based on type where needed.
      */
     @Override
-    public void renderToBuffer(
-            PoseStack        poseStack,
-            VertexConsumer   buffer,
-            int              packedLight,
-            int              packedOverlay,
-            float            red,
-            float            green,
-            float            blue,
-            float            alpha
-    ) {
+    public void renderToBuffer(PoseStack poseStack, VertexConsumer buffer, int packedLight, int packedOverlay, int packedColor) {
         if (type == 1) {
             // Render primary head
-            this.Head.render(poseStack, buffer, packedLight, packedOverlay, color);
-            this.Brow.render(poseStack, buffer, packedLight, packedOverlay, color);
-            this.NoseBridge.render(poseStack, buffer, packedLight, packedOverlay, color);
-            this.Nose.render(poseStack, buffer, packedLight, packedOverlay, color);
-            this.RgtTusk.render(poseStack, buffer, packedLight, packedOverlay, color);
-            this.RgtTooth.render(poseStack, buffer, packedLight, packedOverlay, color);
-            this.LftTooth.render(poseStack, buffer, packedLight, packedOverlay, color);
-            this.LftTusk.render(poseStack, buffer, packedLight, packedOverlay, color);
-            this.Lip.render(poseStack, buffer, packedLight, packedOverlay, color);
-            this.RgtEar.render(poseStack, buffer, packedLight, packedOverlay, color);
-            this.RgtRing.render(poseStack, buffer, packedLight, packedOverlay, color);
-            this.RgtRingHole.render(poseStack, buffer, packedLight, packedOverlay, color);
-            this.LftEar.render(poseStack, buffer, packedLight, packedOverlay, color);
-            this.LftRing.render(poseStack, buffer, packedLight, packedOverlay, color);
-            this.LftRingHole.render(poseStack, buffer, packedLight, packedOverlay, color);
-            this.HairRope.render(poseStack, buffer, packedLight, packedOverlay, color);
-            this.Hair1.render(poseStack, buffer, packedLight, packedOverlay, color);
-            this.Hair2.render(poseStack, buffer, packedLight, packedOverlay, color);
-            this.Hair3.render(poseStack, buffer, packedLight, packedOverlay, color);
-            this.DiamondHorn.render(poseStack, buffer, packedLight, packedOverlay, color);
-            this.RgtHorn.render(poseStack, buffer, packedLight, packedOverlay, color);
-            this.RgtHornTip.render(poseStack, buffer, packedLight, packedOverlay, color);
-            this.LftHorn.render(poseStack, buffer, packedLight, packedOverlay, color);
-            this.LftHornTip.render(poseStack, buffer, packedLight, packedOverlay, color);
+            this.Head.render(poseStack, buffer, packedLight, packedOverlay, packedColor);
+            this.Brow.render(poseStack, buffer, packedLight, packedOverlay, packedColor);
+            this.NoseBridge.render(poseStack, buffer, packedLight, packedOverlay, packedColor);
+            this.Nose.render(poseStack, buffer, packedLight, packedOverlay, packedColor);
+            this.RgtTusk.render(poseStack, buffer, packedLight, packedOverlay, packedColor);
+            this.RgtTooth.render(poseStack, buffer, packedLight, packedOverlay, packedColor);
+            this.LftTooth.render(poseStack, buffer, packedLight, packedOverlay, packedColor);
+            this.LftTusk.render(poseStack, buffer, packedLight, packedOverlay, packedColor);
+            this.Lip.render(poseStack, buffer, packedLight, packedOverlay, packedColor);
+            this.RgtEar.render(poseStack, buffer, packedLight, packedOverlay, packedColor);
+            this.RgtRing.render(poseStack, buffer, packedLight, packedOverlay, packedColor);
+            this.RgtRingHole.render(poseStack, buffer, packedLight, packedOverlay, packedColor);
+            this.LftEar.render(poseStack, buffer, packedLight, packedOverlay, packedColor);
+            this.LftRing.render(poseStack, buffer, packedLight, packedOverlay, packedColor);
+            this.LftRingHole.render(poseStack, buffer, packedLight, packedOverlay, packedColor);
+            this.HairRope.render(poseStack, buffer, packedLight, packedOverlay, packedColor);
+            this.Hair1.render(poseStack, buffer, packedLight, packedOverlay, packedColor);
+            this.Hair2.render(poseStack, buffer, packedLight, packedOverlay, packedColor);
+            this.Hair3.render(poseStack, buffer, packedLight, packedOverlay, packedColor);
+            this.DiamondHorn.render(poseStack, buffer, packedLight, packedOverlay, packedColor);
+            this.RgtHorn.render(poseStack, buffer, packedLight, packedOverlay, packedColor);
+            this.RgtHornTip.render(poseStack, buffer, packedLight, packedOverlay, packedColor);
+            this.LftHorn.render(poseStack, buffer, packedLight, packedOverlay, packedColor);
+            this.LftHornTip.render(poseStack, buffer, packedLight, packedOverlay, packedColor);
         } else {
             // Render HEAD3 variant
-            this.Head3RgtEar.render(poseStack, buffer, packedLight, packedOverlay, color);
-            this.Head3LftEar.render(poseStack, buffer, packedLight, packedOverlay, color);
-            this.Head3Eyelid.render(poseStack, buffer, packedLight, packedOverlay, color);
-            this.Head3Nose.render(poseStack, buffer, packedLight, packedOverlay, color);
-            this.Head3.render(poseStack, buffer, packedLight, packedOverlay, color);
-            this.Head3Brow.render(poseStack, buffer, packedLight, packedOverlay, color);
-            this.Head3Hair.render(poseStack, buffer, packedLight, packedOverlay, color);
-            this.Head3Lip.render(poseStack, buffer, packedLight, packedOverlay, color);
-            this.Head3RgtTusk.render(poseStack, buffer, packedLight, packedOverlay, color);
-            this.Head3RgtTooth.render(poseStack, buffer, packedLight, packedOverlay, color);
-            this.Head3LftTooth.render(poseStack, buffer, packedLight, packedOverlay, color);
-            this.Head3LftTusk.render(poseStack, buffer, packedLight, packedOverlay, color);
-            this.Head3RingHole.render(poseStack, buffer, packedLight, packedOverlay, color);
-            this.Head3Ring.render(poseStack, buffer, packedLight, packedOverlay, color);
+            this.Head3RgtEar.render(poseStack, buffer, packedLight, packedOverlay, packedColor);
+            this.Head3LftEar.render(poseStack, buffer, packedLight, packedOverlay, packedColor);
+            this.Head3Eyelid.render(poseStack, buffer, packedLight, packedOverlay, packedColor);
+            this.Head3Nose.render(poseStack, buffer, packedLight, packedOverlay, packedColor);
+            this.Head3.render(poseStack, buffer, packedLight, packedOverlay, packedColor);
+            this.Head3Brow.render(poseStack, buffer, packedLight, packedOverlay, packedColor);
+            this.Head3Hair.render(poseStack, buffer, packedLight, packedOverlay, packedColor);
+            this.Head3Lip.render(poseStack, buffer, packedLight, packedOverlay, packedColor);
+            this.Head3RgtTusk.render(poseStack, buffer, packedLight, packedOverlay, packedColor);
+            this.Head3RgtTooth.render(poseStack, buffer, packedLight, packedOverlay, packedColor);
+            this.Head3LftTooth.render(poseStack, buffer, packedLight, packedOverlay, packedColor);
+            this.Head3LftTusk.render(poseStack, buffer, packedLight, packedOverlay, packedColor);
+            this.Head3RingHole.render(poseStack, buffer, packedLight, packedOverlay, packedColor);
+            this.Head3Ring.render(poseStack, buffer, packedLight, packedOverlay, packedColor);
 
             // Render HEAD2 variant
-            this.Head2Chin.render(poseStack, buffer, packedLight, packedOverlay, color);
-            this.Head2.render(poseStack, buffer, packedLight, packedOverlay, color);
-            this.Head2Lip.render(poseStack, buffer, packedLight, packedOverlay, color);
-            this.Head2LftTusk.render(poseStack, buffer, packedLight, packedOverlay, color);
-            this.Head2RgtTusk.render(poseStack, buffer, packedLight, packedOverlay, color);
-            this.Head2Nose.render(poseStack, buffer, packedLight, packedOverlay, color);
-            this.Head2NoseBridge.render(poseStack, buffer, packedLight, packedOverlay, color);
-            this.Head2Brow.render(poseStack, buffer, packedLight, packedOverlay, color);
-            this.Head2RgtHorn.render(poseStack, buffer, packedLight, packedOverlay, color);
-            this.Head2LftHorn.render(poseStack, buffer, packedLight, packedOverlay, color);
-            this.Head2DiamondHorn.render(poseStack, buffer, packedLight, packedOverlay, color);
+            this.Head2Chin.render(poseStack, buffer, packedLight, packedOverlay, packedColor);
+            this.Head2.render(poseStack, buffer, packedLight, packedOverlay, packedColor);
+            this.Head2Lip.render(poseStack, buffer, packedLight, packedOverlay, packedColor);
+            this.Head2LftTusk.render(poseStack, buffer, packedLight, packedOverlay, packedColor);
+            this.Head2RgtTusk.render(poseStack, buffer, packedLight, packedOverlay, packedColor);
+            this.Head2Nose.render(poseStack, buffer, packedLight, packedOverlay, packedColor);
+            this.Head2NoseBridge.render(poseStack, buffer, packedLight, packedOverlay, packedColor);
+            this.Head2Brow.render(poseStack, buffer, packedLight, packedOverlay, packedColor);
+            this.Head2RgtHorn.render(poseStack, buffer, packedLight, packedOverlay, packedColor);
+            this.Head2LftHorn.render(poseStack, buffer, packedLight, packedOverlay, packedColor);
+            this.Head2DiamondHorn.render(poseStack, buffer, packedLight, packedOverlay, packedColor);
         }
 
         // Render body, limbs, arms
-        this.NeckRest.render(poseStack, buffer, packedLight, packedOverlay, color);
-        this.Chest.render(poseStack, buffer, packedLight, packedOverlay, color);
-        this.Stomach.render(poseStack, buffer, packedLight, packedOverlay, color);
-        this.ButtCover.render(poseStack, buffer, packedLight, packedOverlay, color);
-        this.LoinCloth.render(poseStack, buffer, packedLight, packedOverlay, color);
+        this.NeckRest.render(poseStack, buffer, packedLight, packedOverlay, packedColor);
+        this.Chest.render(poseStack, buffer, packedLight, packedOverlay, packedColor);
+        this.Stomach.render(poseStack, buffer, packedLight, packedOverlay, packedColor);
+        this.ButtCover.render(poseStack, buffer, packedLight, packedOverlay, packedColor);
+        this.LoinCloth.render(poseStack, buffer, packedLight, packedOverlay, packedColor);
 
-        this.RgtThigh.render(poseStack, buffer, packedLight, packedOverlay, color);
-        this.LftThigh.render(poseStack, buffer, packedLight, packedOverlay, color);
+        this.RgtThigh.render(poseStack, buffer, packedLight, packedOverlay, packedColor);
+        this.LftThigh.render(poseStack, buffer, packedLight, packedOverlay, packedColor);
 
-        this.RgtShoulder.render(poseStack, buffer, packedLight, packedOverlay, color);
-        this.LftShoulder.render(poseStack, buffer, packedLight, packedOverlay, color);
+        this.RgtShoulder.render(poseStack, buffer, packedLight, packedOverlay, packedColor);
+        this.LftShoulder.render(poseStack, buffer, packedLight, packedOverlay, packedColor);
     }
 }

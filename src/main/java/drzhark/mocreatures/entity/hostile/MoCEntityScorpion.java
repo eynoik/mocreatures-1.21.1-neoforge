@@ -12,7 +12,6 @@ import drzhark.mocreatures.init.MoCSoundEvents;
 import drzhark.mocreatures.network.MoCMessageHandler;
 import drzhark.mocreatures.network.message.MoCMessageAnimation;
 import net.minecraft.world.level.block.state.BlockState;
-import net.minecraft.world.entity.MobType;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.LivingEntity;
@@ -280,11 +279,6 @@ public class MoCEntityScorpion extends MoCEntityMob {
     }
 
     @Override
-    public MobType getMobType() {
-        return MobType.ARTHROPOD;
-    }
-
-    @Override
     public float getAdjustedYOffset() {
         return 30F;
     }
@@ -293,8 +287,6 @@ public class MoCEntityScorpion extends MoCEntityMob {
     protected int getMaxAge() {
         return 120;
     }
-
-    @Override
     public double getPassengersRidingOffset() {
         return (this.getBbHeight() * 0.75D) - 0.15D;
     }
@@ -305,7 +297,7 @@ public class MoCEntityScorpion extends MoCEntityMob {
             double dist = 0.2D;
             double offsetX = this.getX() + (dist * Math.sin(this.getYRot() / 57.29578F));
             double offsetZ = this.getZ() - (dist * Math.cos(this.getYRot() / 57.29578F));
-            double offsetY = this.getY() + this.getPassengersRidingOffset() + passenger.getMyRidingOffset();
+            double offsetY = this.getY() + this.getPassengersRidingOffset() + 0.0D;
             
             moveFunction.accept(passenger, offsetX, offsetY, offsetZ);
             passenger.setYRot(this.getYRot());
@@ -328,8 +320,6 @@ public class MoCEntityScorpion extends MoCEntityMob {
                 return super.canContinueToUse();
             }
         }
-
-        @Override
         protected double getAttackReachSqr(LivingEntity attackTarget) {
             return 4.0F + attackTarget.getBbWidth();
         }

@@ -66,7 +66,7 @@ public class MoCGUIEntityNamer extends Screen {
 
     @Override
     public void render(GuiGraphics poseStack, int mouseX, int mouseY, float partialTicks) {
-        this.renderBackground(poseStack);
+        this.renderBackground(poseStack, mouseX, mouseY, partialTicks);
         int centerX = (this.width - imageWidth) / 2;
         int centerY = (this.height - imageHeight) / 2;
 

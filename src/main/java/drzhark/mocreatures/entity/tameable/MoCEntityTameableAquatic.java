@@ -3,6 +3,8 @@
  */
 package drzhark.mocreatures.entity.tameable;
 
+import net.minecraft.core.registries.Registries;
+import net.minecraft.core.registries.BuiltInRegistries;
 import drzhark.mocreatures.MoCConstants;
 import drzhark.mocreatures.MoCTools;
 import drzhark.mocreatures.MoCreatures;
@@ -38,7 +40,6 @@ import net.neoforged.api.distmarker.Dist;
 import net.neoforged.api.distmarker.OnlyIn;
 import net.neoforged.neoforge.fluids.FluidType;
 import drzhark.mocreatures.network.MoCPacketDistributor;
-import net.neoforged.neoforge.registries.ForgeRegistries;
 
 import javax.annotation.Nullable;
 import java.util.List;
@@ -495,7 +496,7 @@ public class MoCEntityTameableAquatic extends MoCEntityAquatic implements IMoCTa
             try {
                 String offspringName = this.getOffspringClazz((IMoCTameable) mate);
 
-                Mob offspring = (Mob) ForgeRegistries.ENTITY_TYPES.getValue(ResourceLocation.parse(MoCConstants.MOD_PREFIX + offspringName.toLowerCase())).create(this.level());
+                Mob offspring = (Mob) BuiltInRegistries.ENTITY_TYPE.get(ResourceLocation.parse(MoCConstants.MOD_PREFIX + offspringName.toLowerCase())).create(this.level());
                 if (offspring instanceof IMoCTameable) {
                     IMoCTameable baby = (IMoCTameable) offspring;
                     offspring.moveTo(this.getX(), this.getY(), this.getZ(), 0.0F, 0.0F);

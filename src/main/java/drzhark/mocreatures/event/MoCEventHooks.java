@@ -61,36 +61,6 @@ public class MoCEventHooks {
         }
     }
 
-    @SubscribeEvent
-    public void onLivingSpawnEvent(MobSpawnEvent.FinalizeSpawn event) {
-        LivingEntity entity = event.getEntity();
-        Class<? extends LivingEntity> entityClass = entity.getClass();
-        MoCEntityData data = MoCreatures.entityMap.get(entityClass);
-        if (data == null) return; // not a MoC entity
-        
-        Level level = entity.level();
-        List<ResourceKey<Level>> dimensionIDs = Arrays.asList(data.getDimensions());
-        
-        // Check if we're in the Wyvern dimension
-        if (MoCTools.isInWyvernLair(entity)) {
-            // If this is not an allowed mob for the Wyvern dimension, cancel spawning
-            if (!MoCTools.canSpawnInWyvernLair(entity)) {
-                event.setSpawnCancelled(true);
-                return;
-            }
-            // Explicitly allow Wyvern Lair mobs
-            event.setResult(Event.Result.ALLOW);
-            return;
-        }
-        
-        if (!dimensionIDs.contains(level.dimension())) {
-            event.setSpawnCancelled(true);
-        } else if (data.getFrequency() <= 0) {
-            event.setSpawnCancelled(true);
-        } else if (dimensionIDs.contains(MoCreatures.proxy.wyvernDimension) && level.dimension().equals(MoCreatures.proxy.wyvernDimension)) {
-            event.setResult(Event.Result.ALLOW);
-        }
-    }
 
     @SubscribeEvent
     public void onLivingDeathEvent(LivingDeathEvent event) {

@@ -269,7 +269,7 @@ public class MoCModelJellyFish<T extends MoCEntityJellyFish> extends EntityModel
         
         // Render transparent parts with blending
         if (shouldRenderPartialTransparency()) {
-            renderTransparentParts(matrixStackIn, bufferIn, packedLightIn, packedOverlayIn, red, green, blue, getTransparencyValue());
+            renderTransparentParts(matrixStackIn, bufferIn, packedLightIn, packedOverlayIn, color);
         }
         
         matrixStackIn.popPose();

@@ -7,14 +7,14 @@ import drzhark.mocreatures.network.command.multision.ReloadSpawnConfigCommand;
 import net.minecraft.commands.CommandSourceStack;
 import net.neoforged.neoforge.event.RegisterCommandsEvent;
 import net.neoforged.bus.api.SubscribeEvent;
-import net.neoforged.fml.common.Mod;
+import net.neoforged.fml.common.EventBusSubscriber;
 
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
 import com.mojang.brigadier.CommandDispatcher;
 
-@Mod.EventBusSubscriber(modid = "mocreatures")
+@EventBusSubscriber(modid = "mocreatures")
 public class MoCCommandHandler {
     
     private static final Logger LOGGER = LogManager.getLogger();

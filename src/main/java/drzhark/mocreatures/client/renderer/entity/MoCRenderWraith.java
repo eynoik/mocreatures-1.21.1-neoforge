@@ -42,7 +42,7 @@ public class MoCRenderWraith extends MobRenderer<MoCEntityWraith, MoCModelWraith
         float pitch = Mth.lerp(partialTicks, wraith.xRotO, wraith.getXRot());
     
         // apply entity orientation
-        this.setupRotations(wraith, poseStack, wraith.tickCount + partialTicks, bodyRot, partialTicks);
+        this.setupRotations(wraith, poseStack, wraith.tickCount + partialTicks, bodyRot, partialTicks, 1.0F);
     
         // Get your translucent render type
         RenderType renderType = RenderType.entityTranslucent(getTextureLocation(wraith));

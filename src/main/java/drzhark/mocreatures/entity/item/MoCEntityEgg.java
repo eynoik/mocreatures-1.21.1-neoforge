@@ -51,10 +51,6 @@ public class MoCEntityEgg extends Mob {
     @Override
     protected void registerGoals() {}
 
-    @Override
-    public boolean canBreatheUnderwater() {
-        return true;
-    }
 
     @Override
     protected float getSoundVolume() {

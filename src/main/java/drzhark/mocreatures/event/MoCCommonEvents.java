@@ -4,10 +4,10 @@ import drzhark.mocreatures.MoCConstants;
 import drzhark.mocreatures.config.biome.BiomeSpawnConfig;
 import drzhark.mocreatures.world.MoCSpawnRegistryCache;
 import net.neoforged.bus.api.SubscribeEvent;
-import net.neoforged.fml.common.Mod;
+import net.neoforged.fml.common.EventBusSubscriber;
 import net.neoforged.fml.event.lifecycle.FMLCommonSetupEvent;
 
-@Mod.EventBusSubscriber(modid = MoCConstants.MOD_ID, bus = Mod.EventBusSubscriber.Bus.MOD)
+@EventBusSubscriber(modid = MoCConstants.MOD_ID, bus = EventBusSubscriber.Bus.MOD)
 public class MoCCommonEvents {
     @SubscribeEvent
     public static void onCommonSetup(FMLCommonSetupEvent event) {

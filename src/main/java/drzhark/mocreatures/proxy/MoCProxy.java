@@ -250,7 +250,7 @@ public class MoCProxy {
                 // Try to create a fallback tag if the original fails
                 try {
                     String fallback = biomeName.replaceAll("[^a-z0-9_/:-]", "").toLowerCase();
-                    if (fallback.contains(":") && ResourceLocation.isValidResourceLocation(fallback)) {
+                    if (fallback.contains(":") && ResourceLocation.tryParse(fallback) != null) {
                         TagKey<Biome> biomeTag = TagKey.create(Registries.BIOME, ResourceLocation.parse(fallback));
                         biomeTypes.add(biomeTag);
                         MoCreatures.LOGGER.info("Using fallback biome tag: {} -> {}", biomeName, fallback);

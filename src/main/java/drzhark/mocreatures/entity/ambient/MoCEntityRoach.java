@@ -73,8 +73,6 @@ public class MoCEntityRoach extends MoCEntityInsect {
     public boolean isNotScared() {
         return getIsFlying();
     }
-
-    @Override
     public float getStandingEyeHeight(Pose poseIn, EntityDimensions sizeIn) {
         return 0.1F;
     }

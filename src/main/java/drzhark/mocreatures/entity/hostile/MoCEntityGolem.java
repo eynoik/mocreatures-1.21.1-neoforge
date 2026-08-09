@@ -839,8 +839,6 @@ public class MoCEntityGolem extends MoCEntityMob implements IEntityWithComplexSp
     public static boolean getCanSpawnHere(EntityType<? extends MoCEntityMob> type, ServerLevel world, MobSpawnType reason, BlockPos pos, Random randomIn) {
         return MoCEntityMob.getCanSpawnHere(type, world, reason, pos, randomIn);
     }
-
-    @Override
     protected float getStandingEyeHeight(Pose poseIn, EntityDimensions sizeIn) {
         return this.getBbHeight() * 0.8F;
     }
@@ -861,8 +859,6 @@ public class MoCEntityGolem extends MoCEntityMob implements IEntityWithComplexSp
                 return super.canContinueToUse();
             }
         }
-
-        @Override
         protected double getAttackReachSqr(LivingEntity attackTarget) {
             return 4.0F + attackTarget.getBbWidth();
         }

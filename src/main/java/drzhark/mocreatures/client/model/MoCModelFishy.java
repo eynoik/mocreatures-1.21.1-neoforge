@@ -64,16 +64,7 @@ public class MoCModelFishy<T extends MoCEntityFishy> extends EntityModel<T> {
     }
 
     @Override
-    public void renderToBuffer(
-            PoseStack poseStack,
-            VertexConsumer vertexConsumer,
-            int packedLight,
-            int packedOverlay,
-            float red,
-            float green,
-            float blue,
-            float alpha
-    ) {
+    public void renderToBuffer(PoseStack poseStack, VertexConsumer vertexConsumer, int packedLight, int packedOverlay, int packedColor) {
         // Before rendering, apply the "fish offset" from the entity
         float yOffset = this.smallFish.getAdjustedYOffset();
         float xOffset = this.smallFish.getAdjustedXOffset();
@@ -83,8 +74,8 @@ public class MoCModelFishy<T extends MoCEntityFishy> extends EntityModel<T> {
         poseStack.translate(xOffset, yOffset, zOffset);
 
         // Only render body and tail, to match the 1.16 behavior
-        this.Body.render(poseStack, vertexConsumer, packedLight, packedOverlay, color);
-        this.Tail.render(poseStack, vertexConsumer, packedLight, packedOverlay, color);
+        this.Body.render(poseStack, vertexConsumer, packedLight, packedOverlay, packedColor);
+        this.Tail.render(poseStack, vertexConsumer, packedLight, packedOverlay, packedColor);
 
         poseStack.popPose();
     }

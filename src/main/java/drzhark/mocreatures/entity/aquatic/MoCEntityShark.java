@@ -3,6 +3,7 @@
  */
 package drzhark.mocreatures.entity.aquatic;
 
+import net.minecraft.network.syncher.SynchedEntityData;
 import drzhark.mocreatures.MoCreatures;
 import drzhark.mocreatures.entity.MoCEntityAquatic;
 import drzhark.mocreatures.entity.ai.EntityAIHunt;
@@ -163,8 +164,6 @@ public class MoCEntityShark extends MoCEntityTameableAquatic {
     public boolean isNotScared() {
         return true;
     }
-
-    @Override
     protected float getStandingEyeHeight(Pose poseIn, EntityDimensions sizeIn) {
         return this.getBbHeight() * 0.61F;
     }

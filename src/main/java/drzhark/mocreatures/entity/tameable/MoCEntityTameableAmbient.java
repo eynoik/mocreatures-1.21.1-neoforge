@@ -3,6 +3,8 @@
  */
 package drzhark.mocreatures.entity.tameable;
 
+import net.minecraft.core.registries.Registries;
+import net.minecraft.core.registries.BuiltInRegistries;
 import drzhark.mocreatures.MoCConstants;
 import drzhark.mocreatures.MoCTools;
 import drzhark.mocreatures.MoCreatures;
@@ -37,7 +39,6 @@ import net.minecraft.world.level.Level;
 import drzhark.mocreatures.network.MoCPacketDistributor;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.sounds.SoundEvents;
-import net.neoforged.neoforge.registries.ForgeRegistries;
 
 import javax.annotation.Nullable;
 import java.util.List;
@@ -461,7 +462,7 @@ public class MoCEntityTameableAmbient extends MoCEntityAmbient implements IMoCTa
             try {
                 String offspringName = this.getOffspringClazz((IMoCTameable) mate);
 
-                Mob offspring = (Mob) ForgeRegistries.ENTITY_TYPES.getValue(ResourceLocation.parse(MoCConstants.MOD_PREFIX + offspringName.toLowerCase())).create(this.level());
+                Mob offspring = (Mob) BuiltInRegistries.ENTITY_TYPE.get(ResourceLocation.parse(MoCConstants.MOD_PREFIX + offspringName.toLowerCase())).create(this.level());
                 if (offspring instanceof IMoCTameable) {
                     IMoCTameable baby = (IMoCTameable) offspring;
                     ((Mob) baby).setPos(this.getX(), this.getY(), this.getZ());

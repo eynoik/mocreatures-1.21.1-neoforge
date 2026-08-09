@@ -2,6 +2,9 @@ package drzhark.mocreatures.util;
 
 import drzhark.mocreatures.init.MoCItems;
 import net.minecraft.world.item.Tier;
+import net.minecraft.world.item.Tiers;
+import net.minecraft.tags.TagKey;
+import net.minecraft.world.level.block.Block;
 import net.minecraft.world.item.crafting.Ingredient;
 import net.minecraft.util.LazyLoadedValue;
 
@@ -37,7 +40,18 @@ public enum MoCItemTier implements Tier {
     @Override public int getUses() { return uses; }
     @Override public float getSpeed() { return speed; }
     @Override public float getAttackDamageBonus() { return damage; }
-    @Override public int getLevel() { return level; }
+    public int getLevel() { return level; }
     @Override public int getEnchantmentValue() { return enchantmentValue; }
     @Override public Ingredient getRepairIngredient() { return repairIngredient.get(); }
+
+    @Override
+    public TagKey<Block> getIncorrectBlocksForDrops() {
+        return switch (level) {
+            case 0 -> Tiers.WOOD.getIncorrectBlocksForDrops();
+            case 1 -> Tiers.STONE.getIncorrectBlocksForDrops();
+            case 2 -> Tiers.IRON.getIncorrectBlocksForDrops();
+            case 3 -> Tiers.DIAMOND.getIncorrectBlocksForDrops();
+            default -> Tiers.NETHERITE.getIncorrectBlocksForDrops();
+        };
+    }
 }

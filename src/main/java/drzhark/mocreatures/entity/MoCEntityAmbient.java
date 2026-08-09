@@ -425,12 +425,8 @@ public abstract class MoCEntityAmbient extends PathfinderMob implements IMoCEnti
     }
 
     @Override
-    public boolean canBeLeashed(Player player) {
-        if (!this.level().isClientSide && !MoCTools.isThisPlayerAnOP(player) && this.getIsTamed()
-                && !player.getUUID().equals(this.getOwnerId())) {
-            return false;
-        }
-        return super.canBeLeashed(player);
+    public boolean canBeLeashed() {
+        return super.canBeLeashed();
     }
 
     @Override

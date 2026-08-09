@@ -134,11 +134,6 @@ public class MoCEntitySilverSkeleton extends MoCEntityMob {
         return SoundEvents.SKELETON_AMBIENT;
     }
 
-    @Override
-    public MobType getMobType() {
-        return MobType.UNDEAD;
-    }
-
     // TODO: Add unique step sound
     @Override
     protected void playStepSound(BlockPos pos, BlockState block) {
@@ -149,8 +144,6 @@ public class MoCEntitySilverSkeleton extends MoCEntityMob {
     protected ResourceKey<LootTable> getDefaultLootTable() {
         return MoCLootTables.SILVER_SKELETON;
     }
-
-    @Override
     protected float getStandingEyeHeight(Pose poseIn, EntityDimensions sizeIn) {
         return this.getBbHeight() * 0.905F;
     }
@@ -171,8 +164,6 @@ public class MoCEntitySilverSkeleton extends MoCEntityMob {
                 return super.canContinueToUse();
             }
         }
-
-        @Override
         protected double getAttackReachSqr(LivingEntity attackTarget) {
             return 4.0F + attackTarget.getBbWidth();
         }

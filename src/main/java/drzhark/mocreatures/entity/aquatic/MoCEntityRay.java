@@ -63,8 +63,6 @@ public class MoCEntityRay extends MoCEntityTameableAquatic {
     public boolean canBeTrappedInNet() {
         return true;
     }
-
-    @Override
     public double getPassengersRidingOffset() {
         return this.getBbHeight() * 0.15D * getSizeFactor();
     }

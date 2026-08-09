@@ -249,24 +249,17 @@ public class MoCLegacyModelShark<T extends MoCEntityShark> extends EntityModel<T
     }
 
     @Override
-    public void renderToBuffer(PoseStack poseStack,
-                               VertexConsumer buffer,
-                               int packedLight,
-                               int packedOverlay,
-                               float red,
-                               float green,
-                               float blue,
-                               float alpha) {
-        this.Body.render(poseStack, buffer, packedLight, packedOverlay, color);
-        this.PTail.render(poseStack, buffer, packedLight, packedOverlay, color);
-        this.UHead.render(poseStack, buffer, packedLight, packedOverlay, color);
-        this.DHead.render(poseStack, buffer, packedLight, packedOverlay, color);
-        this.RHead.render(poseStack, buffer, packedLight, packedOverlay, color);
-        this.LHead.render(poseStack, buffer, packedLight, packedOverlay, color);
-        this.UpperFin.render(poseStack, buffer, packedLight, packedOverlay, color);
-        this.UpperTailFin.render(poseStack, buffer, packedLight, packedOverlay, color);
-        this.LowerTailFin.render(poseStack, buffer, packedLight, packedOverlay, color);
-        this.LeftFin.render(poseStack, buffer, packedLight, packedOverlay, color);
-        this.RightFin.render(poseStack, buffer, packedLight, packedOverlay, color);
+    public void renderToBuffer(PoseStack poseStack, VertexConsumer buffer, int packedLight, int packedOverlay, int packedColor) {
+        this.Body.render(poseStack, buffer, packedLight, packedOverlay, packedColor);
+        this.PTail.render(poseStack, buffer, packedLight, packedOverlay, packedColor);
+        this.UHead.render(poseStack, buffer, packedLight, packedOverlay, packedColor);
+        this.DHead.render(poseStack, buffer, packedLight, packedOverlay, packedColor);
+        this.RHead.render(poseStack, buffer, packedLight, packedOverlay, packedColor);
+        this.LHead.render(poseStack, buffer, packedLight, packedOverlay, packedColor);
+        this.UpperFin.render(poseStack, buffer, packedLight, packedOverlay, packedColor);
+        this.UpperTailFin.render(poseStack, buffer, packedLight, packedOverlay, packedColor);
+        this.LowerTailFin.render(poseStack, buffer, packedLight, packedOverlay, packedColor);
+        this.LeftFin.render(poseStack, buffer, packedLight, packedOverlay, packedColor);
+        this.RightFin.render(poseStack, buffer, packedLight, packedOverlay, packedColor);
     }
 }

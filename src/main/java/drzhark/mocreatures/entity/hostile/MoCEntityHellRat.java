@@ -104,8 +104,6 @@ public class MoCEntityHellRat extends MoCEntityRat {
         }
         super.aiStep();
     }
-
-    @Override
     protected float getStandingEyeHeight(Pose poseIn, EntityDimensions sizeIn) {
         return this.getBbHeight() * 0.485F;
     }

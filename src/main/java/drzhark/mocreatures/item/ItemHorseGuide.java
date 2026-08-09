@@ -40,7 +40,7 @@ public class ItemHorseGuide extends Item {
 
 	@OnlyIn(Dist.CLIENT)
 	private void openClientBookScreen(ItemStack bookStack) {
-		Minecraft.getInstance().setScreen(new BookViewScreen(new BookViewScreen.WrittenBookAccess(bookStack)));
+		Minecraft.getInstance().setScreen(new BookViewScreen(BookViewScreen.BookAccess.fromItem(bookStack)));
 	}
 
 	/**

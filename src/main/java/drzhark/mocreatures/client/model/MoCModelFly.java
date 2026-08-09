@@ -89,18 +89,9 @@ public class MoCModelFly<T extends MoCEntityFly> extends EntityModel<T> implemen
     }
 
     @Override
-    public void renderToBuffer(
-            PoseStack poseStack,
-            VertexConsumer vertexConsumer,
-            int packedLight,
-            int packedOverlay,
-            float red,
-            float green,
-            float blue,
-            float alpha
-    ) {
+    public void renderToBuffer(PoseStack poseStack, VertexConsumer vertexConsumer, int packedLight, int packedOverlay, int packedColor) {
         // Render opaque parts first
-        renderOpaqueParts(poseStack, vertexConsumer, packedLight, packedOverlay, color);
+        renderOpaqueParts(poseStack, vertexConsumer, packedLight, packedOverlay, packedColor);
         
         // Render transparent parts with blending if needed
         if (shouldRenderPartialTransparency()) {
@@ -109,33 +100,33 @@ public class MoCModelFly<T extends MoCEntityFly> extends EntityModel<T> implemen
             RenderSystem.defaultBlendFunc();
             RenderSystem.clearColor(getTransparencyColor()[0], getTransparencyColor()[1], getTransparencyColor()[2], getTransparencyValue());
             
-            renderTransparentParts(poseStack, vertexConsumer, packedLight, packedOverlay, color);
+            renderTransparentParts(poseStack, vertexConsumer, packedLight, packedOverlay, packedColor);
             
             RenderSystem.disableBlend();
             poseStack.popPose();
         } else {
             // Render folded wings as opaque when not flying
-            this.foldedWings.render(poseStack, vertexConsumer, packedLight, packedOverlay, color);
+            this.foldedWings.render(poseStack, vertexConsumer, packedLight, packedOverlay, packedColor);
         }
     }
     
     @Override
-    public void renderOpaqueParts(PoseStack poseStack, VertexConsumer buffer, int packedLight, int packedOverlay, int color) {
+    public void renderOpaqueParts(PoseStack poseStack, VertexConsumer buffer, int packedLight, int packedOverlay, int packedColor) {
         // Draw legs and body parts
-        this.frontLegs.render(poseStack, buffer, packedLight, packedOverlay, color);
-        this.rearLegs.render(poseStack, buffer, packedLight, packedOverlay, color);
-        this.midLegs.render(poseStack, buffer, packedLight, packedOverlay, color);
-        this.head.render(poseStack, buffer, packedLight, packedOverlay, color);
-        this.tail.render(poseStack, buffer, packedLight, packedOverlay, color);
-        this.abdomen.render(poseStack, buffer, packedLight, packedOverlay, color);
-        this.thorax.render(poseStack, buffer, packedLight, packedOverlay, color);
+        this.frontLegs.render(poseStack, buffer, packedLight, packedOverlay, packedColor);
+        this.rearLegs.render(poseStack, buffer, packedLight, packedOverlay, packedColor);
+        this.midLegs.render(poseStack, buffer, packedLight, packedOverlay, packedColor);
+        this.head.render(poseStack, buffer, packedLight, packedOverlay, packedColor);
+        this.tail.render(poseStack, buffer, packedLight, packedOverlay, packedColor);
+        this.abdomen.render(poseStack, buffer, packedLight, packedOverlay, packedColor);
+        this.thorax.render(poseStack, buffer, packedLight, packedOverlay, packedColor);
     }
     
     @Override
-    public void renderTransparentParts(PoseStack poseStack, VertexConsumer buffer, int packedLight, int packedOverlay, int color) {
+    public void renderTransparentParts(PoseStack poseStack, VertexConsumer buffer, int packedLight, int packedOverlay, int packedColor) {
         // Render open wings with transparency
-        this.leftWing.render(poseStack, buffer, packedLight, packedOverlay, color);
-        this.rightWing.render(poseStack, buffer, packedLight, packedOverlay, color);
+        this.leftWing.render(poseStack, buffer, packedLight, packedOverlay, packedColor);
+        this.rightWing.render(poseStack, buffer, packedLight, packedOverlay, packedColor);
     }
     
     @Override

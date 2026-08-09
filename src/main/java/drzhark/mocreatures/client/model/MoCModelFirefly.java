@@ -109,42 +109,33 @@ public class MoCModelFirefly<T extends MoCEntityFirefly> extends EntityModel<T> 
     }
 
     @Override
-    public void renderToBuffer(
-            PoseStack poseStack,
-            VertexConsumer vertexConsumer,
-            int packedLight,
-            int packedOverlay,
-            float red,
-            float green,
-            float blue,
-            float alpha
-    ) {
+    public void renderToBuffer(PoseStack poseStack, VertexConsumer vertexConsumer, int packedLight, int packedOverlay, int packedColor) {
         // Antenna, legs, head, abdomen, front legs, thorax, tail
-        this.antenna.render(poseStack, vertexConsumer, packedLight, packedOverlay, color);
-        this.rearLegs.render(poseStack, vertexConsumer, packedLight, packedOverlay, color);
-        this.midLegs.render(poseStack, vertexConsumer, packedLight, packedOverlay, color);
-        this.head.render(poseStack, vertexConsumer, packedLight, packedOverlay, color);
-        this.abdomen.render(poseStack, vertexConsumer, packedLight, packedOverlay, color);
-        this.frontLegs.render(poseStack, vertexConsumer, packedLight, packedOverlay, color);
-        this.thorax.render(poseStack, vertexConsumer, packedLight, packedOverlay, color);
-        this.tail.render(poseStack, vertexConsumer, packedLight, packedOverlay, color);
+        this.antenna.render(poseStack, vertexConsumer, packedLight, packedOverlay, packedColor);
+        this.rearLegs.render(poseStack, vertexConsumer, packedLight, packedOverlay, packedColor);
+        this.midLegs.render(poseStack, vertexConsumer, packedLight, packedOverlay, packedColor);
+        this.head.render(poseStack, vertexConsumer, packedLight, packedOverlay, packedColor);
+        this.abdomen.render(poseStack, vertexConsumer, packedLight, packedOverlay, packedColor);
+        this.frontLegs.render(poseStack, vertexConsumer, packedLight, packedOverlay, packedColor);
+        this.thorax.render(poseStack, vertexConsumer, packedLight, packedOverlay, packedColor);
+        this.tail.render(poseStack, vertexConsumer, packedLight, packedOverlay, packedColor);
 
         if (!this.flying) {
             // When not flying, render closed shells
-            this.rightShell.render(poseStack, vertexConsumer, packedLight, packedOverlay, color);
-            this.leftShell.render(poseStack, vertexConsumer, packedLight, packedOverlay, color);
+            this.rightShell.render(poseStack, vertexConsumer, packedLight, packedOverlay, packedColor);
+            this.leftShell.render(poseStack, vertexConsumer, packedLight, packedOverlay, packedColor);
         } else {
             // Flying: open shells + wings with partial alpha
-            this.rightShellOpen.render(poseStack, vertexConsumer, packedLight, packedOverlay, color);
-            this.leftShellOpen.render(poseStack, vertexConsumer, packedLight, packedOverlay, color);
+            this.rightShellOpen.render(poseStack, vertexConsumer, packedLight, packedOverlay, packedColor);
+            this.leftShellOpen.render(poseStack, vertexConsumer, packedLight, packedOverlay, packedColor);
 
             poseStack.pushPose();
             RenderSystem.enableBlend();
             float transparency = 0.6F;
             RenderSystem.defaultBlendFunc();
             RenderSystem.clearColor(0.8F, 0.8F, 0.8F, transparency);
-            this.leftWing.render(poseStack, vertexConsumer, packedLight, packedOverlay, color);
-            this.rightWing.render(poseStack, vertexConsumer, packedLight, packedOverlay, color);
+            this.leftWing.render(poseStack, vertexConsumer, packedLight, packedOverlay, packedColor);
+            this.rightWing.render(poseStack, vertexConsumer, packedLight, packedOverlay, packedColor);
             RenderSystem.disableBlend();
             poseStack.popPose();
         }

@@ -238,26 +238,17 @@ public class MoCModelMouse<T extends MoCEntityMouse> extends EntityModel<T> {
      * Render all parts. In the original, no entity-specific offsets were applied.
      */
     @Override
-    public void renderToBuffer(
-            PoseStack        poseStack,
-            VertexConsumer   buffer,
-            int              packedLight,
-            int              packedOverlay,
-            float            red,
-            float            green,
-            float            blue,
-            float            alpha
-    ) {
-        this.Head.render(poseStack, buffer, packedLight, packedOverlay, color);
-        this.EarR.render(poseStack, buffer, packedLight, packedOverlay, color);
-        this.EarL.render(poseStack, buffer, packedLight, packedOverlay, color);
-        this.WhiskerR.render(poseStack, buffer, packedLight, packedOverlay, color);
-        this.WhiskerL.render(poseStack, buffer, packedLight, packedOverlay, color);
-        this.Tail.render(poseStack, buffer, packedLight, packedOverlay, color);
-        this.FrontL.render(poseStack, buffer, packedLight, packedOverlay, color);
-        this.FrontR.render(poseStack, buffer, packedLight, packedOverlay, color);
-        this.RearL.render(poseStack, buffer, packedLight, packedOverlay, color);
-        this.RearR.render(poseStack, buffer, packedLight, packedOverlay, color);
-        this.BodyF.render(poseStack, buffer, packedLight, packedOverlay, color);
+    public void renderToBuffer(PoseStack poseStack, VertexConsumer buffer, int packedLight, int packedOverlay, int packedColor) {
+        this.Head.render(poseStack, buffer, packedLight, packedOverlay, packedColor);
+        this.EarR.render(poseStack, buffer, packedLight, packedOverlay, packedColor);
+        this.EarL.render(poseStack, buffer, packedLight, packedOverlay, packedColor);
+        this.WhiskerR.render(poseStack, buffer, packedLight, packedOverlay, packedColor);
+        this.WhiskerL.render(poseStack, buffer, packedLight, packedOverlay, packedColor);
+        this.Tail.render(poseStack, buffer, packedLight, packedOverlay, packedColor);
+        this.FrontL.render(poseStack, buffer, packedLight, packedOverlay, packedColor);
+        this.FrontR.render(poseStack, buffer, packedLight, packedOverlay, packedColor);
+        this.RearL.render(poseStack, buffer, packedLight, packedOverlay, packedColor);
+        this.RearR.render(poseStack, buffer, packedLight, packedOverlay, packedColor);
+        this.BodyF.render(poseStack, buffer, packedLight, packedOverlay, packedColor);
     }
 }

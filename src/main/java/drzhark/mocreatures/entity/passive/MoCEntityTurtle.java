@@ -118,8 +118,6 @@ public class MoCEntityTurtle extends MoCEntityTameableAnimal {
         this.attackAnim = 0.0F;
         this.entityData.set(IS_UPSIDE_DOWN, flag);
     }
-
-    @Override
     public double getPassengersRidingOffset() {
         if (this.getVehicle() instanceof Player) {
             if (this.getVehicle().isCrouching()) {
@@ -128,7 +126,7 @@ public class MoCEntityTurtle extends MoCEntityTameableAnimal {
             return (300D - this.getMoCAge()) / 500D;
         }
 
-        return super.getPassengersRidingOffset();
+        return (this.getBbHeight() * 0.75D);
     }
 
     @Override
@@ -211,10 +209,6 @@ public class MoCEntityTurtle extends MoCEntityTameableAnimal {
         }
     }
 
-    @Override
-    public boolean canBreatheUnderwater() {
-        return true;
-    }
 
     @Override
     public boolean hurt(DamageSource damagesource, float i) {

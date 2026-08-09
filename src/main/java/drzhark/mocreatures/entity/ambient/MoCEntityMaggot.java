@@ -69,8 +69,6 @@ public class MoCEntityMaggot extends MoCEntityAmbient {
     public void jumpFromGround() {
         // Override to prevent jumping
     }
-
-    @Override
     public float getStandingEyeHeight(Pose poseIn, EntityDimensions sizeIn) {
         return this.getBbHeight() * 0.45F;
     }

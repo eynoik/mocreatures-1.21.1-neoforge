@@ -2,6 +2,7 @@ package drzhark.mocreatures.dimension.worldgen;
 
 import drzhark.mocreatures.registry.MoCPOI;
 import net.minecraft.core.BlockPos;
+import net.minecraft.core.registries.Registries;
 import net.minecraft.core.Direction;
 import net.minecraft.core.Holder;
 import net.minecraft.server.level.ServerLevel;
@@ -136,7 +137,10 @@ public class MoCWorldGenPortal {
         poiManager.ensureLoadedAndValid(world, pos, 8);
         
         // Force the POI to be registered at this position
-        poiManager.add(pos, MoCPOI.WYVERN_PORTAL.getHolder().get());
+        world.registryAccess()
+                .registryOrThrow(Registries.POINT_OF_INTEREST_TYPE)
+                .getHolder(MoCPOI.WYVERN_PORTAL_KEY)
+                .ifPresent(holder -> poiManager.add(pos, holder));
         
         // Log the POI registration
         System.out.println("[MoC Portal] Registered wyvern portal POI at " + pos);

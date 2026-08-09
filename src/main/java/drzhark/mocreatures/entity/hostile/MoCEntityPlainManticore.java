@@ -34,8 +34,6 @@ public class MoCEntityPlainManticore extends MoCEntityManticore {
     public ResourceLocation getTexture() {
         return MoCreatures.proxy.getModelTexture("manticore_plain.png");
     }
-
-    @Override
     public void doEnchantDamageEffects(LivingEntity attacker, Entity target) {
         if (!getIsPoisoning() && this.random.nextInt(5) == 0 && target instanceof LivingEntity livingTarget) {
             setPoisoning(true);
@@ -43,8 +41,7 @@ public class MoCEntityPlainManticore extends MoCEntityManticore {
         } else {
             openMouth();
         }
-        super.doEnchantDamageEffects(attacker, target);
-    }
+}
 
     @Override
     protected ResourceKey<LootTable> getDefaultLootTable() {

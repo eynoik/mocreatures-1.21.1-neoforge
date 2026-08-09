@@ -125,8 +125,6 @@ public class MoCEntityCricket extends MoCEntityAmbient {
         }
         return 0.15F;
     }
-
-    @Override
     protected float getStandingEyeHeight(Pose poseIn, EntityDimensions sizeIn) {
         return 0.15F;
     }

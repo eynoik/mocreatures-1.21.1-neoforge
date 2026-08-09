@@ -27,13 +27,13 @@ import net.neoforged.api.distmarker.Dist;
 import net.neoforged.api.distmarker.OnlyIn;
 import net.neoforged.neoforge.client.event.RegisterParticleProvidersEvent;
 import net.neoforged.bus.api.SubscribeEvent;
-import net.neoforged.fml.common.Mod;
+import net.neoforged.fml.common.EventBusSubscriber;
 
 /**
  * Client-side proxy for Mo' Creatures
  */
 @OnlyIn(Dist.CLIENT)
-@Mod.EventBusSubscriber(modid = "mocreatures", bus = Mod.EventBusSubscriber.Bus.MOD, value = Dist.CLIENT)
+@EventBusSubscriber(modid = "mocreatures", bus = EventBusSubscriber.Bus.MOD, value = Dist.CLIENT)
 public class MoCProxyClient extends MoCProxy {
 
     public static Minecraft mc = Minecraft.getInstance();

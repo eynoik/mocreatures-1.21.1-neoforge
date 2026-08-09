@@ -1247,146 +1247,137 @@ public class MoCModelOstrich<T extends MoCEntityOstrich> extends EntityModel<T> 
      * Render all parts. Toggle visibility based on type, openMouth, saddled, bagged, helmet.
      */
     @Override
-    public void renderToBuffer(
-            PoseStack        poseStack,
-            VertexConsumer   buffer,
-            int              packedLight,
-            int              packedOverlay,
-            float            red,
-            float            green,
-            float            blue,
-            float            alpha
-    ) {
-        this.Head.render(poseStack, buffer, packedLight, packedOverlay, color);
-        this.NeckU.render(poseStack, buffer, packedLight, packedOverlay, color);
-        this.NeckD.render(poseStack, buffer, packedLight, packedOverlay, color);
-        this.NeckL.render(poseStack, buffer, packedLight, packedOverlay, color);
-        this.Body.render(poseStack, buffer, packedLight, packedOverlay, color);
-        this.Tail.render(poseStack, buffer, packedLight, packedOverlay, color);
-        this.LLegA.render(poseStack, buffer, packedLight, packedOverlay, color);
-        this.LLegB.render(poseStack, buffer, packedLight, packedOverlay, color);
-        this.LLegC.render(poseStack, buffer, packedLight, packedOverlay, color);
-        this.LFoot.render(poseStack, buffer, packedLight, packedOverlay, color);
-        this.RLegA.render(poseStack, buffer, packedLight, packedOverlay, color);
-        this.RLegB.render(poseStack, buffer, packedLight, packedOverlay, color);
-        this.RLegC.render(poseStack, buffer, packedLight, packedOverlay, color);
-        this.RFoot.render(poseStack, buffer, packedLight, packedOverlay, color);
+    public void renderToBuffer(PoseStack poseStack, VertexConsumer buffer, int packedLight, int packedOverlay, int packedColor) {
+        this.Head.render(poseStack, buffer, packedLight, packedOverlay, packedColor);
+        this.NeckU.render(poseStack, buffer, packedLight, packedOverlay, packedColor);
+        this.NeckD.render(poseStack, buffer, packedLight, packedOverlay, packedColor);
+        this.NeckL.render(poseStack, buffer, packedLight, packedOverlay, packedColor);
+        this.Body.render(poseStack, buffer, packedLight, packedOverlay, packedColor);
+        this.Tail.render(poseStack, buffer, packedLight, packedOverlay, packedColor);
+        this.LLegA.render(poseStack, buffer, packedLight, packedOverlay, packedColor);
+        this.LLegB.render(poseStack, buffer, packedLight, packedOverlay, packedColor);
+        this.LLegC.render(poseStack, buffer, packedLight, packedOverlay, packedColor);
+        this.LFoot.render(poseStack, buffer, packedLight, packedOverlay, packedColor);
+        this.RLegA.render(poseStack, buffer, packedLight, packedOverlay, packedColor);
+        this.RLegB.render(poseStack, buffer, packedLight, packedOverlay, packedColor);
+        this.RLegC.render(poseStack, buffer, packedLight, packedOverlay, packedColor);
+        this.RFoot.render(poseStack, buffer, packedLight, packedOverlay, packedColor);
 
         // UniHorn for type 8
         if (this.typeI == 8) {
-            this.UniHorn.render(poseStack, buffer, packedLight, packedOverlay, color);
+            this.UniHorn.render(poseStack, buffer, packedLight, packedOverlay, packedColor);
         }
 
         // Wings
         if (this.typeI == 5 || this.typeI == 6) {
-            this.LWingD.render(poseStack, buffer, packedLight, packedOverlay, color);
-            this.LWingE.render(poseStack, buffer, packedLight, packedOverlay, color);
-            this.RWingD.render(poseStack, buffer, packedLight, packedOverlay, color);
-            this.RWingE.render(poseStack, buffer, packedLight, packedOverlay, color);
-            this.NeckUFeather.render(poseStack, buffer, packedLight, packedOverlay, color);
-            this.NeckLFeather.render(poseStack, buffer, packedLight, packedOverlay, color);
+            this.LWingD.render(poseStack, buffer, packedLight, packedOverlay, packedColor);
+            this.LWingE.render(poseStack, buffer, packedLight, packedOverlay, packedColor);
+            this.RWingD.render(poseStack, buffer, packedLight, packedOverlay, packedColor);
+            this.RWingE.render(poseStack, buffer, packedLight, packedOverlay, packedColor);
+            this.NeckUFeather.render(poseStack, buffer, packedLight, packedOverlay, packedColor);
+            this.NeckLFeather.render(poseStack, buffer, packedLight, packedOverlay, packedColor);
         } else {
-            this.LWingB.render(poseStack, buffer, packedLight, packedOverlay, color);
-            this.LWingC.render(poseStack, buffer, packedLight, packedOverlay, color);
-            this.RWingB.render(poseStack, buffer, packedLight, packedOverlay, color);
-            this.RWingC.render(poseStack, buffer, packedLight, packedOverlay, color);
+            this.LWingB.render(poseStack, buffer, packedLight, packedOverlay, packedColor);
+            this.LWingC.render(poseStack, buffer, packedLight, packedOverlay, packedColor);
+            this.RWingB.render(poseStack, buffer, packedLight, packedOverlay, packedColor);
+            this.RWingC.render(poseStack, buffer, packedLight, packedOverlay, packedColor);
         }
 
         // Tail segments for darkness ostrich
         if (this.typeI == 6) {
-            this.Tailpart1.render(poseStack, buffer, packedLight, packedOverlay, color);
-            this.Tailpart2.render(poseStack, buffer, packedLight, packedOverlay, color);
-            this.Tailpart3.render(poseStack, buffer, packedLight, packedOverlay, color);
-            this.Tailpart4.render(poseStack, buffer, packedLight, packedOverlay, color);
-            this.Tailpart5.render(poseStack, buffer, packedLight, packedOverlay, color);
+            this.Tailpart1.render(poseStack, buffer, packedLight, packedOverlay, packedColor);
+            this.Tailpart2.render(poseStack, buffer, packedLight, packedOverlay, packedColor);
+            this.Tailpart3.render(poseStack, buffer, packedLight, packedOverlay, packedColor);
+            this.Tailpart4.render(poseStack, buffer, packedLight, packedOverlay, packedColor);
+            this.Tailpart5.render(poseStack, buffer, packedLight, packedOverlay, packedColor);
         } else {
-            this.Tail1.render(poseStack, buffer, packedLight, packedOverlay, color);
-            this.Tail2.render(poseStack, buffer, packedLight, packedOverlay, color);
-            this.Tail3.render(poseStack, buffer, packedLight, packedOverlay, color);
+            this.Tail1.render(poseStack, buffer, packedLight, packedOverlay, packedColor);
+            this.Tail2.render(poseStack, buffer, packedLight, packedOverlay, packedColor);
+            this.Tail3.render(poseStack, buffer, packedLight, packedOverlay, packedColor);
         }
 
         // Beak open/closed
         if (openMouth) {
-            this.UBeakb.render(poseStack, buffer, packedLight, packedOverlay, color);
-            this.UBeak2b.render(poseStack, buffer, packedLight, packedOverlay, color);
-            this.LBeakb.render(poseStack, buffer, packedLight, packedOverlay, color);
-            this.LBeak2b.render(poseStack, buffer, packedLight, packedOverlay, color);
+            this.UBeakb.render(poseStack, buffer, packedLight, packedOverlay, packedColor);
+            this.UBeak2b.render(poseStack, buffer, packedLight, packedOverlay, packedColor);
+            this.LBeakb.render(poseStack, buffer, packedLight, packedOverlay, packedColor);
+            this.LBeak2b.render(poseStack, buffer, packedLight, packedOverlay, packedColor);
         } else {
-            this.UBeak.render(poseStack, buffer, packedLight, packedOverlay, color);
-            this.UBeak2.render(poseStack, buffer, packedLight, packedOverlay, color);
-            this.LBeak.render(poseStack, buffer, packedLight, packedOverlay, color);
-            this.LBeak2.render(poseStack, buffer, packedLight, packedOverlay, color);
+            this.UBeak.render(poseStack, buffer, packedLight, packedOverlay, packedColor);
+            this.UBeak2.render(poseStack, buffer, packedLight, packedOverlay, packedColor);
+            this.LBeak.render(poseStack, buffer, packedLight, packedOverlay, packedColor);
+            this.LBeak2.render(poseStack, buffer, packedLight, packedOverlay, packedColor);
         }
 
         // Saddle elements
         if (isSaddled) {
-            this.SaddleA.render(poseStack, buffer, packedLight, packedOverlay, color);
-            this.SaddleB.render(poseStack, buffer, packedLight, packedOverlay, color);
-            this.SaddleC.render(poseStack, buffer, packedLight, packedOverlay, color);
-            this.SaddleL.render(poseStack, buffer, packedLight, packedOverlay, color);
-            this.SaddleR.render(poseStack, buffer, packedLight, packedOverlay, color);
-            this.SaddleL2.render(poseStack, buffer, packedLight, packedOverlay, color);
-            this.SaddleR2.render(poseStack, buffer, packedLight, packedOverlay, color);
-            this.NeckHarness.render(poseStack, buffer, packedLight, packedOverlay, color);
-            this.NeckHarness2.render(poseStack, buffer, packedLight, packedOverlay, color);
+            this.SaddleA.render(poseStack, buffer, packedLight, packedOverlay, packedColor);
+            this.SaddleB.render(poseStack, buffer, packedLight, packedOverlay, packedColor);
+            this.SaddleC.render(poseStack, buffer, packedLight, packedOverlay, packedColor);
+            this.SaddleL.render(poseStack, buffer, packedLight, packedOverlay, packedColor);
+            this.SaddleR.render(poseStack, buffer, packedLight, packedOverlay, packedColor);
+            this.SaddleL2.render(poseStack, buffer, packedLight, packedOverlay, packedColor);
+            this.SaddleR2.render(poseStack, buffer, packedLight, packedOverlay, packedColor);
+            this.NeckHarness.render(poseStack, buffer, packedLight, packedOverlay, packedColor);
+            this.NeckHarness2.render(poseStack, buffer, packedLight, packedOverlay, packedColor);
             if (rider) {
-                this.NeckHarnessLeft.render(poseStack, buffer, packedLight, packedOverlay, color);
-                this.NeckHarnessRight.render(poseStack, buffer, packedLight, packedOverlay, color);
+                this.NeckHarnessLeft.render(poseStack, buffer, packedLight, packedOverlay, packedColor);
+                this.NeckHarnessRight.render(poseStack, buffer, packedLight, packedOverlay, packedColor);
             }
         }
 
         // Saddlebag and flag
         if (bagged) {
-            this.Saddlebag.render(poseStack, buffer, packedLight, packedOverlay, color);
-            this.Flagpole.render(poseStack, buffer, packedLight, packedOverlay, color);
+            this.Saddlebag.render(poseStack, buffer, packedLight, packedOverlay, packedColor);
+            this.Flagpole.render(poseStack, buffer, packedLight, packedOverlay, packedColor);
             switch (this.flagColor) {
-                case 0 -> this.FlagWhite.render(poseStack, buffer, packedLight, packedOverlay, color);
-                case 1 -> this.FlagOrange.render(poseStack, buffer, packedLight, packedOverlay, color);
-                case 2 -> this.FlagPurple.render(poseStack, buffer, packedLight, packedOverlay, color);
-                case 3 -> this.FlagLightBlue.render(poseStack, buffer, packedLight, packedOverlay, color);
-                case 4 -> this.FlagYellow.render(poseStack, buffer, packedLight, packedOverlay, color);
-                case 5 -> this.FlagGreen.render(poseStack, buffer, packedLight, packedOverlay, color);
-                case 6 -> this.FlagLightRed.render(poseStack, buffer, packedLight, packedOverlay, color);
-                case 7 -> this.FlagDarkGrey.render(poseStack, buffer, packedLight, packedOverlay, color);
-                case 8 -> this.FlagGrey.render(poseStack, buffer, packedLight, packedOverlay, color);
-                case 9 -> this.FlagCyan.render(poseStack, buffer, packedLight, packedOverlay, color);
-                case 10-> this.FlagDarkPurple.render(poseStack, buffer, packedLight, packedOverlay, color);
-                case 11-> this.FlagDarkBlue.render(poseStack, buffer, packedLight, packedOverlay, color);
-                case 12-> this.FlagBrown.render(poseStack, buffer, packedLight, packedOverlay, color);
-                case 13-> this.FlagDarkGreen.render(poseStack, buffer, packedLight, packedOverlay, color);
-                case 14-> this.FlagRed.render(poseStack, buffer, packedLight, packedOverlay, color);
-                case 15-> this.FlagBlack.render(poseStack, buffer, packedLight, packedOverlay, color);
+                case 0 -> this.FlagWhite.render(poseStack, buffer, packedLight, packedOverlay, packedColor);
+                case 1 -> this.FlagOrange.render(poseStack, buffer, packedLight, packedOverlay, packedColor);
+                case 2 -> this.FlagPurple.render(poseStack, buffer, packedLight, packedOverlay, packedColor);
+                case 3 -> this.FlagLightBlue.render(poseStack, buffer, packedLight, packedOverlay, packedColor);
+                case 4 -> this.FlagYellow.render(poseStack, buffer, packedLight, packedOverlay, packedColor);
+                case 5 -> this.FlagGreen.render(poseStack, buffer, packedLight, packedOverlay, packedColor);
+                case 6 -> this.FlagLightRed.render(poseStack, buffer, packedLight, packedOverlay, packedColor);
+                case 7 -> this.FlagDarkGrey.render(poseStack, buffer, packedLight, packedOverlay, packedColor);
+                case 8 -> this.FlagGrey.render(poseStack, buffer, packedLight, packedOverlay, packedColor);
+                case 9 -> this.FlagCyan.render(poseStack, buffer, packedLight, packedOverlay, packedColor);
+                case 10-> this.FlagDarkPurple.render(poseStack, buffer, packedLight, packedOverlay, packedColor);
+                case 11-> this.FlagDarkBlue.render(poseStack, buffer, packedLight, packedOverlay, packedColor);
+                case 12-> this.FlagBrown.render(poseStack, buffer, packedLight, packedOverlay, packedColor);
+                case 13-> this.FlagDarkGreen.render(poseStack, buffer, packedLight, packedOverlay, packedColor);
+                case 14-> this.FlagRed.render(poseStack, buffer, packedLight, packedOverlay, packedColor);
+                case 15-> this.FlagBlack.render(poseStack, buffer, packedLight, packedOverlay, packedColor);
             }
         }
 
         // Render selected helmet
         switch (this.helmet) {
-            case 1 -> this.HelmetLeather.render(poseStack, buffer, packedLight, packedOverlay, color);
-            case 2 -> this.HelmetIron.render(poseStack, buffer, packedLight, packedOverlay, color);
-            case 3 -> this.HelmetGold.render(poseStack, buffer, packedLight, packedOverlay, color);
-            case 4 -> this.HelmetDiamond.render(poseStack, buffer, packedLight, packedOverlay, color);
+            case 1 -> this.HelmetLeather.render(poseStack, buffer, packedLight, packedOverlay, packedColor);
+            case 2 -> this.HelmetIron.render(poseStack, buffer, packedLight, packedOverlay, packedColor);
+            case 3 -> this.HelmetGold.render(poseStack, buffer, packedLight, packedOverlay, packedColor);
+            case 4 -> this.HelmetDiamond.render(poseStack, buffer, packedLight, packedOverlay, packedColor);
             case 5 -> {
-                this.HelmetHide.render(poseStack, buffer, packedLight, packedOverlay, color);
-                this.HelmetNeckHide.render(poseStack, buffer, packedLight, packedOverlay, color);
-                this.HelmetHideEar1.render(poseStack, buffer, packedLight, packedOverlay, color);
-                this.HelmetHideEar2.render(poseStack, buffer, packedLight, packedOverlay, color);
+                this.HelmetHide.render(poseStack, buffer, packedLight, packedOverlay, packedColor);
+                this.HelmetNeckHide.render(poseStack, buffer, packedLight, packedOverlay, packedColor);
+                this.HelmetHideEar1.render(poseStack, buffer, packedLight, packedOverlay, packedColor);
+                this.HelmetHideEar2.render(poseStack, buffer, packedLight, packedOverlay, packedColor);
             }
             case 6 -> {
-                this.HelmetFur.render(poseStack, buffer, packedLight, packedOverlay, color);
-                this.HelmetNeckFur.render(poseStack, buffer, packedLight, packedOverlay, color);
-                this.HelmetFurEar1.render(poseStack, buffer, packedLight, packedOverlay, color);
-                this.HelmetFurEar2.render(poseStack, buffer, packedLight, packedOverlay, color);
+                this.HelmetFur.render(poseStack, buffer, packedLight, packedOverlay, packedColor);
+                this.HelmetNeckFur.render(poseStack, buffer, packedLight, packedOverlay, packedColor);
+                this.HelmetFurEar1.render(poseStack, buffer, packedLight, packedOverlay, packedColor);
+                this.HelmetFurEar2.render(poseStack, buffer, packedLight, packedOverlay, packedColor);
             }
             case 7 -> {
-                this.HelmetReptile.render(poseStack, buffer, packedLight, packedOverlay, color);
-                this.HelmetReptileEar1.render(poseStack, buffer, packedLight, packedOverlay, color);
-                this.HelmetReptileEar2.render(poseStack, buffer, packedLight, packedOverlay, color);
+                this.HelmetReptile.render(poseStack, buffer, packedLight, packedOverlay, packedColor);
+                this.HelmetReptileEar1.render(poseStack, buffer, packedLight, packedOverlay, packedColor);
+                this.HelmetReptileEar2.render(poseStack, buffer, packedLight, packedOverlay, packedColor);
             }
-            case 8 -> this.HelmetGreenChitin.render(poseStack, buffer, packedLight, packedOverlay, color);
-            case 9 -> this.HelmetYellowChitin.render(poseStack, buffer, packedLight, packedOverlay, color);
-            case 10-> this.HelmetBlueChitin.render(poseStack, buffer, packedLight, packedOverlay, color);
-            case 11-> this.HelmetBlackChitin.render(poseStack, buffer, packedLight, packedOverlay, color);
-            case 12-> this.HelmetRedChitin.render(poseStack, buffer, packedLight, packedOverlay, color);
+            case 8 -> this.HelmetGreenChitin.render(poseStack, buffer, packedLight, packedOverlay, packedColor);
+            case 9 -> this.HelmetYellowChitin.render(poseStack, buffer, packedLight, packedOverlay, packedColor);
+            case 10-> this.HelmetBlueChitin.render(poseStack, buffer, packedLight, packedOverlay, packedColor);
+            case 11-> this.HelmetBlackChitin.render(poseStack, buffer, packedLight, packedOverlay, packedColor);
+            case 12-> this.HelmetRedChitin.render(poseStack, buffer, packedLight, packedOverlay, packedColor);
         }
     }
 }

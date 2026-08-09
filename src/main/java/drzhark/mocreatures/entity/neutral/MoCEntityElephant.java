@@ -85,7 +85,7 @@ public class MoCEntityElephant extends MoCEntityTameableAnimal {
         setMoCAge(50);
         // TODO: Different hitboxes for each elephant type
         //setSize(1.1F, 3F);
-        this.setMaxUpStep(1.0F);
+        this.getAttribute(Attributes.STEP_HEIGHT).setBaseValue(1.0F);
         this.xpReward = 10;
 
         if (!this.level().isClientSide()) {
@@ -241,7 +241,7 @@ public class MoCEntityElephant extends MoCEntityTameableAnimal {
             double sinYaw = Math.sin((MoCTools.realAngle(this.getYRot() - 90F)) / 57.29578F);
             double newPosX = this.getX() - (dist * cosYaw);
             double newPosZ = this.getZ() - (dist * sinYaw);
-            passenger.setPos(newPosX, this.getY() + getPassengersRidingOffset() + passenger.getPassengersRidingOffset(), newPosZ);
+            passenger.setPos(newPosX, this.getY() + getPassengersRidingOffset() + 0.0D, newPosZ);
         }
         
         if (!this.level().isClientSide()) {
@@ -652,7 +652,7 @@ public class MoCEntityElephant extends MoCEntityTameableAnimal {
                 if (!this.localstack.isEmpty()) {
                     CompoundTag nbttagcompound1 = new CompoundTag();
                     nbttagcompound1.putByte("Slot", (byte) i);
-                    this.localstack.save(nbttagcompound1);
+                    nbttagcompound1.merge((CompoundTag) this.localstack.save(this.registryAccess()));
                     nbttaglist.add(nbttagcompound1);
                 }
             }
@@ -666,7 +666,7 @@ public class MoCEntityElephant extends MoCEntityTameableAnimal {
                 if (!this.localstack.isEmpty()) {
                     CompoundTag nbttagcompound1 = new CompoundTag();
                     nbttagcompound1.putByte("Slot", (byte) i);
-                    this.localstack.save(nbttagcompound1);
+                    nbttagcompound1.merge((CompoundTag) this.localstack.save(this.registryAccess()));
                     nbttaglist.add(nbttagcompound1);
                 }
             }
@@ -680,7 +680,7 @@ public class MoCEntityElephant extends MoCEntityTameableAnimal {
                 if (!this.localstack.isEmpty()) {
                     CompoundTag nbttagcompound1 = new CompoundTag();
                     nbttagcompound1.putByte("Slot", (byte) i);
-                    this.localstack.save(nbttagcompound1);
+                    nbttagcompound1.merge((CompoundTag) this.localstack.save(this.registryAccess()));
                     nbttaglist.add(nbttagcompound1);
                 }
             }
@@ -694,7 +694,7 @@ public class MoCEntityElephant extends MoCEntityTameableAnimal {
                 if (!this.localstack.isEmpty()) {
                     CompoundTag nbttagcompound1 = new CompoundTag();
                     nbttagcompound1.putByte("Slot", (byte) i);
-                    this.localstack.save(nbttagcompound1);
+                    nbttagcompound1.merge((CompoundTag) this.localstack.save(this.registryAccess()));
                     nbttaglist.add(nbttagcompound1);
                 }
             }
@@ -717,7 +717,7 @@ public class MoCEntityElephant extends MoCEntityTameableAnimal {
                 CompoundTag nbttagcompound1 = nbttaglist.getCompound(i);
                 int j = nbttagcompound1.getByte("Slot") & 0xff;
                 if (j < this.localelephantchest.getContainerSize()) {
-                    this.localelephantchest.setItem(j, ItemStack.of(nbttagcompound1));
+                    this.localelephantchest.setItem(j, ItemStack.parseOptional(this.registryAccess(), nbttagcompound1));
                 }
             }
         }
@@ -728,7 +728,7 @@ public class MoCEntityElephant extends MoCEntityTameableAnimal {
                 CompoundTag nbttagcompound1 = nbttaglist.getCompound(i);
                 int j = nbttagcompound1.getByte("Slot") & 0xff;
                 if (j < this.localelephantchest2.getContainerSize()) {
-                    this.localelephantchest2.setItem(j, ItemStack.of(nbttagcompound1));
+                    this.localelephantchest2.setItem(j, ItemStack.parseOptional(this.registryAccess(), nbttagcompound1));
                 }
             }
         }
@@ -740,7 +740,7 @@ public class MoCEntityElephant extends MoCEntityTameableAnimal {
                 CompoundTag nbttagcompound1 = nbttaglist.getCompound(i);
                 int j = nbttagcompound1.getByte("Slot") & 0xff;
                 if (j < this.localelephantchest3.getContainerSize()) {
-                    this.localelephantchest3.setItem(j, ItemStack.of(nbttagcompound1));
+                    this.localelephantchest3.setItem(j, ItemStack.parseOptional(this.registryAccess(), nbttagcompound1));
                 }
             }
         }
@@ -751,7 +751,7 @@ public class MoCEntityElephant extends MoCEntityTameableAnimal {
                 CompoundTag nbttagcompound1 = nbttaglist.getCompound(i);
                 int j = nbttagcompound1.getByte("Slot") & 0xff;
                 if (j < this.localelephantchest4.getContainerSize()) {
-                    this.localelephantchest4.setItem(j, ItemStack.of(nbttagcompound1));
+                    this.localelephantchest4.setItem(j, ItemStack.parseOptional(this.registryAccess(), nbttagcompound1));
                 }
             }
         }
@@ -797,8 +797,6 @@ public class MoCEntityElephant extends MoCEntityTameableAnimal {
     public boolean isPushable() {
         return !this.isVehicle();
     }
-
-    @Override
     public double getPassengersRidingOffset() {
         double yOff = 0F;
         boolean sit = (this.sitCounter != 0);

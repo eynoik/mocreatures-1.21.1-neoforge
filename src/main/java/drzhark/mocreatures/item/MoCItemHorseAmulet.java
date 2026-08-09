@@ -1,5 +1,6 @@
 package drzhark.mocreatures.item;
 
+import net.minecraft.core.registries.Registries;
 import drzhark.mocreatures.MoCConstants;
 import drzhark.mocreatures.MoCTools;
 import drzhark.mocreatures.MoCreatures;

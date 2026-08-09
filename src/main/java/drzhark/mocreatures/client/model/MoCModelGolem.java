@@ -183,16 +183,7 @@ public class MoCModelGolem<T extends MoCEntityGolem> extends EntityModel<T> {
     }
 
     @Override
-    public void renderToBuffer(
-            PoseStack poseStack,
-            VertexConsumer vertexConsumer,
-            int packedLight,
-            int packedOverlay,
-            float red,
-            float green,
-            float blue,
-            float alpha
-    ) {
+    public void renderToBuffer(PoseStack poseStack, VertexConsumer vertexConsumer, int packedLight, int packedOverlay, int packedColor) {
         // Render all visible blocks
         float yOffset = entityG.getAdjustedYOffset();
 
@@ -202,17 +193,17 @@ public class MoCModelGolem<T extends MoCEntityGolem> extends EntityModel<T> {
         for (int g = 0; g < 23; g++) {
             int idx = this.blocksText[g];
             if (idx != 30) {
-                this.blocks[g][idx].render(poseStack, vertexConsumer, packedLight, packedOverlay, color);
+                this.blocks[g][idx].render(poseStack, vertexConsumer, packedLight, packedOverlay, packedColor);
             }
         }
 
         // Render head/chest based on angry state
         if (this.angry) {
-            this.headb.render(poseStack, vertexConsumer, packedLight, packedOverlay, color);
-            this.chestb.render(poseStack, vertexConsumer, packedLight, packedOverlay, color);
+            this.headb.render(poseStack, vertexConsumer, packedLight, packedOverlay, packedColor);
+            this.chestb.render(poseStack, vertexConsumer, packedLight, packedOverlay, packedColor);
         } else {
-            this.head.render(poseStack, vertexConsumer, packedLight, packedOverlay, color);
-            this.chest.render(poseStack, vertexConsumer, packedLight, packedOverlay, color);
+            this.head.render(poseStack, vertexConsumer, packedLight, packedOverlay, packedColor);
+            this.chest.render(poseStack, vertexConsumer, packedLight, packedOverlay, packedColor);
         }
         
         poseStack.popPose();

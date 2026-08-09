@@ -199,8 +199,6 @@ public class MoCEntityMediumFish extends MoCEntityTameableAquatic {
     public boolean isNotScared() {
         return getIsTamed();
     }
-
-    @Override
     protected float getStandingEyeHeight(Pose poseIn, EntityDimensions sizeIn) {
         return this.getBbHeight() * 0.775F;
     }

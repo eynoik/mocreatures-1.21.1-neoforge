@@ -55,14 +55,7 @@ public class MoCModelKittyBed2<T extends MoCEntityKittyBed> extends EntityModel<
     }
 
     @Override
-    public void renderToBuffer(PoseStack poseStack,
-                               VertexConsumer buffer,
-                               int packedLight,
-                               int packedOverlay,
-                               float red,
-                               float green,
-                               float blue,
-                               float alpha) {
-        this.sheet.render(poseStack, buffer, packedLight, packedOverlay, color);
+    public void renderToBuffer(PoseStack poseStack, VertexConsumer buffer, int packedLight, int packedOverlay, int packedColor) {
+        this.sheet.render(poseStack, buffer, packedLight, packedOverlay, packedColor);
     }
 }

@@ -189,8 +189,6 @@ public class MoCEntityMiniGolem extends MoCEntityMob {
     protected ResourceKey<LootTable> getDefaultLootTable() {
         return MoCLootTables.MINI_GOLEM;
     }
-
-    @Override
     protected float getStandingEyeHeight(Pose poseIn, EntityDimensions sizeIn) {
         return this.getBbHeight() * 0.92F;
     }
@@ -211,8 +209,6 @@ public class MoCEntityMiniGolem extends MoCEntityMob {
                 return super.canContinueToUse();
             }
         }
-
-        @Override
         protected double getAttackReachSqr(LivingEntity attackTarget) {
             return 4.0F + attackTarget.getBbWidth();
         }

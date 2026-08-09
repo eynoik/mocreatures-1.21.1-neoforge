@@ -118,7 +118,6 @@ public class WyvernIslandFeature extends Feature<NoneFeatureConfiguration> {
                     .setRandom(random)
                     .addProcessor(BlockIgnoreProcessor.STRUCTURE_AND_AIR)
                     .setIgnoreEntities(false)
-                    .setKeepLiquids(false)  // Don't require liquids to match
                     .setKnownShape(false);  // More lenient placement
             
             if (DEBUG) {

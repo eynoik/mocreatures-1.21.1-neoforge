@@ -154,8 +154,6 @@ public class MoCEntityLeopard extends MoCEntityBigCat {
         }
         return entity.getBbHeight() < 1.3F && entity.getBbWidth() < 1.3F;
     }
-
-    @Override
     protected float getStandingEyeHeight(Pose poseIn, EntityDimensions sizeIn) {
         return this.getBbHeight() * 0.92F;
     }

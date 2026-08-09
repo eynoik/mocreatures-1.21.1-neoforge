@@ -14,7 +14,6 @@ import drzhark.mocreatures.MoCConstants;
 import net.minecraft.world.entity.Entity;
 import net.neoforged.api.distmarker.Dist;
 import net.neoforged.api.distmarker.OnlyIn;
-import net.neoforged.fml.DistExecutor;
 import drzhark.mocreatures.network.MoCNetworkContext;
 
 import java.util.function.Supplier;
@@ -40,15 +39,7 @@ public class MoCMessageNameGUI implements CustomPacketPayload {
     }
 
     public static void onMessage(MoCMessageNameGUI message, Supplier<MoCNetworkContext> ctx) {
-        // We're already on the client when we receive this packet
-        if (DistExecutor.unsafeRunForDist(
-                () -> () -> {
-                    ctx.get().enqueueWork(() -> handleClient(message));
-                    return true;
-                },
-                () -> () -> false)) {
-            // Only executed on client side
-        }
+        ctx.get().enqueueWork(() -> handleClient(message));
         ctx.get().setPacketHandled(true);
     }
 

@@ -61,7 +61,7 @@ public class MoCEntityBear extends MoCEntityTameableAnimal {
         //setSize(1.2F, 1.5F);
         setMoCAge(55);
         setAdult(this.random.nextInt(4) != 0);
-        this.setMaxUpStep(1.0F);
+        this.getAttribute(Attributes.STEP_HEIGHT).setBaseValue(1.0F);
         this.xpReward = 5;
     }
 
@@ -363,8 +363,6 @@ public class MoCEntityBear extends MoCEntityTameableAnimal {
 
         return super.mobInteract(player, hand);
     }
-
-    @Override
     public double getPassengersRidingOffset() {
         double Yfactor = ((0.086D * this.getMoCAge()) - 2.5D) / 10D;
         return this.getBbHeight() * Yfactor;
@@ -393,7 +391,7 @@ public class MoCEntityBear extends MoCEntityTameableAnimal {
         double dist = getSizeFactor() * (0.1D);
         double newPosX = this.getX() + (dist * Math.sin(this.yBodyRot / 57.29578F));
         double newPosZ = this.getZ() - (dist * Math.cos(this.yBodyRot / 57.29578F));
-        passenger.setPos(newPosX, this.getY() + getPassengersRidingOffset() + passenger.getMyRidingOffset(), newPosZ);
+        passenger.setPos(newPosX, this.getY() + getPassengersRidingOffset() + 0.0D, newPosZ);
     }
 
     @Override
@@ -426,7 +424,7 @@ public class MoCEntityBear extends MoCEntityTameableAnimal {
                 if (!this.localstack.isEmpty()) {
                     CompoundTag nbttagcompound1 = new CompoundTag();
                     nbttagcompound1.putByte("Slot", (byte) i);
-                    this.localstack.save(nbttagcompound1);
+                    nbttagcompound1.merge((CompoundTag) this.localstack.save(this.registryAccess()));
                     nbttaglist.add(nbttagcompound1);
                 }
             }
@@ -450,7 +448,7 @@ public class MoCEntityBear extends MoCEntityTameableAnimal {
                 CompoundTag nbttagcompound1 = nbttaglist.getCompound(i);
                 int j = nbttagcompound1.getByte("Slot") & 0xff;
                 if (j < this.localchest.getContainerSize()) {
-                    this.localchest.setItem(j, ItemStack.of(nbttagcompound1));
+                    this.localchest.setItem(j, ItemStack.parseOptional(this.registryAccess(), nbttagcompound1));
                 }
             }
         }

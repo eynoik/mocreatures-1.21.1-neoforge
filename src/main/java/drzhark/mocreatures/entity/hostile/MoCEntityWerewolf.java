@@ -181,9 +181,9 @@ public class MoCEntityWerewolf extends MoCEntityMob {
                     String swordMaterial = ((SwordItem) stack.getItem()).getTier().toString();
                     String swordName = stack.getItem().getDescriptionId();
                     if (swordMaterial.toLowerCase().contains("silver") || swordName.toLowerCase().contains("silver")) {
-                        i = ((SwordItem) stack.getItem()).getDamage() + 6F;
+                        i = stack.getItem().getDamage(stack) + 6F;
                     } else {
-                        i = ((SwordItem) stack.getItem()).getDamage() + 2F;
+                        i = stack.getItem().getDamage(stack) + 2F;
                     }
                 } else if (stack.getItem() instanceof TieredItem) {
                     String swordMaterial = ((TieredItem) stack.getItem()).getTier().toString();
@@ -361,16 +361,6 @@ public class MoCEntityWerewolf extends MoCEntityMob {
         return 0.2F;
     }
 
-    @Override
-    public EntityDimensions getDimensions(Pose poseIn) {
-        if (getIsHumanForm()) {
-            return EntityDimensions.fixed(0.6F, 1.8F); // player size
-        } else {
-            return EntityDimensions.fixed(1.2F, 2.4F); // beast form
-        }
-    }
-
-    @Override
     protected float getStandingEyeHeight(Pose poseIn, EntityDimensions sizeIn) {
         return getIsHumanForm() ? 1.62F : 2.0F; // match model scale
     }

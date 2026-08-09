@@ -67,12 +67,9 @@ public class MoCEntityFlameWraith extends MoCEntityWraith implements Enemy {
     public float getMoveSpeed() {
         return 1.1F;
     }*/
-
-    @Override
     public void doEnchantDamageEffects(LivingEntity attacker, Entity target) {
         if (!this.level().isClientSide() && !this.level().dimensionType().ultraWarm()) {
             target.igniteForSeconds(this.burningTime);
         }
-        super.doEnchantDamageEffects(attacker, target);
-    }
+}
 }

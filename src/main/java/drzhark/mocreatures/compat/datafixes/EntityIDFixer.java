@@ -5,20 +5,9 @@ package drzhark.mocreatures.compat.datafixes;
 
 import drzhark.mocreatures.MoCConstants;
 import net.minecraft.nbt.CompoundTag;
-import net.minecraft.resources.ResourceLocation;
-import net.minecraft.world.entity.EntityType;
-import net.neoforged.neoforge.common.NeoForge;
-import net.neoforged.bus.api.SubscribeEvent;
-import net.neoforged.neoforge.registries.ForgeRegistries;
-import net.neoforged.neoforge.registries.MissingMappingsEvent;
 
 public class EntityIDFixer {
-
-    public EntityIDFixer() {
-        NeoForge.EVENT_BUS.register(this);
-    }
-
-    /**
+/**
      * Called manually when loading legacy entities to remap old IDs.
      */
     public CompoundTag fixTagCompound(CompoundTag compound) {
@@ -60,18 +49,5 @@ public class EntityIDFixer {
         }
 
         return compound;
-    }
-
-    @SuppressWarnings("removal")
-    @SubscribeEvent
-    public void onMissingEntityMappings(MissingMappingsEvent event) {
-        ResourceLocation scorpion = ResourceLocation.fromNamespaceAndPath(MoCConstants.MOD_ID, "scorpion");
-        ResourceLocation manticore = ResourceLocation.fromNamespaceAndPath(MoCConstants.MOD_ID, "manticore");
-
-        event.getMappings(ForgeRegistries.ENTITY_TYPES.getRegistryKey(), MoCConstants.MOD_ID).forEach(mapping -> {
-            if (mapping.getKey().equals(scorpion) || mapping.getKey().equals(manticore)) {
-                mapping.ignore(); // Ignore missing legacy IDs
-            }
-        });
     }
 }

@@ -21,7 +21,6 @@ import drzhark.mocreatures.network.message.MoCMessageAnimation;
 
 // Updated imports for 1.20.1
 import net.minecraft.world.level.block.state.BlockState;
-import net.minecraft.world.entity.MobType;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.LivingEntity;
@@ -73,7 +72,7 @@ public class MoCEntityPetScorpion extends MoCEntityTameableAnimal {
         setAdult(false);
         setMoCAge(20);
         setHasBabies(false);
-        this.setMaxUpStep(1.0F);
+        this.getAttribute(Attributes.STEP_HEIGHT).setBaseValue(1.0F);
     }
 
     @Override
@@ -519,11 +518,6 @@ public class MoCEntityPetScorpion extends MoCEntityTameableAnimal {
     }
 
     @Override
-    public MobType getMobType() {
-        return MobType.ARTHROPOD;
-    }
-
-    @Override
     public float getAdjustedYOffset() {
         return 0.2F;
     }
@@ -532,8 +526,6 @@ public class MoCEntityPetScorpion extends MoCEntityTameableAnimal {
     public int getMoCMaxAge() {
         return 120;
     }
-
-    @Override
     public double getPassengersRidingOffset() {
         return (this.getBbHeight() * 0.75D) - 0.15D;
     }
@@ -647,8 +639,6 @@ public class MoCEntityPetScorpion extends MoCEntityTameableAnimal {
                 return super.canContinueToUse();
             }
         }
-
-        @Override
         protected double getAttackReachSqr(LivingEntity attackTarget) {
             return 4.0F + attackTarget.getBbWidth();
         }

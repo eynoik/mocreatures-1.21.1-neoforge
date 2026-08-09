@@ -114,8 +114,6 @@ public class MoCEntityDuck extends MoCEntityAnimal {
     public boolean causeFallDamage(float distance, float damageMultiplier, DamageSource source) {
         return false;
     }
-
-    @Override
     protected float getStandingEyeHeight(Pose poseIn, EntityDimensions sizeIn) {
         return this.getBbHeight() * 0.945F;
     }

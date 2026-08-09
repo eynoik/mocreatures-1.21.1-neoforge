@@ -96,8 +96,6 @@ public class MoCEntityStingRay extends MoCEntityRay {
         }
         return false;
     }
-
-    @Override
     protected float getStandingEyeHeight(Pose poseIn, EntityDimensions sizeIn) {
         return this.getBbHeight() * 0.86F;
     }

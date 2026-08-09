@@ -367,8 +367,6 @@ public class MoCEntityHorseMob extends MoCEntityMob {
             MoCTools.spawnSlimes(this.level(), this);
         }
     }
-
-    @Override
     public double getPassengersRidingOffset() {
         return (this.getBbHeight() * 0.75D) - 0.1D;
     }
@@ -391,13 +389,6 @@ public class MoCEntityHorseMob extends MoCEntityMob {
     /**
      * Get this Entity's MobType
      */
-    @Override
-    public MobType getMobType() {
-        if (getTypeMoC() == 23 || getTypeMoC() == 24 || getTypeMoC() == 25) {
-            return MobType.UNDEAD;
-        }
-        return super.getMobType();
-    }
 
     @Override
     protected boolean isDaylightSensitive() {
@@ -415,7 +406,7 @@ public class MoCEntityHorseMob extends MoCEntityMob {
             double dist = (0.4D);
             double newPosX = this.getX() + (dist * Math.sin(this.getYRot() / 57.29578F));
             double newPosZ = this.getZ() - (dist * Math.cos(this.getYRot() / 57.29578F));
-            double newPosY = this.getY() + this.getPassengersRidingOffset() + passenger.getMyRidingOffset();
+            double newPosY = this.getY() + this.getPassengersRidingOffset() + 0.0D;
             
             moveFunction.accept(passenger, newPosX, newPosY, newPosZ);
             passenger.setYRot(this.getYRot());
@@ -423,7 +414,6 @@ public class MoCEntityHorseMob extends MoCEntityMob {
     }
 
     // Adjusted to avoid most of the roof suffocation for now
-    @Override
     protected float getStandingEyeHeight(Pose poseIn, EntityDimensions sizeIn) {
         return this.getBbHeight() * 0.9F;
     }

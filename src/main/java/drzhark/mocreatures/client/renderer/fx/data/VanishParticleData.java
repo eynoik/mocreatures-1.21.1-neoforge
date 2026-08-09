@@ -1,32 +1,33 @@
 package drzhark.mocreatures.client.renderer.fx.data;
 
-import com.mojang.brigadier.StringReader;
-import com.mojang.brigadier.exceptions.CommandSyntaxException;
+import com.mojang.serialization.Codec;
+import com.mojang.serialization.MapCodec;
+import com.mojang.serialization.codecs.RecordCodecBuilder;
 import drzhark.mocreatures.client.renderer.fx.MoCParticles;
 import net.minecraft.core.particles.ParticleOptions;
 import net.minecraft.core.particles.ParticleType;
-import net.minecraft.network.FriendlyByteBuf;
-
-import java.util.Locale;
+import net.minecraft.network.RegistryFriendlyByteBuf;
+import net.minecraft.network.codec.StreamCodec;
 
 public class VanishParticleData implements ParticleOptions {
-    public static final ParticleOptions.Deserializer<VanishParticleData> DESERIALIZER = new ParticleOptions.Deserializer<VanishParticleData>() {
+    public static final MapCodec<VanishParticleData> CODEC = RecordCodecBuilder.mapCodec(instance -> instance.group(
+            Codec.FLOAT.fieldOf("red").forGetter(v -> v.red),
+            Codec.FLOAT.fieldOf("green").forGetter(v -> v.green),
+            Codec.FLOAT.fieldOf("blue").forGetter(v -> v.blue), Codec.BOOL.fieldOf("implode").forGetter(v -> v.implode)
+    ).apply(instance, VanishParticleData::new));
+
+    public static final StreamCodec<RegistryFriendlyByteBuf, VanishParticleData> STREAM_CODEC = new StreamCodec<>() {
         @Override
-        public VanishParticleData fromCommand(ParticleType<VanishParticleData> type, StringReader reader) throws CommandSyntaxException {
-            reader.expect(' ');
-            float r = reader.readFloat();
-            reader.expect(' ');
-            float g = reader.readFloat();
-            reader.expect(' ');
-            float b = reader.readFloat();
-            reader.expect(' ');
-            boolean implode = reader.readBoolean();
-            return new VanishParticleData(r, g, b, implode);
+        public VanishParticleData decode(RegistryFriendlyByteBuf buf) {
+            return new VanishParticleData(buf.readFloat(), buf.readFloat(), buf.readFloat(), buf.readBoolean());
         }
 
         @Override
-        public VanishParticleData fromNetwork(ParticleType<VanishParticleData> type, FriendlyByteBuf buffer) {
-            return new VanishParticleData(buffer.readFloat(), buffer.readFloat(), buffer.readFloat(), buffer.readBoolean());
+        public void encode(RegistryFriendlyByteBuf buf, VanishParticleData value) {
+            buf.writeFloat(value.red);
+            buf.writeFloat(value.green);
+            buf.writeFloat(value.blue);
+            buf.writeBoolean(value.implode);
         }
     };
 
@@ -38,19 +39,6 @@ public class VanishParticleData implements ParticleOptions {
         this.green = green;
         this.blue = blue;
         this.implode = implode;
-    }
-
-    @Override
-    public void writeToNetwork(FriendlyByteBuf buffer) {
-        buffer.writeFloat(red);
-        buffer.writeFloat(green);
-        buffer.writeFloat(blue);
-        buffer.writeBoolean(implode);
-    }
-
-    @Override
-    public String writeToString() {
-        return String.format(Locale.ROOT, "%s %.2f %.2f %.2f %b", getType(), red, green, blue, implode);
     }
 
     @Override
