@@ -35,6 +35,25 @@ jobs:
           STATUS=${PIPESTATUS[0]}
           exit $STATUS
 
+      - name: Server load smoke test
+        shell: bash
+        run: |
+          set -uo pipefail
+          mkdir -p run/server
+          printf 'eula=true\n' > run/server/eula.txt
+          rm -f server-smoke.log
+          set +e
+          timeout 90s ./gradlew runServer --no-daemon 2>&1 | tee server-smoke.log
+          STATUS=${PIPESTATUS[0]}
+          set -e
+          if grep -q 'Done (' run/server/logs/latest.log 2>/dev/null; then
+            echo 'Server reached Done: runtime load smoke test passed.'
+            exit 0
+          fi
+          echo "Server did not reach Done (gradle/timeout status: $STATUS)."
+          if [ -f run/server/logs/latest.log ]; then tail -200 run/server/logs/latest.log; fi
+          exit 1
+
       - name: Upload JARs, compiler log and reports
         if: always()
         uses: actions/upload-artifact@v4
@@ -43,6 +62,8 @@ jobs:
           if-no-files-found: warn
           path: |
             compile.log
+            server-smoke.log
+            run/server/logs/latest.log
             build/libs/*.jar
             build/reports/**
             build/tmp/**
