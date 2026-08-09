@@ -2,7 +2,7 @@ name: Build Mo Creatures NeoForge 1.21.1
 
 on:
   push:
-    branches: [ "main" ]
+    branches: [ "main", "agent/**" ]
   workflow_dispatch:
 
 permissions:
@@ -72,6 +72,7 @@ jobs:
           python3 tools/port_fixes_stage3.py
           python3 tools/port_fixes_stage4.py
           python3 tools/port_fixes_stage5.py
+          python3 tools/port_fixes_stage6.py
 
       - name: Snapshot patched source
         shell: bash
