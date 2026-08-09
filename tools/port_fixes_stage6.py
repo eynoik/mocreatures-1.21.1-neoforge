@@ -78,7 +78,7 @@ s = s.replace(
 )
 write(rel, s)
 
-# Resolve the registered POI holder from the built-in registry using the existing ResourceKey.
+# Resolve the registered POI as a Holder; 1.21.1 Registry#getOrThrow returns the value, while PoiManager#add requires a Holder.
 for rel in [
     'drzhark/mocreatures/dimension/worldgen/MoCDirectTeleporter.java',
     'drzhark/mocreatures/dimension/worldgen/MoCWorldGenPortal.java',
@@ -89,11 +89,11 @@ for rel in [
                       'import net.minecraft.core.BlockPos;\nimport net.minecraft.core.registries.BuiltInRegistries;\n')
     s = s.replace(
         'MoCPOI.WYVERN_PORTAL.getHolder().ifPresent(holder -> poiManager.add(pos, holder));',
-        'poiManager.add(pos, BuiltInRegistries.POINT_OF_INTEREST_TYPE.getOrThrow(MoCPOI.WYVERN_PORTAL_KEY));'
+        'poiManager.add(pos, BuiltInRegistries.POINT_OF_INTEREST_TYPE.wrapAsHolder(MoCPOI.WYVERN_PORTAL.get()));'
     )
     s = s.replace(
         'poiManager.add(pos, MoCPOI.WYVERN_PORTAL.getHolder().get());',
-        'poiManager.add(pos, BuiltInRegistries.POINT_OF_INTEREST_TYPE.getOrThrow(MoCPOI.WYVERN_PORTAL_KEY));'
+        'poiManager.add(pos, BuiltInRegistries.POINT_OF_INTEREST_TYPE.wrapAsHolder(MoCPOI.WYVERN_PORTAL.get()));'
     )
     write(rel, s)
 
