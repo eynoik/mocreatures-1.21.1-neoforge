@@ -61,6 +61,54 @@ jobs:
 
           echo 'Server reached Done and Mo Creatures data parsed without loot/recipe errors.'
 
+      - name: Client startup smoke test
+        shell: bash
+        run: |
+          set -uo pipefail
+          rm -f client-smoke.log
+          rm -rf run/client/crash-reports
+          mkdir -p run/client
+
+          if ! command -v xvfb-run >/dev/null 2>&1; then
+            sudo apt-get update
+            sudo apt-get install -y xvfb
+          fi
+
+          set +e
+          timeout 90s xvfb-run -a ./gradlew runClient --no-daemon 2>&1 | tee client-smoke.log
+          STATUS=${PIPESTATUS[0]}
+          set -e
+
+          LOG=run/client/logs/latest.log
+
+          # A healthy client normally keeps running at the title screen until timeout (124).
+          # Any other non-zero exit means startup itself failed.
+          if [ "$STATUS" -ne 0 ] && [ "$STATUS" -ne 124 ]; then
+            echo "Client exited during startup (status: $STATUS)."
+            if [ -f "$LOG" ]; then tail -250 "$LOG"; fi
+            exit 1
+          fi
+
+          if compgen -G 'run/client/crash-reports/*.txt' > /dev/null; then
+            echo 'Minecraft generated a client crash report.'
+            tail -250 run/client/crash-reports/*.txt || true
+            exit 1
+          fi
+
+          if [ ! -f "$LOG" ]; then
+            echo 'Client did not create latest.log; startup was not validated.'
+            tail -250 client-smoke.log || true
+            exit 1
+          fi
+
+          if grep -E "Error loading mods|has failed to load correctly|Failure message:.*mocreatures|Exception caught during firing event" "$LOG"; then
+            echo "Mo' Creatures client startup error detected."
+            tail -250 "$LOG"
+            exit 1
+          fi
+
+          echo 'Client stayed alive through the startup smoke-test window without a mod-loading crash.'
+
       - name: Upload JARs, compiler log and reports
         if: always()
         uses: actions/upload-artifact@v4
@@ -70,7 +118,10 @@ jobs:
           path: |
             compile.log
             server-smoke.log
+            client-smoke.log
             run/server/logs/latest.log
+            run/client/logs/latest.log
+            run/client/crash-reports/**
             build/libs/*.jar
             build/reports/**
             build/tmp/**
