@@ -1,0 +1,58 @@
+name: Build Mo Creatures NeoForge 1.21.1
+
+on:
+  push:
+    branches: [ "main" ]
+  workflow_dispatch:
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup Java 21
+        uses: actions/setup-java@v4
+        with:
+          distribution: temurin
+          java-version: '21'
+          cache: gradle
+
+      - name: Find and unpack port archive
+        shell: bash
+        run: |
+          set -euxo pipefail
+          ARCHIVE=$(find . -maxdepth 2 -type f \( -name '*stage1*.zip' -o -name '*neoforge-port*.zip' \) | head -n 1)
+          if [ -z "${ARCHIVE:-}" ]; then
+            echo 'ERROR: Upload the stage1 port ZIP to the repository root.'
+            exit 1
+          fi
+          mkdir -p port
+          unzip -q "$ARCHIVE" -d port
+          ROOT=$(find port -name gradlew -type f -printf '%h\n' | head -n 1)
+          if [ -z "${ROOT:-}" ]; then
+            echo 'ERROR: gradlew not found inside archive.'
+            exit 1
+          fi
+          echo "PORT_ROOT=$ROOT" >> "$GITHUB_ENV"
+
+      - name: Build
+        shell: bash
+        run: |
+          set -euxo pipefail
+          cd "$PORT_ROOT"
+          chmod +x gradlew
+          ./gradlew clean build --stacktrace --no-daemon
+
+      - name: Upload JARs and reports
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: mocreatures-build-output
+          if-no-files-found: warn
+          path: |
+            ${{ env.PORT_ROOT }}/build/libs/*.jar
+            ${{ env.PORT_ROOT }}/build/reports/**
+            ${{ env.PORT_ROOT }}/build/tmp/**
