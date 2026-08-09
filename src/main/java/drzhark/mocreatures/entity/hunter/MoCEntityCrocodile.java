@@ -390,6 +390,6 @@ public class MoCEntityCrocodile extends MoCEntityTameableAnimal {
         return this.isNotScared() && !this.isMovementCeased() && !this.isVehicle() && !this.getHasCaughtPrey();
     }
     protected float getStandingEyeHeight(Pose poseIn, EntityDimensions sizeIn) {
-        return sizeIn.height()() * 0.8F;
+        return sizeIn.height() * 0.8F;
     }
 }

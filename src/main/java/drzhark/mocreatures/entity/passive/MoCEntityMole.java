@@ -256,6 +256,6 @@ public class MoCEntityMole extends MoCEntityTameableAnimal {
         return MoCLootTables.MOLE;
     }
     protected float getStandingEyeHeight(Pose poseIn, EntityDimensions sizeIn) {
-        return sizeIn.height()() * 0.65F;
+        return sizeIn.height() * 0.65F;
     }
 }

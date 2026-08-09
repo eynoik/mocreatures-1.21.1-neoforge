@@ -139,7 +139,6 @@ public class MoCreatures {
         MoCEntities.ENTITY_TYPES.register(modBus);
         MoCSpawnEggs.SPAWN_EGGS.register(modBus);
         MoCArmorMaterial.ARMOR_MATERIALS.register(modBus);
-        MoCArmorMaterial.ARMOR_MATERIALS.register(modBus);
         MoCItems.ITEMS.register(modBus);
         MoCFeatures.FEATURES.register(modBus);
         MoCCreativeTabs.register(modBus);

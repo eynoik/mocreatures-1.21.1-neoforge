@@ -528,6 +528,6 @@ public class MoCEntityBird extends MoCEntityTameableAnimal {
         return true;
     }
     protected float getStandingEyeHeight(Pose poseIn, EntityDimensions sizeIn) {
-        return sizeIn.height()() * 0.8F;
+        return sizeIn.height() * 0.8F;
     }
 }
