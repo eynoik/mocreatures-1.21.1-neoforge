@@ -224,7 +224,7 @@ public class MoCEntityKitty extends MoCEntityTameableAnimal {
         this.isSwinging = var1;
     }
     protected float getStandingEyeHeight(Pose poseIn, EntityDimensions sizeIn) {
-        return sizeIn.height() * 0.8F;
+        return sizeIn.height()() * 0.8F;
     }
 
     @Override
