@@ -2,7 +2,14 @@
 
 Target: Minecraft 1.21.1, NeoForge 21.1.219, Java 21.
 
-This directory is a substantial source-level port of the supplied 1.20.1 Forge project. It is **not yet claimed to be a release-ready or runtime-tested build** because the current sandbox cannot resolve the Gradle distribution / Maven dependencies required to compile NeoForge.
+This repository contains a substantial source-level port of the supplied 1.20.1 Forge project. The port now **passes a full `./gradlew clean build` directly from the repository source** on GitHub Actions with Java 21 and Gradle 9.2.1. It is not yet claimed to be release-ready because client/server runtime behavior still needs in-game validation.
+
+## Build status
+
+- Full repository-source `./gradlew clean build`: **PASS**.
+- Build no longer depends on the staged `tools/port_fixes*.py` scripts or workflow-time source rewriting.
+- Gradle wrapper is pinned to 9.2.1 in the repository.
+- Produced artifact: `mocreatures-1.21.1-1.0.0-neoforge-port.jar`.
 
 ## Migrated in this iteration
 
@@ -23,10 +30,11 @@ This directory is a substantial source-level port of the supplied 1.20.1 Forge p
 - Synched entity-data definitions migrated to the builder form.
 - Rendering vertex chains migrated from `vertex/color/uv/.../endVertex` to the 1.21 vertex API.
 - Model rendering migrated from four float tint parameters to packed ARGB `int color` across the model package and custom renderer call sites.
+- Remaining 1.21.1 compile blockers were fixed in tool items, villager trades, book rendering, block survival checks, loot keys, horse rider offsets and POI holder lookup.
 
-## Static checks completed
+## Validation completed
 
-- Java 21 parser pass: no syntax-style errors detected across the Java source tree (dependency symbols cannot be resolved without the NeoForge classpath).
+- Full Java/Gradle build with the real NeoForge classpath: pass.
 - `net.minecraftforge` imports: 0.
 - `RegistryObject` references: 0.
 - `SimpleChannel` / old Forge networking references: 0.
@@ -37,7 +45,7 @@ This directory is a substantial source-level port of the supplied 1.20.1 Forge p
 
 ## Known high-risk / unfinished validation areas
 
-1. A real `./gradlew clean build` has not run in this sandbox because Gradle cannot download its distribution/dependencies here. Compile-time API mismatches can therefore still remain.
+1. Client launch and gameplay have not yet been fully runtime-tested on 1.21.1 NeoForge.
 2. Clientbound packet handlers should be tested on a dedicated server to make sure no client class is eagerly classloaded during common registration.
 3. Runtime rendering should be checked for translucent entities/layers (ghost horses, wraiths, insect wings, golem effect layers, legacy big cats).
 4. Texture-stitch/client registration, custom render types and event signatures need confirmation by an actual client launch.
@@ -45,10 +53,9 @@ This directory is a substantial source-level port of the supplied 1.20.1 Forge p
 6. Five custom mob drop routines currently set their manual looting bonus to zero; vanilla loot tables still work, but the mod-specific extra looting bonus needs a proper 1.21 enchantment-context implementation.
 7. Data-component compatibility for old 1.20.1 worlds/items should be tested; the port preserves the mod's logical keys but old serialized ItemStack NBT does not automatically become new components.
 
-## What to run locally
+## What to run next
 
 ```bash
-./gradlew clean build
 ./gradlew runClient
 ./gradlew runServer
 ```
@@ -56,9 +63,8 @@ This directory is a substantial source-level port of the supplied 1.20.1 Forge p
 On Windows:
 
 ```bat
-gradlew.bat clean build
 gradlew.bat runClient
 gradlew.bat runServer
 ```
 
-The first useful artifact for the next port iteration is the **first full `clean build` error log**. Fix compile errors from the top downward; after a clean build, test a fresh client world and then a dedicated server.
+The compile stage is no longer the blocker. The next useful failures are runtime/client/server issues from an actual launch and fresh-world test.
