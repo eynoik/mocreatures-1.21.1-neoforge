@@ -129,4 +129,28 @@ s = s.replace('@EventBusSubscriber(modid = MoCConstants.MOD_ID)\n', '')
 s = s.replace('import net.neoforged.fml.common.EventBusSubscriber;\n', '')
 write(rel, s)
 
+# NeoForge 1.21.1 rejects @EventBusSubscriber classes that contain no active @SubscribeEvent methods.
+# Remove only the redundant empty subscriber annotations. MoCBlocks.ClientEvents remains subscribed.
+empty_subscribers = [
+    'drzhark/mocreatures/world/MoCWorldRegistry.java',
+    'drzhark/mocreatures/init/MoCCreativeTabs.java',
+    'drzhark/mocreatures/compat/CompatHandler.java',
+    'drzhark/mocreatures/proxy/MoCProxyClient.java',
+    'drzhark/mocreatures/client/renderer/fx/MoCParticles.java',
+]
+for rel in empty_subscribers:
+    s = read(rel)
+    lines = s.splitlines(keepends=True)
+    lines = [line for line in lines if '@EventBusSubscriber' not in line]
+    s = ''.join(lines)
+    if '@EventBusSubscriber' not in s:
+        s = s.replace('import net.neoforged.fml.common.EventBusSubscriber;\n', '')
+    write(rel, s)
+
+rel = 'drzhark/mocreatures/init/MoCBlocks.java'
+s = read(rel)
+s = s.replace('@EventBusSubscriber(modid = MoCConstants.MOD_ID, bus = EventBusSubscriber.Bus.MOD)\npublic class MoCBlocks {',
+              'public class MoCBlocks {', 1)
+write(rel, s)
+
 print('Applied stage6 compile and dedicated-server runtime fixes')
