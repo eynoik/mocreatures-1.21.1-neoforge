@@ -63,6 +63,12 @@ jobs:
 
           echo "PORT_ROOT=." >> "$GITHUB_ENV"
 
+      - name: Apply NeoForge 1.21.1 port fixes
+        shell: bash
+        run: |
+          set -euxo pipefail
+          python3 tools/port_fixes.py
+
       - name: Setup Java 21
         uses: actions/setup-java@v5
         with:
