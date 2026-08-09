@@ -38,7 +38,6 @@ import org.apache.logging.log4j.Logger;
 import net.neoforged.bus.api.SubscribeEvent;
 import net.neoforged.neoforge.event.server.ServerStartingEvent;
 import net.neoforged.neoforge.event.RegisterCommandsEvent;
-import drzhark.mocreatures.event.MoCWyvernDimensionHandler;
 
 import java.util.UUID;
 
@@ -71,8 +70,7 @@ public class MoCreatures {
         eventBus.addListener(this::setup);
         NeoForge.EVENT_BUS.register(new MoCEventHooks());
 
-        // Register the Wyvern dimension handler
-        NeoForge.EVENT_BUS.register(MoCWyvernDimensionHandler.class);
+        // Wyvern dimension handler is currently dormant; its legacy event hooks are commented out.
         
         CompatHandler.preInit();
 
