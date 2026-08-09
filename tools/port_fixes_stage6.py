@@ -36,11 +36,9 @@ if 'import net.minecraft.world.item.trading.ItemCost;' not in s:
         'import net.minecraft.world.item.trading.MerchantOffer;',
         'import net.minecraft.world.item.trading.ItemCost;\nimport net.minecraft.world.item.trading.MerchantOffer;'
     )
-if 'import java.util.Optional;' not in s:
-    s = s.replace('import net.neoforged.fml.common.Mod;', 'import net.neoforged.fml.common.Mod;\n\nimport java.util.Optional;')
 s = s.replace(
     'new MerchantOffer(new ItemStack(Items.PAPER), new ItemStack(Items.FEATHER), new ItemStack(MoCItems.SCROLLFREEDOM.get()), 12, 10, 0.1F)',
-    'new MerchantOffer(new ItemCost(Items.PAPER), Optional.of(new ItemCost(Items.FEATHER)), new ItemStack(MoCItems.SCROLLFREEDOM.get()), 12, 10, 0.1F)'
+    'new MerchantOffer(new ItemCost(Items.PAPER), java.util.Optional.of(new ItemCost(Items.FEATHER)), new ItemStack(MoCItems.SCROLLFREEDOM.get()), 12, 10, 0.1F)'
 )
 s = s.replace(
     'return new MerchantOffer(in, out, maxUses, xp, priceMult);',
