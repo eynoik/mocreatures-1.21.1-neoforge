@@ -69,6 +69,7 @@ jobs:
           set -euxo pipefail
           python3 tools/port_fixes.py
           python3 tools/port_fixes_stage2.py
+          python3 tools/port_fixes_stage3.py
 
       - name: Setup Java 21
         uses: actions/setup-java@v5
@@ -87,18 +88,22 @@ jobs:
       - name: Build
         shell: bash
         run: |
-          set -euxo pipefail
+          set -uo pipefail
           cd "$PORT_ROOT"
           chmod +x gradlew
-          ./gradlew clean build --stacktrace --no-daemon
+          mkdir -p build
+          ./gradlew clean build --stacktrace --no-daemon 2>&1 | tee compile.log
+          STATUS=${PIPESTATUS[0]}
+          exit $STATUS
 
-      - name: Upload JARs and reports
+      - name: Upload JARs, compiler log and reports
         if: always()
         uses: actions/upload-artifact@v4
         with:
           name: mocreatures-build-output
           if-no-files-found: warn
           path: |
+            ${{ env.PORT_ROOT }}/compile.log
             ${{ env.PORT_ROOT }}/build/libs/*.jar
             ${{ env.PORT_ROOT }}/build/reports/**
             ${{ env.PORT_ROOT }}/build/tmp/**
