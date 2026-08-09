@@ -23,7 +23,6 @@ jobs:
         run: |
           set -euxo pipefail
 
-          # If the project is already unpacked, do nothing.
           if [ -f ./gradlew ]; then
             echo "Project is already unpacked."
             echo "PORT_ROOT=." >> "$GITHUB_ENV"
@@ -48,9 +47,8 @@ jobs:
           fi
 
           echo "Copying project from $ROOT to repository root"
-          rsync -a --exclude='.git/' "$ROOT/" ./
+          rsync -a --exclude='.git/' --exclude='.github/' "$ROOT/" ./
 
-          # Remove the uploaded archive after extracting it.
           git rm -f "$ARCHIVE"
           rm -rf .unpack-port
 
