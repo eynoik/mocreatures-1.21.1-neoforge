@@ -71,6 +71,7 @@ jobs:
           python3 tools/port_fixes_stage2.py
           python3 tools/port_fixes_stage3.py
           python3 tools/port_fixes_stage4.py
+          python3 tools/port_fixes_stage5.py
 
       - name: Snapshot patched source
         shell: bash
