@@ -1,0 +1,71 @@
+name: Wyvern Lair chunk generation smoke
+
+on:
+  push:
+    branches: [ "agent/finish-neoforge-port" ]
+
+permissions:
+  contents: read
+
+jobs:
+  wyvernlair-chunkgen:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup Java 21
+        uses: actions/setup-java@v5
+        with:
+          distribution: temurin
+          java-version: '21'
+
+      - name: Generate a Wyvern Lair chunk
+        shell: bash
+        run: |
+          set -uo pipefail
+          chmod +x gradlew
+          mkdir -p run/server
+          printf 'eula=true\n' > run/server/eula.txt
+          rm -rf run/server/world run/server/logs
+
+          set +e
+          {
+            sleep 55
+            echo 'execute in mocreatures:wyvernlairworld run forceload add 80 -112'
+            sleep 45
+            echo 'save-all flush'
+            sleep 5
+            echo 'stop'
+          } | timeout 150s ./gradlew runServer --no-daemon 2>&1 | tee wyvernlair-chunkgen.log
+          STATUS=${PIPESTATUS[1]}
+          set -e
+
+          LOG=run/server/logs/latest.log
+          if [ ! -f "$LOG" ]; then
+            echo 'Server produced no latest.log.'
+            exit 1
+          fi
+
+          if grep -E 'Feature order cycle found|Error upgrading chunk .*minecraft:features' "$LOG"; then
+            echo 'Wyvern Lair feature-order/chunk-generation error detected.'
+            exit 1
+          fi
+
+          REGION_DIR='run/server/world/dimensions/mocreatures/wyvernlairworld/region'
+          if ! compgen -G "$REGION_DIR/*.mca" > /dev/null; then
+            echo "No Wyvern Lair region file was generated (server status: $STATUS). Commands may not have reached the server."
+            tail -250 "$LOG"
+            exit 1
+          fi
+
+          echo 'Wyvern Lair chunk generated without feature-order errors.'
+
+      - name: Upload targeted log
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: wyvernlair-chunkgen-smoke
+          path: |
+            wyvernlair-chunkgen.log
+            run/server/logs/latest.log
