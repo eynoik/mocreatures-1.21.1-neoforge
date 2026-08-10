@@ -176,7 +176,17 @@ public abstract class MoCEntityAnimal extends Animal implements IMoCEntity {
 
     @Override
     public void setPetName(String name) {
-        this.entityData.set(NAME_STR, name);
+        String petName = name == null ? "" : name.trim();
+        this.entityData.set(NAME_STR, petName);
+
+        // Keep the legacy MoC name and vanilla 1.21 CustomName in sync.
+        if (petName.isEmpty()) {
+            this.setCustomName(null);
+            this.setCustomNameVisible(false);
+        } else {
+            this.setCustomName(Component.literal(petName));
+            this.setCustomNameVisible(MoCreatures.proxy.getDisplayPetName());
+        }
     }
 
     @Override

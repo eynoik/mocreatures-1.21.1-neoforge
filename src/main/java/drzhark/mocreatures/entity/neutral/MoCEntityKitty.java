@@ -6,6 +6,7 @@ package drzhark.mocreatures.entity.neutral;
 import drzhark.mocreatures.MoCTools;
 import drzhark.mocreatures.MoCreatures;
 import drzhark.mocreatures.entity.MoCEntityAnimal;
+import drzhark.mocreatures.entity.passive.MoCEntityMouse;
 import drzhark.mocreatures.entity.ai.EntityAIFollowAdult;
 import drzhark.mocreatures.entity.ai.EntityAIPanicMoC;
 import drzhark.mocreatures.entity.item.MoCEntityKittyBed;
@@ -38,6 +39,7 @@ import net.minecraft.world.entity.ai.goal.LookAtPlayerGoal;
 import net.minecraft.world.entity.ai.goal.MeleeAttackGoal;
 import net.minecraft.world.entity.ai.goal.FloatGoal;
 import net.minecraft.world.entity.ai.goal.WaterAvoidingRandomStrollGoal;
+import net.minecraft.world.entity.ai.goal.target.NearestAttackableTargetGoal;
 import net.minecraft.world.entity.item.ItemEntity;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
@@ -95,6 +97,14 @@ public class MoCEntityKitty extends MoCEntityTameableAnimal {
         this.goalSelector.addGoal(5, new MeleeAttackGoal(this, 1.0D, false));
         this.goalSelector.addGoal(6, new WaterAvoidingRandomStrollGoal(this, 1.0D));
         this.goalSelector.addGoal(7, new LookAtPlayerGoal(this, Player.class, 8.0F));
+        // Cats should actively hunt Mo Creatures mice.
+        this.targetSelector.addGoal(1, new NearestAttackableTargetGoal<>(this, MoCEntityMouse.class, true));
+    }
+
+    /** Players are not a fear source for kitties; normal fear rules still apply to other mobs. */
+    @Override
+    public boolean entitiesToInclude(Entity entity) {
+        return !(entity instanceof Player) && super.entitiesToInclude(entity);
     }
 
     public static AttributeSupplier.Builder createAttributes() {
