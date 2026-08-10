@@ -12,6 +12,7 @@ This repository contains a substantial source-level port of the supplied 1.20.1 
 - Validated client-fix code SHA: `43790475da1e7bb06dfa84bcef9ec032bb7354c6`.
 - Validated GitHub Actions run: `31334615915`.
 - Uploaded `mocreatures-fixes.patch` was applied to the current port in source commit `679623e202b04773afa6b6c622135c59a39355ae`; CI validation is triggered from this status update.
+- Pet hover nametags now preserve vanilla `CustomName` rendering, and Ogre smash uses a full radial block/entity blast while excluding only the source Ogre; source fix commit `a993af8a821e64192974572f4ea8728bf86b705e` passed a clean build and this status update triggers full client/server validation.
 - Build no longer depends on the staged `tools/port_fixes*.py` scripts or workflow-time source rewriting.
 - Gradle wrapper is pinned to 9.2.1 in the repository.
 - Produced artifact: `mocreatures-1.21.1-1.0.0-neoforge-port.jar`.
