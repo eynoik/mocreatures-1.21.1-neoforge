@@ -23,47 +23,128 @@ jobs:
       - name: Setup Gradle cache
         uses: gradle/actions/setup-gradle@v4
 
-      - name: Generate a Wyvern Lair chunk
+      - name: Generate a Wyvern Lair chunk over RCON
         shell: bash
         run: |
-          set -uo pipefail
+          set -euo pipefail
           chmod +x gradlew
           mkdir -p run/server
-          printf 'eula=true\n' > run/server/eula.txt
+          cat > run/server/eula.txt <<'EOF'
+          eula=true
+          EOF
+          cat > run/server/server.properties <<'EOF'
+          online-mode=false
+          enable-rcon=true
+          rcon.password=wyvern-smoke
+          rcon.port=25575
+          sync-chunk-writes=true
+          spawn-protection=0
+          EOF
           rm -rf run/server/world run/server/logs
+          rm -f wyvernlair-chunkgen.log
 
-          set +e
-          {
-            sleep 110
-            echo 'execute in mocreatures:wyvernlairworld run forceload add 80 -112'
-            sleep 50
-            echo 'save-all flush'
-            sleep 5
-            echo 'stop'
-          } | timeout 260s ./gradlew runServer --no-daemon 2>&1 | tee wyvernlair-chunkgen.log
-          STATUS=${PIPESTATUS[1]}
-          set -e
+          ./gradlew runServer --no-daemon > wyvernlair-chunkgen.log 2>&1 &
+          SERVER_PID=$!
+          cleanup() {
+            kill "$SERVER_PID" 2>/dev/null || true
+            wait "$SERVER_PID" 2>/dev/null || true
+          }
+          trap cleanup EXIT
+
+          python3 - <<'PY'
+          import os, socket, struct, time, sys
+
+          log_path = 'run/server/logs/latest.log'
+          deadline = time.time() + 210
+          while time.time() < deadline:
+              if os.path.exists(log_path):
+                  text = open(log_path, errors='replace').read()
+                  if 'Done (' in text:
+                      break
+                  if 'Feature order cycle found' in text:
+                      print(text[-8000:])
+                      raise SystemExit('Feature order cycle occurred before RCON command')
+              time.sleep(1)
+          else:
+              raise SystemExit('Server did not reach Done before timeout')
+
+          def packet(sock, request_id, packet_type, payload):
+              data = struct.pack('<ii', request_id, packet_type) + payload.encode() + b'\x00\x00'
+              sock.sendall(struct.pack('<i', len(data)) + data)
+
+          def receive(sock):
+              raw_len = sock.recv(4)
+              if len(raw_len) != 4:
+                  raise RuntimeError('Short RCON length')
+              length = struct.unpack('<i', raw_len)[0]
+              buf = b''
+              while len(buf) < length:
+                  part = sock.recv(length - len(buf))
+                  if not part:
+                      raise RuntimeError('RCON closed connection')
+                  buf += part
+              request_id, packet_type = struct.unpack('<ii', buf[:8])
+              payload = buf[8:-2].decode(errors='replace')
+              return request_id, packet_type, payload
+
+          rcon_deadline = time.time() + 30
+          while True:
+              try:
+                  sock = socket.create_connection(('127.0.0.1', 25575), timeout=5)
+                  break
+              except OSError:
+                  if time.time() > rcon_deadline:
+                      raise
+                  time.sleep(1)
+
+          with sock:
+              packet(sock, 1, 3, 'wyvern-smoke')
+              rid, rtype, payload = receive(sock)
+              if rid == -1:
+                  raise SystemExit('RCON authentication failed')
+
+              command = 'execute in mocreatures:wyvernlairworld run forceload add 80 -112'
+              packet(sock, 2, 2, command)
+              rid, rtype, response = receive(sock)
+              print('RCON forceload response:', response)
+              if 'Unknown dimension' in response or 'Incorrect argument' in response:
+                  raise SystemExit('Wyvern Lair command failed: ' + response)
+
+              time.sleep(35)
+              packet(sock, 3, 2, 'save-all flush')
+              print('RCON save response:', receive(sock)[2])
+              time.sleep(5)
+              packet(sock, 4, 2, 'stop')
+              try:
+                  print('RCON stop response:', receive(sock)[2])
+              except Exception:
+                  pass
+          PY
+
+          for i in $(seq 1 45); do
+            if ! kill -0 "$SERVER_PID" 2>/dev/null; then break; fi
+            sleep 1
+          done
+          cleanup
+          trap - EXIT
 
           LOG=run/server/logs/latest.log
-          if [ ! -f "$LOG" ]; then
-            echo 'Server produced no latest.log.'
-            tail -250 wyvernlair-chunkgen.log || true
-            exit 1
-          fi
+          test -f "$LOG"
 
           if grep -E 'Feature order cycle found|Error upgrading chunk .*minecraft:features' "$LOG"; then
             echo 'Wyvern Lair feature-order/chunk-generation error detected.'
+            tail -300 "$LOG"
             exit 1
           fi
 
           REGION_DIR='run/server/world/dimensions/mocreatures/wyvernlairworld/region'
           if ! compgen -G "$REGION_DIR/*.mca" > /dev/null; then
-            echo "No Wyvern Lair region file was generated (server status: $STATUS). Commands may not have reached the server."
-            tail -250 "$LOG"
+            echo 'No Wyvern Lair region file was generated.'
+            tail -300 "$LOG"
             exit 1
           fi
 
-          echo 'Wyvern Lair chunk generated without feature-order errors.'
+          echo 'Wyvern Lair chunk generated and saved without feature-order errors.'
 
       - name: Upload targeted log
         if: always()
@@ -73,3 +154,4 @@ jobs:
           path: |
             wyvernlair-chunkgen.log
             run/server/logs/latest.log
+            run/server/world/dimensions/mocreatures/wyvernlairworld/region/**
