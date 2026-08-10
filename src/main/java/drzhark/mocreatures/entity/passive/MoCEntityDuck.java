@@ -40,6 +40,7 @@ public class MoCEntityDuck extends MoCEntityAnimal {
     public MoCEntityDuck(EntityType<? extends MoCEntityDuck> type, Level world) {
         super(type, world);
         this.texture = "duck.png";
+        this.xpReward = 0;
         //setSize(0.4F, 0.7F);
     }
 
