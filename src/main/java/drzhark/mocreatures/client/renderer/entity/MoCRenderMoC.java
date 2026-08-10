@@ -385,7 +385,17 @@ public class MoCRenderMoC<T extends Mob, M extends EntityModel<T>> extends MobRe
 
     @Override
     public boolean shouldShowName(T entity) {
-        return false;
+        // The legacy renderer disabled vanilla name rendering unconditionally.
+        // On 1.21 this also kills the normal "look at a named mob" nametag.
+        // NAME_STR is synchronized, so explicitly allow the hover label for a
+        // named MoC entity under the crosshair, then fall back to vanilla rules.
+        IMoCEntity entityMoC = (IMoCEntity) entity;
+        String petName = entityMoC.getPetName();
+        if (petName != null && !petName.isEmpty()
+                && Minecraft.getInstance().crosshairPickEntity == entity) {
+            return true;
+        }
+        return super.shouldShowName(entity);
     }
 
     /**

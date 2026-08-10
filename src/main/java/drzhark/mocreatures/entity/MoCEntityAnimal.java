@@ -91,9 +91,13 @@ public abstract class MoCEntityAnimal extends Animal implements IMoCEntity {
     @OnlyIn(Dist.CLIENT)
     @Override
     public Component getName() {
-        // A real custom pet name must win over MoC verbose species names.
-        // Vanilla name-tag rendering asks getName()/getDisplayName(), so ignoring
-        // CustomName here made renamed pets look named internally but blank overhead.
+        // NAME_STR is Mo' Creatures' synchronized pet-name field. Use it as the
+        // primary client display name so the hover nametag always renders the
+        // actual name chosen in the MoC naming GUI.
+        String petName = this.getPetName();
+        if (petName != null && !petName.isEmpty()) {
+            return Component.literal(petName);
+        }
         if (this.hasCustomName() && this.getCustomName() != null) {
             return this.getCustomName();
         }

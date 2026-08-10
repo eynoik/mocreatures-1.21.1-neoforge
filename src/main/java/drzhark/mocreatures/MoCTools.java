@@ -590,39 +590,42 @@ public class MoCTools {
         }
 
         if (!level.isClientSide) {
+            // Entity effects of an explosion reach farther than the block-breaking
+            // core. The old port used only `strength` and multiplied the result by
+            // line-of-sight exposure, which could turn the Ogre smash damage into 0.
+            double damageRadius = Math.max(2.0D, strength * 2.0D);
             AABB blastBox = new AABB(
-                    x - blastRadius, y - blastRadius, z - blastRadius,
-                    x + blastRadius, y + blastRadius, z + blastRadius
+                    x - damageRadius, y - damageRadius, z - damageRadius,
+                    x + damageRadius, y + damageRadius, z + damageRadius
             );
 
             Vec3 blastCenter = new Vec3(x, y, z);
-            List<Entity> entities = level.getEntities(entity, blastBox);
+            List<LivingEntity> entities = level.getEntitiesOfClass(
+                    LivingEntity.class, blastBox,
+                    target -> target != entity && target.isAlive()
+            );
+            DamageSource blastDamage = level.damageSources().explosion(entity, entity);
 
-            for (Entity e : entities) {
-                // Damage everything caught in the blast except the Ogre that
-                // generated this specific blast. Other Ogres are valid victims.
-                if (e == entity) continue;
+            for (LivingEntity target : entities) {
+                double rawDistance = Math.sqrt(target.distanceToSqr(blastCenter));
+                if (rawDistance > damageRadius) continue;
 
-                double distance = Math.sqrt(e.distanceToSqr(blastCenter)) / blastRadius;
-                if (distance > 1.0D) continue;
+                double impact = 1.0D - (rawDistance / damageRadius);
+                float damage = (float) (((impact * impact + impact) / 2.0D)
+                        * 7.0D * strength * 2.0D + 1.0D);
 
-                double dx = e.getX() - x;
-                double dy = e.getY() - y;
-                double dz = e.getZ() - z;
-                double magnitude = Math.sqrt(dx * dx + dy * dy + dz * dz);
+                // Only the Ogre producing this blast is immune. Players, animals,
+                // monsters and other Ogres are all valid AOE victims.
+                target.hurt(blastDamage, Math.max(1.0F, damage));
 
-                if (magnitude != 0.0D) {
-                    dx /= magnitude;
-                    dy /= magnitude;
-                    dz /= magnitude;
-
-                    double exposure = Explosion.getSeenPercent(blastCenter, e);
-                    double impact = (1.0D - distance) * exposure;
-                    float damage = (float) (((impact * impact + impact) / 2.0D) * 7.0D * blastRadius + 1.0D);
-
-                    e.hurt(level.damageSources().explosion(entity, null), damage);
-                    Vec3 motion = e.getDeltaMovement().add(dx * impact, dy * impact, dz * impact);
-                    e.setDeltaMovement(motion);
+                Vec3 push = target.position().subtract(blastCenter);
+                double len = push.length();
+                if (len > 1.0E-4D) {
+                    push = push.scale(1.0D / len);
+                    target.setDeltaMovement(target.getDeltaMovement().add(
+                            push.x * impact, Math.max(0.15D, push.y * impact + 0.15D), push.z * impact
+                    ));
+                    target.hasImpulse = true;
                 }
             }
         }
