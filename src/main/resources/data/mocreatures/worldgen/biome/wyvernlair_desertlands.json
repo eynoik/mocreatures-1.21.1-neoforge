@@ -46,9 +46,10 @@
       "minecraft:patch_dead_bush",
       "minecraft:patch_cactus"
     ],
+    [],
+    [],
     [
       "mocreatures:wyvern_nest"
-    ],
-    []
+    ]
   ]
-} 
+}
