@@ -39,17 +39,17 @@
     [],
     [],
     [],
+    [],
     [
       "mocreatures:firestone_cluster"
     ],
+    [],
+    [],
     [
       "minecraft:patch_dead_bush",
-      "minecraft:patch_cactus"
-    ],
-    [],
-    [],
-    [
+      "minecraft:patch_cactus",
       "mocreatures:wyvern_nest"
-    ]
+    ],
+    []
   ]
 }
