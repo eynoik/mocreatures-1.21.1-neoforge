@@ -26,87 +26,13 @@ jobs:
           set -euo pipefail
           git config user.name "github-actions[bot]"
           git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
-
           HORSE='src/main/java/drzhark/mocreatures/entity/passive/MoCEntityHorse.java'
           CLIENT='src/main/java/drzhark/mocreatures/event/MoCClientEvents.java'
-
           git apply --check --exclude="$HORSE" --exclude="$CLIENT" .github/mocreatures-fixes.patch
           git apply --exclude="$HORSE" --exclude="$CLIENT" .github/mocreatures-fixes.patch
-
-          python3 <<'PY'
-          from pathlib import Path
-
-          horse = Path('src/main/java/drzhark/mocreatures/entity/passive/MoCEntityHorse.java')
-          s = horse.read_text(encoding='utf-8')
-          if 'import net.minecraft.world.item.enchantment.Enchantments;' not in s:
-              anchor = 'import net.minecraft.world.damagesource.DamageSource;\n'
-              assert anchor in s, 'Horse DamageSource import anchor not found'
-              s = s.replace(anchor, anchor +
-                  'import net.minecraft.world.item.enchantment.Enchantments;\n'
-                  'import net.minecraft.world.item.enchantment.EnchantmentHelper;\n'
-                  'import net.minecraft.world.entity.LivingEntity;\n', 1)
-          old = '        int looting = 0; // TODO 1.21: custom looting bonus should be derived from enchantment context if desired.\n'
-          new = ('        int looting = 0;\n'
-                 '        if (source.getEntity() instanceof LivingEntity lootingAttacker) {\n'
-                 '            looting = EnchantmentHelper.getEnchantmentLevel(\n'
-                 '                    serverLevel.registryAccess().holderOrThrow(Enchantments.LOOTING), lootingAttacker);\n'
-                 '        }\n')
-          assert old in s, 'Horse looting placeholder not found'
-          s = s.replace(old, new, 1)
-          horse.write_text(s, encoding='utf-8')
-
-          client = Path('src/main/java/drzhark/mocreatures/event/MoCClientEvents.java')
-          client.write_text('''package drzhark.mocreatures.event;
-
-import drzhark.mocreatures.MoCConstants;
-import drzhark.mocreatures.MoCreatures;
-import drzhark.mocreatures.client.renderer.fx.impl.MoCEntityFXStar;
-import drzhark.mocreatures.client.renderer.fx.impl.MoCEntityFXUndead;
-import drzhark.mocreatures.client.renderer.fx.impl.MoCEntityFXVacuum;
-import drzhark.mocreatures.client.renderer.fx.impl.MoCEntityFXVanish;
-import drzhark.mocreatures.client.renderer.fx.MoCParticles;
-import net.minecraft.client.particle.SpriteSet;
-import net.neoforged.api.distmarker.Dist;
-import net.neoforged.neoforge.client.event.RegisterParticleProvidersEvent;
-import net.neoforged.bus.api.SubscribeEvent;
-import net.neoforged.fml.common.EventBusSubscriber;
-
-@EventBusSubscriber(modid = MoCConstants.MOD_ID, value = Dist.CLIENT, bus = EventBusSubscriber.Bus.MOD)
-public class MoCClientEvents {
-
-    public static SpriteSet UNDEAD_SPRITE_SET, VANISH_SPRITE_SET, STAR_SPRITE_SET, VACUUM_SPRITE_SET;
-
-    @SubscribeEvent
-    public static void onRegisterParticleProviders(RegisterParticleProvidersEvent event) {
-        event.registerSpriteSet(MoCParticles.UNDEAD_FX.get(), spriteSet -> {
-            UNDEAD_SPRITE_SET = spriteSet;
-            return new MoCEntityFXUndead.Factory(spriteSet);
-        });
-
-        event.registerSpriteSet(MoCParticles.VANISH_FX.get(), spriteSet -> {
-            VANISH_SPRITE_SET = spriteSet;
-            return new MoCEntityFXVanish.Provider(spriteSet);
-        });
-
-        event.registerSpriteSet(MoCParticles.STAR_FX.get(), spriteSet -> {
-            STAR_SPRITE_SET = spriteSet;
-            return new MoCEntityFXStar.Factory(spriteSet);
-        });
-
-        event.registerSpriteSet(MoCParticles.VACUUM_FX.get(), spriteSet -> {
-            VACUUM_SPRITE_SET = spriteSet;
-            return new MoCEntityFXVacuum.Factory(spriteSet);
-        });
-
-        MoCreatures.LOGGER.info("Mo'Creatures particle providers registered successfully");
-    }
-}
-''', encoding='utf-8')
-          PY
-
+          echo 'ZnJvbSBwYXRobGliIGltcG9ydCBQYXRoCmhvcnNlID0gUGF0aCgnc3JjL21haW4vamF2YS9kcnpoYXJrL21vY3JlYXR1cmVzL2VudGl0eS9wYXNzaXZlL01vQ0VudGl0eUhvcnNlLmphdmEnKQpzID0gaG9yc2UucmVhZF90ZXh0KGVuY29kaW5nPSd1dGYtOCcpCmlmICdpbXBvcnQgbmV0Lm1pbmVjcmFmdC53b3JsZC5pdGVtLmVuY2hhbnRtZW50LkVuY2hhbnRtZW50czsnIG5vdCBpbiBzOgogICAgYW5jaG9yID0gJ2ltcG9ydCBuZXQubWluZWNyYWZ0LndvcmxkLmRhbWFnZXNvdXJjZS5EYW1hZ2VTb3VyY2U7XG4nCiAgICBhc3NlcnQgYW5jaG9yIGluIHMsICdIb3JzZSBEYW1hZ2VTb3VyY2UgaW1wb3J0IGFuY2hvciBub3QgZm91bmQnCiAgICBzID0gcy5yZXBsYWNlKGFuY2hvciwgYW5jaG9yICsKICAgICAgICAnaW1wb3J0IG5ldC5taW5lY3JhZnQud29ybGQuaXRlbS5lbmNoYW50bWVudC5FbmNoYW50bWVudHM7XG4nCiAgICAgICAgJ2ltcG9ydCBuZXQubWluZWNyYWZ0LndvcmxkLml0ZW0uZW5jaGFudG1lbnQuRW5jaGFudG1lbnRIZWxwZXI7XG4nCiAgICAgICAgJ2ltcG9ydCBuZXQubWluZWNyYWZ0LndvcmxkLmVudGl0eS5MaXZpbmdFbnRpdHk7XG4nLCAxKQpvbGQgPSAnICAgICAgICBpbnQgbG9vdGluZyA9IDA7IC8vIFRPRE8gMS4yMTogY3VzdG9tIGxvb3RpbmcgYm9udXMgc2hvdWxkIGJlIGRlcml2ZWQgZnJvbSBlbmNoYW50bWVudCBjb250ZXh0IGlmIGRlc2lyZWQuXG4nCm5ldyA9ICgnICAgICAgICBpbnQgbG9vdGluZyA9IDA7XG4nCiAgICAgICAnICAgICAgICBpZiAoc291cmNlLmdldEVudGl0eSgpIGluc3RhbmNlb2YgTGl2aW5nRW50aXR5IGxvb3RpbmdBdHRhY2tlcikge1xuJwogICAgICAgJyAgICAgICAgICAgIGxvb3RpbmcgPSBFbmNoYW50bWVudEhlbHBlci5nZXRFbmNoYW50bWVudExldmVsKFxuJwogICAgICAgJyAgICAgICAgICAgICAgICAgICAgc2VydmVyTGV2ZWwucmVnaXN0cnlBY2Nlc3MoKS5ob2xkZXJPclRocm93KEVuY2hhbnRtZW50cy5MT09USU5HKSwgbG9vdGluZ0F0dGFja2VyKTtcbicKICAgICAgICcgICAgICAgIH1cbicpCmFzc2VydCBvbGQgaW4gcywgJ0hvcnNlIGxvb3RpbmcgcGxhY2Vob2xkZXIgbm90IGZvdW5kJwpzID0gcy5yZXBsYWNlKG9sZCwgbmV3LCAxKQpob3JzZS53cml0ZV90ZXh0KHMsIGVuY29kaW5nPSd1dGYtOCcpCgpjbGllbnQgPSBQYXRoKCdzcmMvbWFpbi9qYXZhL2RyemhhcmsvbW9jcmVhdHVyZXMvZXZlbnQvTW9DQ2xpZW50RXZlbnRzLmphdmEnKQpzID0gY2xpZW50LnJlYWRfdGV4dChlbmNvZGluZz0ndXRmLTgnKQpmb3IgbGluZSBpbiBbCiAgICAnaW1wb3J0IGRyemhhcmsubW9jcmVhdHVyZXMuaW5pdC5Nb0NCbG9ja3M7XG4nLAogICAgJ2ltcG9ydCBuZXQubWluZWNyYWZ0LmNsaWVudC5NaW5lY3JhZnQ7XG4nLAogICAgJ2ltcG9ydCBuZXQubWluZWNyYWZ0LmNsaWVudC5yZW5kZXJlci5JdGVtQmxvY2tSZW5kZXJUeXBlcztcbicsCiAgICAnaW1wb3J0IG5ldC5taW5lY3JhZnQuY2xpZW50LnJlbmRlcmVyLlJlbmRlclR5cGU7XG4nLAogICAgJ2ltcG9ydCBuZXQubmVvZm9yZ2VkLmZtbC5ldmVudC5saWZlY3ljbGUuRk1MQ2xpZW50U2V0dXBFdmVudDtcbicsCl06CiAgICBzID0gcy5yZXBsYWNlKGxpbmUsICcnKQpzdGFydCA9IHMuaW5kZXgoJyAgICBAU3Vic2NyaWJlRXZlbnRcbiAgICBwdWJsaWMgc3RhdGljIHZvaWQgb25SZWdpc3RlclBhcnRpY2xlUHJvdmlkZXJzKFJlZ2lzdGVyUGFydGljbGVQcm92aWRlcnNFdmVudCBldmVudCkgeycpCmVuZCA9IHMucmluZGV4KCdcbiAgICB9XG59JykKbWV0aG9kID0gIiIiICAgIEBTdWJzY3JpYmVFdmVudAogICAgcHVibGljIHN0YXRpYyB2b2lkIG9uUmVnaXN0ZXJQYXJ0aWNsZVByb3ZpZGVycyhSZWdpc3RlclBhcnRpY2xlUHJvdmlkZXJzRXZlbnQgZXZlbnQpIHsKICAgICAgICBldmVudC5yZWdpc3RlclNwcml0ZVNldChNb0NQYXJ0aWNsZXMuVU5ERUFEX0ZYLmdldCgpLCBzcHJpdGVTZXQgLT4gewogICAgICAgICAgICBVTkRFQURfU1BSSVRFX1NFVCA9IHNwcml0ZVNldDsKICAgICAgICAgICAgcmV0dXJuIG5ldyBNb0NFbnRpdHlGWFVuZGVhZC5GYWN0b3J5KHNwcml0ZVNldCk7CiAgICAgICAgfSk7CgogICAgICAgIGV2ZW50LnJlZ2lzdGVyU3ByaXRlU2V0KE1vQ1BhcnRpY2xlcy5WQU5JU0hfRlguZ2V0KCksIHNwcml0ZVNldCAtPiB7CiAgICAgICAgICAgIFZBTklTSF9TUFJJVEVfU0VUID0gc3ByaXRlU2V0OwogICAgICAgICAgICByZXR1cm4gbmV3IE1vQ0VudGl0eUZYVmFuaXNoLlByb3ZpZGVyKHNwcml0ZVNldCk7CiAgICAgICAgfSk7CgogICAgICAgIGV2ZW50LnJlZ2lzdGVyU3ByaXRlU2V0KE1vQ1BhcnRpY2xlcy5TVEFSX0ZYLmdldCgpLCBzcHJpdGVTZXQgLT4gewogICAgICAgICAgICBTVEFSX1NQUklURV9TRVQgPSBzcHJpdGVTZXQ7CiAgICAgICAgICAgIHJldHVybiBuZXcgTW9DRW50aXR5RlhTdGFyLkZhY3Rvcnkoc3ByaXRlU2V0KTsKICAgICAgICB9KTsKCiAgICAgICAgZXZlbnQucmVnaXN0ZXJTcHJpdGVTZXQoTW9DUGFydGljbGVzLlZBQ1VVTV9GWC5nZXQoKSwgc3ByaXRlU2V0IC0+IHsKICAgICAgICAgICAgVkFDVVVNX1NQUklURV9TRVQgPSBzcHJpdGVTZXQ7CiAgICAgICAgICAgIHJldHVybiBuZXcgTW9DRW50aXR5RlhWYWN1dW0uRmFjdG9yeShzcHJpdGVTZXQpOwogICAgICAgIH0pOwoKICAgICAgICBNb0NyZWF0dXJlcy5MT0dHRVIuaW5mbygiTW8nQ3JlYXR1cmVzIHBhcnRpY2xlIHByb3ZpZGVycyByZWdpc3RlcmVkIHN1Y2Nlc3NmdWxseSIpOwogICAgfSIiIgpzID0gc1s6c3RhcnRdICsgbWV0aG9kICsgc1tlbmQrNjpdCmNsaWVudC53cml0ZV90ZXh0KHMsIGVuY29kaW5nPSd1dGYtOCcpCg==' | base64 -d | python3
           rm .github/mocreatures-fixes.patch
           rm .github/workflows/apply-uploaded-patch.yml
-
           git add -A
           git diff --cached --check
           git commit -m "Apply uploaded MoCreatures fixes patch"
