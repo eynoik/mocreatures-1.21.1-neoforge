@@ -39,19 +39,18 @@
     [],
     [],
     [],
+    [],
     [
       "mocreatures:firestone_cluster"
     ],
-    [
-      "mocreatures:wyvwood_trees_plains"
-    ],
+    [],
     [],
     [
+      "mocreatures:wyvwood_trees_plains",
       "mocreatures:patch_tall_wyvgrass",
-      "mocreatures:patch_mushrooms"
-    ],
-    [
+      "mocreatures:patch_mushrooms",
       "mocreatures:wyvern_nest"
-    ]
+    ],
+    []
   ]
-} 
+}
