@@ -20,6 +20,9 @@ jobs:
           distribution: temurin
           java-version: '21'
 
+      - name: Setup Gradle cache
+        uses: gradle/actions/setup-gradle@v4
+
       - name: Generate a Wyvern Lair chunk
         shell: bash
         run: |
@@ -31,19 +34,20 @@ jobs:
 
           set +e
           {
-            sleep 55
+            sleep 110
             echo 'execute in mocreatures:wyvernlairworld run forceload add 80 -112'
-            sleep 45
+            sleep 50
             echo 'save-all flush'
             sleep 5
             echo 'stop'
-          } | timeout 150s ./gradlew runServer --no-daemon 2>&1 | tee wyvernlair-chunkgen.log
+          } | timeout 260s ./gradlew runServer --no-daemon 2>&1 | tee wyvernlair-chunkgen.log
           STATUS=${PIPESTATUS[1]}
           set -e
 
           LOG=run/server/logs/latest.log
           if [ ! -f "$LOG" ]; then
             echo 'Server produced no latest.log.'
+            tail -250 wyvernlair-chunkgen.log || true
             exit 1
           fi
 
