@@ -91,6 +91,13 @@ public abstract class MoCEntityAnimal extends Animal implements IMoCEntity {
     @OnlyIn(Dist.CLIENT)
     @Override
     public Component getName() {
+        // A real custom pet name must win over MoC verbose species names.
+        // Vanilla name-tag rendering asks getName()/getDisplayName(), so ignoring
+        // CustomName here made renamed pets look named internally but blank overhead.
+        if (this.hasCustomName() && this.getCustomName() != null) {
+            return this.getCustomName();
+        }
+
         String entityString = this.getType().getDescriptionId();
         if (!MoCreatures.proxy.verboseEntityNames || entityString == null) {
             return super.getName();
@@ -185,7 +192,9 @@ public abstract class MoCEntityAnimal extends Animal implements IMoCEntity {
             this.setCustomNameVisible(false);
         } else {
             this.setCustomName(Component.literal(petName));
-            this.setCustomNameVisible(MoCreatures.proxy.getDisplayPetName());
+            // Keep vanilla semantics: the name is visible when the player aims at
+            // the mob. MoC can still draw persistent pet names through its own renderer.
+            this.setCustomNameVisible(false);
         }
     }
 

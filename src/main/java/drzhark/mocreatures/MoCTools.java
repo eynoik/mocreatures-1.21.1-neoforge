@@ -573,7 +573,10 @@ public class MoCTools {
                             power -= (resistance + 0.3F) * step;
                         }
 
-                        if (power > 0.0F && py > entity.getY() && state.getDestroySpeed(level, pos) < 3.0F) {
+                        // Full spherical blast. The old port only collected blocks above
+                        // the Ogre, producing a clipped half-explosion. Explosion resistance
+                        // already drains ray power; negative destroy speed protects unbreakables.
+                        if (power > 0.0F && !state.isAir() && state.getDestroySpeed(level, pos) >= 0.0F) {
                             affectedBlocks.add(pos);
                         }
 
@@ -596,7 +599,9 @@ public class MoCTools {
             List<Entity> entities = level.getEntities(entity, blastBox);
 
             for (Entity e : entities) {
-                if (e instanceof MoCEntityOgre) continue;
+                // Damage everything caught in the blast except the Ogre that
+                // generated this specific blast. Other Ogres are valid victims.
+                if (e == entity) continue;
 
                 double distance = Math.sqrt(e.distanceToSqr(blastCenter)) / blastRadius;
                 if (distance > 1.0D) continue;
