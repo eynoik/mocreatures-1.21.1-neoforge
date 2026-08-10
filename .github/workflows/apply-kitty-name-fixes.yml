@@ -25,7 +25,7 @@ jobs:
           distribution: temurin
           java-version: '21'
 
-      - name: Apply source fixes
+      - name: Apply source fixes and build
         shell: bash
         run: |
           set -euo pipefail
@@ -34,67 +34,26 @@ jobs:
 
           kitty = Path('src/main/java/drzhark/mocreatures/entity/neutral/MoCEntityKitty.java')
           s = kitty.read_text(encoding='utf-8')
-
           anchor = 'import drzhark.mocreatures.entity.MoCEntityAnimal;\n'
           addition = 'import drzhark.mocreatures.entity.passive.MoCEntityMouse;\n'
           assert anchor in s, 'Kitty entity import anchor missing'
           if addition not in s:
               s = s.replace(anchor, anchor + addition, 1)
-
           anchor = 'import net.minecraft.world.entity.ai.goal.WaterAvoidingRandomStrollGoal;\n'
           addition = 'import net.minecraft.world.entity.ai.goal.target.NearestAttackableTargetGoal;\n'
           assert anchor in s, 'Kitty AI import anchor missing'
           if addition not in s:
               s = s.replace(anchor, anchor + addition, 1)
-
-          old = '''        this.goalSelector.addGoal(6, new WaterAvoidingRandomStrollGoal(this, 1.0D));
-        this.goalSelector.addGoal(7, new LookAtPlayerGoal(this, Player.class, 8.0F));
-    }
-'''
-          new = '''        this.goalSelector.addGoal(6, new WaterAvoidingRandomStrollGoal(this, 1.0D));
-        this.goalSelector.addGoal(7, new LookAtPlayerGoal(this, Player.class, 8.0F));
-        // Cats should actively hunt Mo' Creatures mice.
-        this.targetSelector.addGoal(1, new NearestAttackableTargetGoal<>(this, MoCEntityMouse.class, true));
-    }
-
-    /**
-     * Players are not a fear source for kitties. Other sufficiently large living
-     * entities still use the normal MoC fear rules, so we do not disable the
-     * scared state or panic behaviour globally.
-     */
-    @Override
-    public boolean entitiesToInclude(Entity entity) {
-        return !(entity instanceof Player) && super.entitiesToInclude(entity);
-    }
-'''
+          old = '        this.goalSelector.addGoal(6, new WaterAvoidingRandomStrollGoal(this, 1.0D));\n        this.goalSelector.addGoal(7, new LookAtPlayerGoal(this, Player.class, 8.0F));\n    }\n'
+          new = '        this.goalSelector.addGoal(6, new WaterAvoidingRandomStrollGoal(this, 1.0D));\n        this.goalSelector.addGoal(7, new LookAtPlayerGoal(this, Player.class, 8.0F));\n        // Cats should actively hunt Mo Creatures mice.\n        this.targetSelector.addGoal(1, new NearestAttackableTargetGoal<>(this, MoCEntityMouse.class, true));\n    }\n\n    /** Players are not a fear source for kitties; normal fear rules still apply to other mobs. */\n    @Override\n    public boolean entitiesToInclude(Entity entity) {\n        return !(entity instanceof Player) && super.entitiesToInclude(entity);\n    }\n'
           assert old in s, 'Kitty registerGoals block changed unexpectedly'
           s = s.replace(old, new, 1)
           kitty.write_text(s, encoding='utf-8')
 
           animal = Path('src/main/java/drzhark/mocreatures/entity/MoCEntityAnimal.java')
           s = animal.read_text(encoding='utf-8')
-          old = '''    @Override
-    public void setPetName(String name) {
-        this.entityData.set(NAME_STR, name);
-    }
-'''
-          new = '''    @Override
-    public void setPetName(String name) {
-        String petName = name == null ? "" : name.trim();
-        this.entityData.set(NAME_STR, petName);
-
-        // Bridge Mo' Creatures' legacy synced pet-name field to vanilla's
-        // CustomName data. Modern 1.21 renderers use the vanilla name state for
-        // the overhead nametag, while NAME_STR remains for MoC save/pet data.
-        if (petName.isEmpty()) {
-            this.setCustomName(null);
-            this.setCustomNameVisible(false);
-        } else {
-            this.setCustomName(Component.literal(petName));
-            this.setCustomNameVisible(MoCreatures.proxy.getDisplayPetName());
-        }
-    }
-'''
+          old = '    @Override\n    public void setPetName(String name) {\n        this.entityData.set(NAME_STR, name);\n    }\n'
+          new = '    @Override\n    public void setPetName(String name) {\n        String petName = name == null ? "" : name.trim();\n        this.entityData.set(NAME_STR, petName);\n\n        // Keep the legacy MoC name and vanilla 1.21 CustomName in sync.\n        if (petName.isEmpty()) {\n            this.setCustomName(null);\n            this.setCustomNameVisible(false);\n        } else {\n            this.setCustomName(Component.literal(petName));\n            this.setCustomNameVisible(MoCreatures.proxy.getDisplayPetName());\n        }\n    }\n'
           assert old in s, 'MoCEntityAnimal setPetName block changed unexpectedly'
           s = s.replace(old, new, 1)
           animal.write_text(s, encoding='utf-8')
