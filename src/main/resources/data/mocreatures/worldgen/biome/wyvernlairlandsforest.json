@@ -48,8 +48,7 @@
     [
       "mocreatures:wyvwood_trees_forest",
       "mocreatures:patch_tall_wyvgrass",
-      "mocreatures:patch_mushrooms",
-      "mocreatures:wyvern_nest"
+      "mocreatures:patch_mushrooms"
     ],
     []
   ]
