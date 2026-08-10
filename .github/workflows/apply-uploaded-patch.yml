@@ -1,0 +1,39 @@
+name: Apply uploaded MoCreatures patch
+
+on:
+  push:
+    branches: [ "agent/finish-neoforge-port" ]
+    paths:
+      - ".github/mocreatures-fixes.patch"
+      - ".github/workflows/apply-uploaded-patch.yml"
+
+permissions:
+  contents: write
+
+jobs:
+  apply:
+    if: github.actor != 'github-actions[bot]'
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Apply patch and commit source changes
+        shell: bash
+        run: |
+          set -euo pipefail
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+
+          git apply --check .github/mocreatures-fixes.patch
+          git apply .github/mocreatures-fixes.patch
+
+          rm .github/mocreatures-fixes.patch
+          rm .github/workflows/apply-uploaded-patch.yml
+
+          git add -A
+          git diff --cached --check
+          git commit -m "Apply uploaded MoCreatures fixes patch"
+          git push origin "HEAD:${GITHUB_REF_NAME}"
