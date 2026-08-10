@@ -27,6 +27,7 @@ import net.neoforged.neoforge.event.entity.living.LivingDeathEvent;
 import net.neoforged.neoforge.event.entity.living.MobSpawnEvent;
 import net.neoforged.neoforge.event.entity.player.PlayerEvent;
 import net.neoforged.neoforge.event.level.LevelEvent;
+import net.neoforged.neoforge.event.tick.PlayerTickEvent;
 import net.neoforged.bus.api.Event;
 import net.neoforged.bus.api.SubscribeEvent;
 
@@ -85,6 +86,14 @@ public class MoCEventHooks {
         if (player.getVehicle() instanceof IMoCTameable) {
             IMoCTameable mocEntity = (IMoCTameable) player.getVehicle();
             mocEntity.setRiderDisconnecting(true);
+        }
+    }
+
+    @SubscribeEvent
+    public void onPlayerTick(PlayerTickEvent.Post event) {
+        Player player = event.getEntity();
+        if (!player.level().isClientSide() && player.tickCount % 20 == 0) {
+            MoCTools.updatePlayerArmorEffects(player);
         }
     }
 

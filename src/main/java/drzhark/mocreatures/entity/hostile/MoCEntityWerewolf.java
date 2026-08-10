@@ -18,6 +18,7 @@ import net.minecraft.world.entity.ai.goal.target.NearestAttackableTargetGoal;
 import net.minecraft.world.entity.animal.IronGolem;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.Items;
 import net.minecraft.world.item.SwordItem;
 import net.minecraft.world.item.TieredItem;
 import net.minecraft.nbt.CompoundTag;
@@ -177,6 +178,8 @@ public class MoCEntityWerewolf extends MoCEntityMob {
             if (!stack.isEmpty()) {
                 if (stack.getItem() == MoCItems.SILVERSWORD.get()) {
                     i = 10F;
+                } else if (stack.is(Items.GOLDEN_SWORD)) {
+                    // Preserve the actual incoming Golden Sword damage.
                 } else if (stack.getItem() instanceof SwordItem) {
                     String swordMaterial = ((SwordItem) stack.getItem()).getTier().toString();
                     String swordName = stack.getItem().getDescriptionId();

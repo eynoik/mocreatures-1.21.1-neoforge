@@ -328,9 +328,14 @@ public class MoCEntityKomodo extends MoCEntityTameableAnimal {
     public boolean isNotScared() {
         return getMoCAge() > 70;
     }
-    public void doEnchantDamageEffects(LivingEntity entityLivingBaseIn, Entity entityIn) {
-        ((LivingEntity) entityIn).addEffect(new MobEffectInstance(MobEffects.POISON, 150, 0));
-}
+    @Override
+    public boolean doHurtTarget(Entity entityIn) {
+        boolean hit = super.doHurtTarget(entityIn);
+        if (hit && entityIn instanceof LivingEntity livingTarget) {
+            livingTarget.addEffect(new MobEffectInstance(MobEffects.POISON, 150, 1));
+        }
+        return hit;
+    }
 
     @Override
     public boolean isReadyToHunt() {

@@ -134,7 +134,7 @@ public class MoCEntities {
             MoCEntityCrocodile::new, MobCategory.CREATURE, 0.9F, 0.5F, MoCEntityCrocodile::createAttributes, 2698525,
             10720356);
     public static final Supplier<EntityType<MoCEntityDuck>> DUCK = registerEntity("duck", MoCEntityDuck::new,
-            MobCategory.CREATURE, 0.4F, 0.7F, MoCEntityDuck::createAttributes, 3161353, 14011565);
+            MobCategory.CREATURE, 0.4F, 0.7F, MoCEntityDuck::registerAttributes, 3161353, 14011565);
     public static final Supplier<EntityType<MoCEntityDeer>> DEER = registerEntity("deer", MoCEntityDeer::new,
             MobCategory.CREATURE, 0.9F, 1.425F, MoCEntityDeer::createAttributes, 11572843, 13752020);
     public static final Supplier<EntityType<MoCEntityElephant>> ELEPHANT = registerEntity("elephant",
@@ -177,7 +177,7 @@ public class MoCEntities {
     public static final Supplier<EntityType<MoCEntityMole>> MOLE = registerEntity("mole", MoCEntityMole::new,
             MobCategory.CREATURE, 1F, 0.5F, MoCEntityMole::createAttributes, 263173, 10646113);
     public static final Supplier<EntityType<MoCEntityMouse>> MOUSE = registerEntity("mouse", MoCEntityMouse::new,
-            MobCategory.CREATURE, 0.45F, 0.3F, MoCEntityMouse::createAttributes, 7428164, 15510186);
+            MobCategory.CREATURE, 0.45F, 0.3F, MoCEntityMouse::registerAttributes, 7428164, 15510186);
     public static final Supplier<EntityType<MoCEntityOstrich>> OSTRICH = registerEntity("ostrich",
             MoCEntityOstrich::new, MobCategory.CREATURE, 0.8F, 2.225F, MoCEntityOstrich::createAttributes, 12884106,
             10646377);

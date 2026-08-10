@@ -15,6 +15,8 @@ import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.LivingEntity;
+import net.minecraft.world.effect.MobEffectInstance;
+import net.minecraft.world.effect.MobEffects;
 import net.minecraft.world.entity.ai.goal.*;
 import net.minecraft.world.entity.ai.goal.target.HurtByTargetGoal;
 import net.minecraft.world.entity.ai.goal.target.NearestAttackableTargetGoal;
@@ -139,11 +141,37 @@ public class MoCEntityScorpion extends MoCEntityMob {
 
     @Override
     public boolean doHurtTarget(Entity entity) {
-        // Claw Attack Sound
         if (this.poisontimer != 1) {
             MoCTools.playCustomSound(this, MoCSoundEvents.ENTITY_SCORPION_CLAW.get());
         }
-        return super.doHurtTarget(entity);
+
+        boolean hit = super.doHurtTarget(entity);
+        if (!hit || !(entity instanceof LivingEntity livingTarget)) {
+            return hit;
+        }
+
+        // Original Mo' Creatures special sting: 20% chance. setPoisoning(true)
+        // broadcasts the existing sting animation (animation type 0); no new animation.
+        if (!getIsPoisoning() && this.random.nextInt(5) == 0) {
+            setPoisoning(true);
+            switch (this.getTypeMoC) {
+                case 1 -> livingTarget.addEffect(new MobEffectInstance(MobEffects.POISON, 15 * 20, 1));
+                case 2 -> {
+                    livingTarget.addEffect(new MobEffectInstance(MobEffects.CONFUSION, 15 * 20, 0));
+                    livingTarget.addEffect(new MobEffectInstance(MobEffects.WEAKNESS, 15 * 20, 0));
+                }
+                case 3 -> livingTarget.igniteForSeconds(15);
+                case 4 -> livingTarget.addEffect(new MobEffectInstance(MobEffects.MOVEMENT_SLOWDOWN, 25 * 20, 0));
+                case 5 -> {
+                    livingTarget.addEffect(new MobEffectInstance(MobEffects.BLINDNESS, 15 * 20, 0));
+                    livingTarget.addEffect(new MobEffectInstance(MobEffects.WITHER, 15 * 20, 0));
+                }
+                default -> livingTarget.addEffect(new MobEffectInstance(MobEffects.POISON, 15 * 20, 1));
+            }
+        } else {
+            swingArm();
+        }
+        return true;
     }
 
     @Override

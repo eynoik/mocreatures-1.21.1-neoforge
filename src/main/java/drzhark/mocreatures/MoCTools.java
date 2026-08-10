@@ -612,7 +612,7 @@ public class MoCTools {
 
                 double impact = 1.0D - (rawDistance / damageRadius);
                 float damage = (float) (((impact * impact + impact) / 2.0D)
-                        * 7.0D * strength * 2.0D + 1.0D);
+                        * 8.0D * strength * 2.0D + 1.0D);
 
                 // Only the Ogre producing this blast is immune. Players, animals,
                 // monsters and other Ogres are all valid AOE victims.
