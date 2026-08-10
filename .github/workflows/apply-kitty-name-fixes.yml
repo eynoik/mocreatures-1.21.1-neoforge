@@ -1,0 +1,117 @@
+name: Apply Kitty AI and pet-name fixes
+
+on:
+  push:
+    branches: [ "agent/finish-neoforge-port" ]
+    paths:
+      - ".github/workflows/apply-kitty-name-fixes.yml"
+
+permissions:
+  contents: write
+
+jobs:
+  apply:
+    if: github.actor != 'github-actions[bot]'
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Setup Java 21
+        uses: actions/setup-java@v5
+        with:
+          distribution: temurin
+          java-version: '21'
+
+      - name: Apply source fixes
+        shell: bash
+        run: |
+          set -euo pipefail
+          python3 <<'PY'
+          from pathlib import Path
+
+          kitty = Path('src/main/java/drzhark/mocreatures/entity/neutral/MoCEntityKitty.java')
+          s = kitty.read_text(encoding='utf-8')
+
+          anchor = 'import drzhark.mocreatures.entity.MoCEntityAnimal;\n'
+          addition = 'import drzhark.mocreatures.entity.passive.MoCEntityMouse;\n'
+          assert anchor in s, 'Kitty entity import anchor missing'
+          if addition not in s:
+              s = s.replace(anchor, anchor + addition, 1)
+
+          anchor = 'import net.minecraft.world.entity.ai.goal.WaterAvoidingRandomStrollGoal;\n'
+          addition = 'import net.minecraft.world.entity.ai.goal.target.NearestAttackableTargetGoal;\n'
+          assert anchor in s, 'Kitty AI import anchor missing'
+          if addition not in s:
+              s = s.replace(anchor, anchor + addition, 1)
+
+          old = '''        this.goalSelector.addGoal(6, new WaterAvoidingRandomStrollGoal(this, 1.0D));
+        this.goalSelector.addGoal(7, new LookAtPlayerGoal(this, Player.class, 8.0F));
+    }
+'''
+          new = '''        this.goalSelector.addGoal(6, new WaterAvoidingRandomStrollGoal(this, 1.0D));
+        this.goalSelector.addGoal(7, new LookAtPlayerGoal(this, Player.class, 8.0F));
+        // Cats should actively hunt Mo' Creatures mice.
+        this.targetSelector.addGoal(1, new NearestAttackableTargetGoal<>(this, MoCEntityMouse.class, true));
+    }
+
+    /**
+     * Players are not a fear source for kitties. Other sufficiently large living
+     * entities still use the normal MoC fear rules, so we do not disable the
+     * scared state or panic behaviour globally.
+     */
+    @Override
+    public boolean entitiesToInclude(Entity entity) {
+        return !(entity instanceof Player) && super.entitiesToInclude(entity);
+    }
+'''
+          assert old in s, 'Kitty registerGoals block changed unexpectedly'
+          s = s.replace(old, new, 1)
+          kitty.write_text(s, encoding='utf-8')
+
+          animal = Path('src/main/java/drzhark/mocreatures/entity/MoCEntityAnimal.java')
+          s = animal.read_text(encoding='utf-8')
+          old = '''    @Override
+    public void setPetName(String name) {
+        this.entityData.set(NAME_STR, name);
+    }
+'''
+          new = '''    @Override
+    public void setPetName(String name) {
+        String petName = name == null ? "" : name.trim();
+        this.entityData.set(NAME_STR, petName);
+
+        // Bridge Mo' Creatures' legacy synced pet-name field to vanilla's
+        // CustomName data. Modern 1.21 renderers use the vanilla name state for
+        // the overhead nametag, while NAME_STR remains for MoC save/pet data.
+        if (petName.isEmpty()) {
+            this.setCustomName(null);
+            this.setCustomNameVisible(false);
+        } else {
+            this.setCustomName(Component.literal(petName));
+            this.setCustomNameVisible(MoCreatures.proxy.getDisplayPetName());
+        }
+    }
+'''
+          assert old in s, 'MoCEntityAnimal setPetName block changed unexpectedly'
+          s = s.replace(old, new, 1)
+          animal.write_text(s, encoding='utf-8')
+          PY
+
+          git diff --check
+          chmod +x gradlew
+          ./gradlew clean build --stacktrace --no-daemon
+
+      - name: Commit source fixes
+        shell: bash
+        run: |
+          set -euo pipefail
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          rm .github/workflows/apply-kitty-name-fixes.yml
+          git add -A
+          git diff --cached --check
+          git commit -m "Fix Kitty mouse hunting and pet nametags"
+          git push origin "HEAD:${GITHUB_REF_NAME}"
