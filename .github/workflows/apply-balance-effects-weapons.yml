@@ -36,7 +36,7 @@ jobs:
                   raise SystemExit(f'{label}: anchor not found in {path}')
               p.write_text(s.replace(old, new, 1))
 
-          # Ogre: modest ~14% increase to the entity-damage coefficient; radius unchanged.
+          # Ogre: modest ~14% increase to entity damage; blast radius stays unchanged.
           replace_one(
               'src/main/java/drzhark/mocreatures/MoCTools.java',
               '* 7.0D * strength * 2.0D + 1.0D);',
@@ -44,34 +44,33 @@ jobs:
               'Ogre damage coefficient'
           )
 
-          # Komodo already has the poison hit hook: promote Poison I -> Poison II.
+          # 1.21 no longer calls the legacy doEnchantDamageEffects signature used by this port.
+          # Move Komodo poison directly into the live attack path and make it Poison II.
           komodo = Path('src/main/java/drzhark/mocreatures/entity/hunter/MoCEntityKomodo.java')
           s = komodo.read_text()
-          old = '    public void doEnchantDamageEffects(LivingEntity entityLivingBaseIn, Entity entityIn) {\n        ((LivingEntity) entityIn).addEffect(new MobEffectInstance(MobEffects.POISON, 150, 0));\n}'
-          new = '    @Override\n    public void doEnchantDamageEffects(LivingEntity entityLivingBaseIn, Entity entityIn) {\n        ((LivingEntity) entityIn).addEffect(new MobEffectInstance(MobEffects.POISON, 150, 1));\n    }'
+          old = '''    public void doEnchantDamageEffects(LivingEntity entityLivingBaseIn, Entity entityIn) {\n        ((LivingEntity) entityIn).addEffect(new MobEffectInstance(MobEffects.POISON, 150, 0));\n}\n'''
+          new = '''    @Override\n    public boolean doHurtTarget(Entity entityIn) {\n        boolean hit = super.doHurtTarget(entityIn);\n        if (hit && entityIn instanceof LivingEntity livingTarget) {\n            livingTarget.addEffect(new MobEffectInstance(MobEffects.POISON, 150, 1));\n        }\n        return hit;\n    }\n'''
           if old not in s:
-              raise SystemExit('Komodo poison hook anchor not found')
+              raise SystemExit('Komodo legacy poison hook anchor not found')
           komodo.write_text(s.replace(old, new, 1))
 
-          # Scorpion variants already contain their original 20% sting hooks and animation.
-          # Add @Override so the compiler proves they are actually wired to the 1.21 Mob attack hook.
-          scorpions = [
-              'MoCEntityDirtScorpion.java',
-              'MoCEntityCaveScorpion.java',
-              'MoCEntityFireScorpion.java',
-              'MoCEntityFrostScorpion.java',
-              'MoCEntityUndeadScorpion.java',
-          ]
-          for name in scorpions:
-              p = Path('src/main/java/drzhark/mocreatures/entity/hostile') / name
-              s = p.read_text()
-              needle = '    public void doEnchantDamageEffects(LivingEntity attacker, Entity target) {'
-              if needle not in s:
-                  raise SystemExit(f'{name}: sting hook anchor not found')
-              p.write_text(s.replace(needle, '    @Override\n' + needle, 1))
+          # Wild scorpions already have an actual sting animation (animation 0), sting sound,
+          # and original per-variant effects. Their old effect hook is dead on 1.21, so trigger
+          # the same 20% special attack explicitly after a successful melee hit.
+          scorpion = Path('src/main/java/drzhark/mocreatures/entity/hostile/MoCEntityScorpion.java')
+          s = scorpion.read_text()
+          import_anchor = 'import net.minecraft.world.entity.LivingEntity;\n'
+          if import_anchor not in s:
+              raise SystemExit('Scorpion effect import anchor not found')
+          s = s.replace(import_anchor, import_anchor + 'import net.minecraft.world.effect.MobEffectInstance;\nimport net.minecraft.world.effect.MobEffects;\n', 1)
+          old = '''    @Override\n    public boolean doHurtTarget(Entity entity) {\n        // Claw Attack Sound\n        if (this.poisontimer != 1) {\n            MoCTools.playCustomSound(this, MoCSoundEvents.ENTITY_SCORPION_CLAW.get());\n        }\n        return super.doHurtTarget(entity);\n    }\n'''
+          new = '''    @Override\n    public boolean doHurtTarget(Entity entity) {\n        if (this.poisontimer != 1) {\n            MoCTools.playCustomSound(this, MoCSoundEvents.ENTITY_SCORPION_CLAW.get());\n        }\n\n        boolean hit = super.doHurtTarget(entity);\n        if (!hit || !(entity instanceof LivingEntity livingTarget)) {\n            return hit;\n        }\n\n        // Original Mo' Creatures special sting: 20% chance. setPoisoning(true)\n        // broadcasts the existing sting animation (animation type 0); no new animation.\n        if (!getIsPoisoning() && this.random.nextInt(5) == 0) {\n            setPoisoning(true);\n            switch (this.getTypeMoC) {\n                case 1 -> livingTarget.addEffect(new MobEffectInstance(MobEffects.POISON, 15 * 20, 1));\n                case 2 -> {\n                    livingTarget.addEffect(new MobEffectInstance(MobEffects.CONFUSION, 15 * 20, 0));\n                    livingTarget.addEffect(new MobEffectInstance(MobEffects.WEAKNESS, 15 * 20, 0));\n                }\n                case 3 -> livingTarget.igniteForSeconds(15);\n                case 4 -> livingTarget.addEffect(new MobEffectInstance(MobEffects.MOVEMENT_SLOWDOWN, 25 * 20, 0));\n                case 5 -> {\n                    livingTarget.addEffect(new MobEffectInstance(MobEffects.BLINDNESS, 15 * 20, 0));\n                    livingTarget.addEffect(new MobEffectInstance(MobEffects.WITHER, 15 * 20, 0));\n                }\n                default -> livingTarget.addEffect(new MobEffectInstance(MobEffects.POISON, 15 * 20, 1));\n            }\n        } else {\n            swingArm();\n        }\n        return true;\n    }\n'''
+          if old not in s:
+              raise SystemExit('Scorpion live attack anchor not found')
+          scorpion.write_text(s.replace(old, new, 1))
 
-          # Duck and Mouse define their intended low-health attribute builders, but the registry
-          # accidentally selected inherited MoCEntityAnimal.createAttributes() instead.
+          # Duck and Mouse define their intended low-health builders, but registration selected
+          # inherited MoCEntityAnimal.createAttributes(), giving them the base animal health.
           entities = Path('src/main/java/drzhark/mocreatures/init/MoCEntities.java')
           s = entities.read_text()
           for old, new, label in [
@@ -83,8 +82,8 @@ jobs:
               s = s.replace(old, new, 1)
           entities.write_text(s)
 
-          # Scorpion armor effect helper exists but was never ticked. Hook it to the already
-          # registered GAME bus event-handler instance, server-side once per second.
+          # The full-set scorpion armor effect helper exists and ArmorSetEffects defaults true,
+          # but nothing called it. Refresh it on the registered GAME bus once per second.
           hooks = Path('src/main/java/drzhark/mocreatures/event/MoCEventHooks.java')
           s = hooks.read_text()
           import_anchor = 'import net.neoforged.neoforge.event.level.LevelEvent;\n'
@@ -97,8 +96,8 @@ jobs:
               raise SystemExit('Player tick method anchor not found')
           hooks.write_text(s.replace(method_anchor, method_replacement, 1))
 
-          # Werewolf: Silver Skeleton Sword retains its special fixed hit. A vanilla golden sword
-          # should bypass the werewolf's generic weapon reduction and keep the actual incoming hit.
+          # Silver Skeleton Sword keeps its fixed 10-damage werewolf hit. Golden Sword now bypasses
+          # the generic werewolf sword reduction and keeps the actual vanilla incoming damage.
           were = Path('src/main/java/drzhark/mocreatures/entity/hostile/MoCEntityWerewolf.java')
           s = were.read_text()
           import_anchor = 'import net.minecraft.world.item.ItemStack;\n'
@@ -106,7 +105,7 @@ jobs:
               raise SystemExit('Werewolf Items import anchor not found')
           s = s.replace(import_anchor, import_anchor + 'import net.minecraft.world.item.Items;\n', 1)
           old = '''                if (stack.getItem() == MoCItems.SILVERSWORD.get()) {\n                    i = 10F;\n                } else if (stack.getItem() instanceof SwordItem) {'''
-          new = '''                if (stack.getItem() == MoCItems.SILVERSWORD.get()) {\n                    i = 10F;\n                } else if (stack.is(Items.GOLDEN_SWORD)) {\n                    // Gold is also an effective werewolf weapon: preserve the sword's\n                    // real incoming vanilla damage instead of applying MoC's reduction.\n                } else if (stack.getItem() instanceof SwordItem) {'''
+          new = '''                if (stack.getItem() == MoCItems.SILVERSWORD.get()) {\n                    i = 10F;\n                } else if (stack.is(Items.GOLDEN_SWORD)) {\n                    // Preserve the actual incoming Golden Sword damage.\n                } else if (stack.getItem() instanceof SwordItem) {'''
           if old not in s:
               raise SystemExit('Werewolf sword damage anchor not found')
           were.write_text(s.replace(old, new, 1))
@@ -123,7 +122,7 @@ jobs:
           git rm .github/workflows/apply-balance-effects-weapons.yml
           git add src/main/java/drzhark/mocreatures/MoCTools.java
           git add src/main/java/drzhark/mocreatures/entity/hunter/MoCEntityKomodo.java
-          git add src/main/java/drzhark/mocreatures/entity/hostile/MoCEntity*Scorpion.java
+          git add src/main/java/drzhark/mocreatures/entity/hostile/MoCEntityScorpion.java
           git add src/main/java/drzhark/mocreatures/init/MoCEntities.java
           git add src/main/java/drzhark/mocreatures/event/MoCEventHooks.java
           git add src/main/java/drzhark/mocreatures/entity/hostile/MoCEntityWerewolf.java
