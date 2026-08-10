@@ -1,0 +1,40 @@
+name: Fix Aura banner asset
+
+on:
+  push:
+    branches: [ "main" ]
+
+permissions:
+  contents: write
+
+jobs:
+  fix-banner:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: main
+          fetch-depth: 0
+      - name: Decode valid JPEG and repair README
+        shell: bash
+        run: |
+          base64 -d aura_banner_b64.txt > aura_banner.jpg
+          file aura_banner.jpg
+          python3 - <<'PY'
+          from pathlib import Path
+          p = Path('README.md')
+          s = p.read_text()
+          s = s.replace('![Mo\' Creatures: Aura Edition](aura_banner.png)', '![Mo\' Creatures: Aura Edition](aura_banner.jpg)')
+          p.write_text(s)
+          PY
+          rm -f aura_banner_b64.txt aura_banner.png
+      - name: Commit repaired banner
+        shell: bash
+        run: |
+          git config user.name 'github-actions[bot]'
+          git config user.email '41898282+github-actions[bot]@users.noreply.github.com'
+          git add README.md aura_banner.jpg
+          git add -u
+          git rm .github/workflows/fix-aura-banner.yml
+          git commit -m 'Fix Aura Edition README banner asset'
+          git push origin HEAD:main
