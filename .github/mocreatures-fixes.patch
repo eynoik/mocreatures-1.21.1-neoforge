@@ -1,0 +1,274 @@
+diff --git a/src/main/java/drzhark/mocreatures/entity/hostile/MoCEntityHorseMob.java b/src/main/java/drzhark/mocreatures/entity/hostile/MoCEntityHorseMob.java
+index eef34b0..23643e5 100644
+--- a/src/main/java/drzhark/mocreatures/entity/hostile/MoCEntityHorseMob.java
++++ b/src/main/java/drzhark/mocreatures/entity/hostile/MoCEntityHorseMob.java
+@@ -25,6 +25,9 @@ import net.minecraft.world.item.Item;
+ import net.minecraft.world.item.ItemStack;
+ import net.minecraft.world.item.Items;
+ import net.minecraft.world.damagesource.DamageSource;
++import net.minecraft.world.item.enchantment.Enchantments;
++import net.minecraft.world.item.enchantment.EnchantmentHelper;
++import net.minecraft.world.entity.LivingEntity;
+ import net.minecraft.resources.ResourceLocation;
+ import net.minecraft.sounds.SoundEvent;
+ import net.minecraft.sounds.SoundEvents;
+@@ -297,7 +300,11 @@ public class MoCEntityHorseMob extends MoCEntityMob {
+ 
+     @Override
+     protected void dropCustomDeathLoot(ServerLevel serverLevel, DamageSource source, boolean recentlyHitIn) {
+-        int looting = 0; // TODO 1.21: custom looting bonus should be derived from enchantment context if desired.
++        int looting = 0;
++        if (source.getEntity() instanceof LivingEntity lootingAttacker) {
++            looting = EnchantmentHelper.getEnchantmentLevel(
++                    serverLevel.registryAccess().holderOrThrow(Enchantments.LOOTING), lootingAttacker);
++        }
+         super.dropCustomDeathLoot(serverLevel, source, recentlyHitIn);
+         boolean flag = (this.random.nextInt(100) < MoCreatures.proxy.rareItemDropChance);
+         if (this.getTypeMoC() == 32 && MoCreatures.proxy.rareItemDropChance < 25) {
+diff --git a/src/main/java/drzhark/mocreatures/entity/hunter/MoCEntitySnake.java b/src/main/java/drzhark/mocreatures/entity/hunter/MoCEntitySnake.java
+index 9f403c0..eceaf2a 100644
+--- a/src/main/java/drzhark/mocreatures/entity/hunter/MoCEntitySnake.java
++++ b/src/main/java/drzhark/mocreatures/entity/hunter/MoCEntitySnake.java
+@@ -664,7 +664,9 @@ public class MoCEntitySnake extends MoCEntityTameableAnimal {
+                 setTypeMoC(2); // spotted
+             }
+             
+-        } catch (Exception ignored) { }
++        } catch (Exception e) {
++            MoCreatures.LOGGER.debug("Snake biome-based variant selection failed", e);
++        }
+         return true;
+     }
+ 
+diff --git a/src/main/java/drzhark/mocreatures/entity/neutral/MoCEntityElephant.java b/src/main/java/drzhark/mocreatures/entity/neutral/MoCEntityElephant.java
+index 3d86cf0..8d712a0 100644
+--- a/src/main/java/drzhark/mocreatures/entity/neutral/MoCEntityElephant.java
++++ b/src/main/java/drzhark/mocreatures/entity/neutral/MoCEntityElephant.java
+@@ -48,6 +48,8 @@ import net.minecraft.resources.ResourceKey;
+ import drzhark.mocreatures.network.MoCPacketDistributor;
+ import net.minecraft.sounds.SoundEvent;
+ import net.minecraft.world.damagesource.DamageSource;
++import net.minecraft.world.item.enchantment.Enchantments;
++import net.minecraft.world.item.enchantment.EnchantmentHelper;
+ import net.minecraft.resources.ResourceLocation;
+ import net.minecraft.world.SimpleMenuProvider;
+ import net.minecraft.network.chat.Component;
+@@ -861,7 +863,11 @@ public class MoCEntityElephant extends MoCEntityTameableAnimal {
+ 
+     @Override
+     protected void dropCustomDeathLoot(ServerLevel serverLevel, DamageSource source, boolean recentlyHitIn) {
+-        int looting = 0; // TODO 1.21: custom looting bonus should be derived from enchantment context if desired.
++        int looting = 0;
++        if (source.getEntity() instanceof LivingEntity lootingAttacker) {
++            looting = EnchantmentHelper.getEnchantmentLevel(
++                    serverLevel.registryAccess().holderOrThrow(Enchantments.LOOTING), lootingAttacker);
++        }
+         int i = this.random.nextInt(3);
+ 
+         if (looting > 0) {
+diff --git a/src/main/java/drzhark/mocreatures/entity/neutral/MoCEntityOstrich.java b/src/main/java/drzhark/mocreatures/entity/neutral/MoCEntityOstrich.java
+index dd1b7ec..bdf6326 100644
+--- a/src/main/java/drzhark/mocreatures/entity/neutral/MoCEntityOstrich.java
++++ b/src/main/java/drzhark/mocreatures/entity/neutral/MoCEntityOstrich.java
+@@ -51,6 +51,9 @@ import net.minecraft.world.InteractionResult;
+ import net.minecraft.world.Difficulty;
+ import net.minecraft.world.InteractionHand;
+ import net.minecraft.world.damagesource.DamageSource;
++import net.minecraft.world.item.enchantment.Enchantments;
++import net.minecraft.world.item.enchantment.EnchantmentHelper;
++import net.minecraft.world.entity.LivingEntity;
+ import net.minecraft.world.level.Level;
+ import net.minecraft.world.level.storage.loot.LootTable;
+ import drzhark.mocreatures.network.MoCPacketDistributor;
+@@ -818,7 +821,11 @@ public class MoCEntityOstrich extends MoCEntityTameableAnimal {
+ 
+     @Override
+     protected void dropCustomDeathLoot(ServerLevel serverLevel, DamageSource source, boolean recentlyHitIn) {
+-        int looting = 0; // TODO 1.21: custom looting bonus should be derived from enchantment context if desired.
++        int looting = 0;
++        if (source.getEntity() instanceof LivingEntity lootingAttacker) {
++            looting = EnchantmentHelper.getEnchantmentLevel(
++                    serverLevel.registryAccess().holderOrThrow(Enchantments.LOOTING), lootingAttacker);
++        }
+         boolean flag = (this.random.nextInt(100) < MoCreatures.proxy.rareItemDropChance);
+         int i = this.random.nextInt(3);
+ 
+diff --git a/src/main/java/drzhark/mocreatures/entity/passive/MoCEntityHorse.java b/src/main/java/drzhark/mocreatures/entity/passive/MoCEntityHorse.java
+index 683f4b6..6721dff 100644
+--- a/src/main/java/drzhark/mocreatures/entity/passive/MoCEntityHorse.java
++++ b/src/main/java/drzhark/mocreatures/entity/passive/MoCEntityHorse.java
+@@ -50,6 +50,9 @@ import net.minecraft.server.level.ServerLevel;
+ import net.minecraft.world.entity.MobType;
+ import net.minecraft.resources.ResourceKey;
+ import net.minecraft.world.damagesource.DamageSource;
++import net.minecraft.world.item.enchantment.Enchantments;
++import net.minecraft.world.item.enchantment.EnchantmentHelper;
++import net.minecraft.world.entity.LivingEntity;
+ import net.minecraft.world.InteractionResult;
+ import net.minecraft.world.InteractionHand;
+ import net.minecraft.world.SimpleMenuProvider;
+@@ -519,7 +522,11 @@ public class MoCEntityHorse extends MoCEntityTameableAnimal {
+ 
+     @Override
+     protected void dropCustomDeathLoot(ServerLevel serverLevel, DamageSource source, boolean recentlyHitIn) {
+-        int looting = 0; // TODO 1.21: custom looting bonus should be derived from enchantment context if desired.
++        int looting = 0;
++        if (source.getEntity() instanceof LivingEntity lootingAttacker) {
++            looting = EnchantmentHelper.getEnchantmentLevel(
++                    serverLevel.registryAccess().holderOrThrow(Enchantments.LOOTING), lootingAttacker);
++        }
+         super.dropCustomDeathLoot(serverLevel, source, recentlyHitIn);
+         
+         boolean flag = (this.random.nextInt(100) < MoCreatures.proxy.rareItemDropChance);
+diff --git a/src/main/java/drzhark/mocreatures/entity/passive/MoCEntityTurtle.java b/src/main/java/drzhark/mocreatures/entity/passive/MoCEntityTurtle.java
+index 181e110..7ee649a 100644
+--- a/src/main/java/drzhark/mocreatures/entity/passive/MoCEntityTurtle.java
++++ b/src/main/java/drzhark/mocreatures/entity/passive/MoCEntityTurtle.java
+@@ -32,6 +32,9 @@ import net.minecraft.tags.FluidTags;
+ import net.minecraft.resources.ResourceLocation;
+ import net.minecraft.resources.ResourceKey;
+ import net.minecraft.world.damagesource.DamageSource;
++import net.minecraft.world.item.enchantment.Enchantments;
++import net.minecraft.world.item.enchantment.EnchantmentHelper;
++import net.minecraft.world.entity.LivingEntity;
+ import net.minecraft.sounds.SoundEvent;
+ import net.minecraft.util.Mth;
+ import net.minecraft.world.level.Level;
+@@ -333,7 +336,11 @@ public class MoCEntityTurtle extends MoCEntityTameableAnimal {
+ 
+     @Override
+     protected void dropCustomDeathLoot(ServerLevel serverLevel, DamageSource source, boolean recentlyHitIn) {
+-        int looting = 0; // TODO 1.21: custom looting bonus should be derived from enchantment context if desired.
++        int looting = 0;
++        if (source.getEntity() instanceof LivingEntity lootingAttacker) {
++            looting = EnchantmentHelper.getEnchantmentLevel(
++                    serverLevel.registryAccess().holderOrThrow(Enchantments.LOOTING), lootingAttacker);
++        }
+         super.dropCustomDeathLoot(serverLevel, source, recentlyHitIn);
+ 
+         // chance to drop turtle helmet
+diff --git a/src/main/java/drzhark/mocreatures/event/MoCClientEvents.java b/src/main/java/drzhark/mocreatures/event/MoCClientEvents.java
+index 66d2fb6..e6fb362 100644
+--- a/src/main/java/drzhark/mocreatures/event/MoCClientEvents.java
++++ b/src/main/java/drzhark/mocreatures/event/MoCClientEvents.java
+@@ -7,16 +7,11 @@ import drzhark.mocreatures.client.renderer.fx.impl.MoCEntityFXUndead;
+ import drzhark.mocreatures.client.renderer.fx.impl.MoCEntityFXVacuum;
+ import drzhark.mocreatures.client.renderer.fx.impl.MoCEntityFXVanish;
+ import drzhark.mocreatures.client.renderer.fx.MoCParticles;
+-import drzhark.mocreatures.init.MoCBlocks;
+-import net.minecraft.client.Minecraft;
+ import net.minecraft.client.particle.SpriteSet;
+-import net.minecraft.client.renderer.ItemBlockRenderTypes;
+-import net.minecraft.client.renderer.RenderType;
+ import net.neoforged.api.distmarker.Dist;
+ import net.neoforged.neoforge.client.event.RegisterParticleProvidersEvent;
+ import net.neoforged.bus.api.SubscribeEvent;
+ import net.neoforged.fml.common.Mod;
+-import net.neoforged.fml.event.lifecycle.FMLClientSetupEvent;
+ 
+ @Mod.EventBusSubscriber(modid = MoCConstants.MOD_ID, value = Dist.CLIENT, bus = Mod.EventBusSubscriber.Bus.MOD)
+ public class MoCClientEvents {
+@@ -25,43 +20,30 @@ public class MoCClientEvents {
+ 
+     @SubscribeEvent
+     public static void onRegisterParticleProviders(RegisterParticleProvidersEvent event) {
+-        // Register particle providers using the new 1.20.1 API
+-        try {
+-            Minecraft.getInstance().particleEngine.register(
+-                MoCParticles.UNDEAD_FX.get(), 
+-                (spriteSet) -> {
+-                    UNDEAD_SPRITE_SET = spriteSet;
+-                    return new MoCEntityFXUndead.Factory(spriteSet);
+-                }
+-            );
++        // Register particle providers via the event's own API (NeoForge 1.21.1), not by
++        // reaching into Minecraft.getInstance().particleEngine directly. Using the event
++        // methods is the documented/supported path and keeps registration ordered correctly
++        // with the rest of the particle-engine reload lifecycle.
++        event.registerSpriteSet(MoCParticles.UNDEAD_FX.get(), spriteSet -> {
++            UNDEAD_SPRITE_SET = spriteSet;
++            return new MoCEntityFXUndead.Factory(spriteSet);
++        });
+ 
+-            Minecraft.getInstance().particleEngine.register(
+-                MoCParticles.VANISH_FX.get(), 
+-                (spriteSet) -> {
+-                    VANISH_SPRITE_SET = spriteSet;
+-                    return new MoCEntityFXVanish.Provider(spriteSet);
+-                }
+-            );
++        event.registerSpriteSet(MoCParticles.VANISH_FX.get(), spriteSet -> {
++            VANISH_SPRITE_SET = spriteSet;
++            return new MoCEntityFXVanish.Provider(spriteSet);
++        });
+ 
+-            Minecraft.getInstance().particleEngine.register(
+-                MoCParticles.STAR_FX.get(), 
+-                (spriteSet) -> {
+-                    STAR_SPRITE_SET = spriteSet;
+-                    return new MoCEntityFXStar.Factory(spriteSet);
+-                }
+-            );
++        event.registerSpriteSet(MoCParticles.STAR_FX.get(), spriteSet -> {
++            STAR_SPRITE_SET = spriteSet;
++            return new MoCEntityFXStar.Factory(spriteSet);
++        });
+ 
+-            Minecraft.getInstance().particleEngine.register(
+-                MoCParticles.VACUUM_FX.get(), 
+-                (spriteSet) -> {
+-                    VACUUM_SPRITE_SET = spriteSet;
+-                    return new MoCEntityFXVacuum.Factory(spriteSet);
+-                }
+-            );
+-            
+-            MoCreatures.LOGGER.info("Mo'Creatures particle providers registered successfully");
+-        } catch (Exception e) {
+-            MoCreatures.LOGGER.error("Error registering Mo'Creatures particle providers: " + e.getMessage(), e);
+-        }
++        event.registerSpriteSet(MoCParticles.VACUUM_FX.get(), spriteSet -> {
++            VACUUM_SPRITE_SET = spriteSet;
++            return new MoCEntityFXVacuum.Factory(spriteSet);
++        });
++
++        MoCreatures.LOGGER.info("Mo'Creatures particle providers registered successfully");
+     }
+ }
+\ No newline at end of file
+diff --git a/src/main/java/drzhark/mocreatures/item/MoCItemFood.java b/src/main/java/drzhark/mocreatures/item/MoCItemFood.java
+index 5f3de07..a694f00 100644
+--- a/src/main/java/drzhark/mocreatures/item/MoCItemFood.java
++++ b/src/main/java/drzhark/mocreatures/item/MoCItemFood.java
+@@ -22,7 +22,6 @@ public class MoCItemFood extends MoCItem {
+         private final FoodProperties.Builder foodBuilder;
+         private int itemUseDuration;
+         private final Item.Properties properties;
+-        private final String name = "PLACEHOLDER";
+ 
+         public Builder(Item.Properties properties, int amount) {
+             this(properties, amount, 0.6F, false);
+diff --git a/src/main/java/drzhark/mocreatures/network/command/CommandMoCSpawn.java b/src/main/java/drzhark/mocreatures/network/command/CommandMoCSpawn.java
+index 428171f..9d9d25d 100644
+--- a/src/main/java/drzhark/mocreatures/network/command/CommandMoCSpawn.java
++++ b/src/main/java/drzhark/mocreatures/network/command/CommandMoCSpawn.java
+@@ -6,6 +6,7 @@ package drzhark.mocreatures.network.command;
+ import com.mojang.brigadier.CommandDispatcher;
+ import com.mojang.brigadier.arguments.IntegerArgumentType;
+ import drzhark.mocreatures.MoCTools;
++import drzhark.mocreatures.MoCreatures;
+ import drzhark.mocreatures.entity.hunter.MoCEntityManticorePet;
+ import drzhark.mocreatures.entity.neutral.MoCEntityWyvern;
+ import drzhark.mocreatures.entity.passive.MoCEntityHorse;
+@@ -86,7 +87,11 @@ public class CommandMoCSpawn {
+                     new MoCMessageAppear(specialEntity.getId()));
+             }
+             MoCTools.playCustomSound(specialEntity, MoCSoundEvents.ENTITY_GENERIC_MAGIC_APPEAR.get());
+-        } catch (Exception e){}
++        } catch (Exception e) {
++            MoCreatures.LOGGER.error("Failed to execute /moc spawn command", e);
++            source.sendFailure(Component.literal("ERROR: Spawn failed, see server log for details."));
++            return 0;
++        }
+         return 1;
+     }
+ 
