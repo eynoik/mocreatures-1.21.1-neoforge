@@ -657,7 +657,9 @@ public class MoCEntitySnake extends MoCEntityTameableAnimal {
                 setTypeMoC(2); // spotted
             }
             
-        } catch (Exception ignored) { }
+        } catch (Exception e) {
+            MoCreatures.LOGGER.debug("Snake biome-based variant selection failed", e);
+        }
         return true;
     }
 

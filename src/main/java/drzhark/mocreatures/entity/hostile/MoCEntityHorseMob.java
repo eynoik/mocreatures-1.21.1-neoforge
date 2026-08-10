@@ -25,6 +25,9 @@ import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Items;
 import net.minecraft.world.damagesource.DamageSource;
+import net.minecraft.world.item.enchantment.Enchantments;
+import net.minecraft.world.item.enchantment.EnchantmentHelper;
+import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.sounds.SoundEvent;
 import net.minecraft.sounds.SoundEvents;
@@ -297,7 +300,11 @@ public class MoCEntityHorseMob extends MoCEntityMob {
 
     @Override
     protected void dropCustomDeathLoot(ServerLevel serverLevel, DamageSource source, boolean recentlyHitIn) {
-        int looting = 0; // TODO 1.21: custom looting bonus should be derived from enchantment context if desired.
+        int looting = 0;
+        if (source.getEntity() instanceof LivingEntity lootingAttacker) {
+            looting = EnchantmentHelper.getEnchantmentLevel(
+                    serverLevel.registryAccess().holderOrThrow(Enchantments.LOOTING), lootingAttacker);
+        }
         super.dropCustomDeathLoot(serverLevel, source, recentlyHitIn);
         boolean flag = (this.random.nextInt(100) < MoCreatures.proxy.rareItemDropChance);
         if (this.getTypeMoC() == 32 && MoCreatures.proxy.rareItemDropChance < 25) {

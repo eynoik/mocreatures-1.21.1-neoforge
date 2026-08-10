@@ -20,7 +20,6 @@ public class MoCItemFood extends MoCItem {
         private final FoodProperties.Builder foodBuilder;
         private int itemUseDuration;
         private final Item.Properties properties;
-        private final String name = "PLACEHOLDER";
 
         public Builder(Item.Properties properties, int amount) {
             this(properties, amount, 0.6F, false);

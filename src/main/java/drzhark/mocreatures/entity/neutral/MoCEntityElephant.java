@@ -48,6 +48,8 @@ import net.minecraft.resources.ResourceKey;
 import drzhark.mocreatures.network.MoCPacketDistributor;
 import net.minecraft.sounds.SoundEvent;
 import net.minecraft.world.damagesource.DamageSource;
+import net.minecraft.world.item.enchantment.Enchantments;
+import net.minecraft.world.item.enchantment.EnchantmentHelper;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.SimpleMenuProvider;
 import net.minecraft.network.chat.Component;
@@ -859,7 +861,11 @@ public class MoCEntityElephant extends MoCEntityTameableAnimal {
 
     @Override
     protected void dropCustomDeathLoot(ServerLevel serverLevel, DamageSource source, boolean recentlyHitIn) {
-        int looting = 0; // TODO 1.21: custom looting bonus should be derived from enchantment context if desired.
+        int looting = 0;
+        if (source.getEntity() instanceof LivingEntity lootingAttacker) {
+            looting = EnchantmentHelper.getEnchantmentLevel(
+                    serverLevel.registryAccess().holderOrThrow(Enchantments.LOOTING), lootingAttacker);
+        }
         int i = this.random.nextInt(3);
 
         if (looting > 0) {

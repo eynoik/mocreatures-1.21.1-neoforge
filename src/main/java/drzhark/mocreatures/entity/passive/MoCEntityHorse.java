@@ -50,6 +50,9 @@ import net.minecraft.world.level.Level;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.resources.ResourceKey;
 import net.minecraft.world.damagesource.DamageSource;
+import net.minecraft.world.item.enchantment.Enchantments;
+import net.minecraft.world.item.enchantment.EnchantmentHelper;
+import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.InteractionResult;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.SimpleMenuProvider;
@@ -519,7 +522,11 @@ public class MoCEntityHorse extends MoCEntityTameableAnimal {
 
     @Override
     protected void dropCustomDeathLoot(ServerLevel serverLevel, DamageSource source, boolean recentlyHitIn) {
-        int looting = 0; // TODO 1.21: custom looting bonus should be derived from enchantment context if desired.
+        int looting = 0;
+        if (source.getEntity() instanceof LivingEntity lootingAttacker) {
+            looting = EnchantmentHelper.getEnchantmentLevel(
+                    serverLevel.registryAccess().holderOrThrow(Enchantments.LOOTING), lootingAttacker);
+        }
         super.dropCustomDeathLoot(serverLevel, source, recentlyHitIn);
         
         boolean flag = (this.random.nextInt(100) < MoCreatures.proxy.rareItemDropChance);

@@ -6,6 +6,7 @@ package drzhark.mocreatures.network.command;
 import com.mojang.brigadier.CommandDispatcher;
 import com.mojang.brigadier.arguments.IntegerArgumentType;
 import drzhark.mocreatures.MoCTools;
+import drzhark.mocreatures.MoCreatures;
 import drzhark.mocreatures.entity.hunter.MoCEntityManticorePet;
 import drzhark.mocreatures.entity.neutral.MoCEntityWyvern;
 import drzhark.mocreatures.entity.passive.MoCEntityHorse;
@@ -86,7 +87,11 @@ public class CommandMoCSpawn {
                     new MoCMessageAppear(specialEntity.getId()));
             }
             MoCTools.playCustomSound(specialEntity, MoCSoundEvents.ENTITY_GENERIC_MAGIC_APPEAR.get());
-        } catch (Exception e){}
+        } catch (Exception e) {
+            MoCreatures.LOGGER.error("Failed to execute /moc spawn command", e);
+            source.sendFailure(Component.literal("ERROR: Spawn failed, see server log for details."));
+            return 0;
+        }
         return 1;
     }
 
