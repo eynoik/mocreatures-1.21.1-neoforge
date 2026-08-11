@@ -25,8 +25,6 @@ import javax.annotation.Nullable;
 
 public class MoCEntityButterfly extends MoCEntityInsect {
 
-    private int fCounter;
-
     public MoCEntityButterfly(EntityType<? extends MoCEntityButterfly> type, Level world) {
         super(type, world);
     }
@@ -77,15 +75,12 @@ public class MoCEntityButterfly extends MoCEntityInsect {
         }
     }
 
-    public float tFloat() {
+    public float tFloat(float partialTick) {
         if (!getIsFlying()) {
             return 0F;
         }
-        if (++this.fCounter > 1000) {
-            this.fCounter = 0;
-        }
-
-        return Mth.cos((this.fCounter * 0.1F)) * 0.2F;
+        // Pure render interpolation: never mutate entity state from the renderer.
+        return Mth.cos((this.tickCount + partialTick) * 0.1F) * 0.2F;
     }
 
     @Override

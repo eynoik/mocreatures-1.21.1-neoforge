@@ -22,7 +22,7 @@ public class MoCRenderButterfly extends MoCRenderInsect<MoCEntityButterfly, MoCM
     @Override
     protected void scale(MoCEntityButterfly entitybutterfly, PoseStack poseStack, float par2) {
         if (entitybutterfly.isOnAir() || !entitybutterfly.onGround()) {
-            adjustHeight(entitybutterfly, entitybutterfly.tFloat(), poseStack);
+            adjustHeight(entitybutterfly, entitybutterfly.tFloat(par2), poseStack);
         }
         if (entitybutterfly.climbing()) {
             rotateAnimal(entitybutterfly, poseStack);

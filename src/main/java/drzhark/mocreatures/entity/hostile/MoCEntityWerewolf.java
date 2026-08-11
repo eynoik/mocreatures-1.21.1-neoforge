@@ -214,7 +214,7 @@ public class MoCEntityWerewolf extends MoCEntityMob {
     @Override
     protected SoundEvent getDeathSound() {
         if (getIsHumanForm()) {
-            return MoCreatures.proxy.legacyWerehumanSounds ? MoCSoundEvents.ENTITY_WEREWOLF_DEATH_HUMAN.get() : SoundEvents.GENERIC_HURT;
+            return MoCreatures.proxy.legacyWerehumanSounds ? MoCSoundEvents.ENTITY_WEREWOLF_DEATH_HUMAN.get() : SoundEvents.PLAYER_DEATH;
         } else {
             return MoCSoundEvents.ENTITY_WEREWOLF_DEATH.get();
         }
@@ -224,7 +224,7 @@ public class MoCEntityWerewolf extends MoCEntityMob {
     protected SoundEvent getHurtSound(DamageSource source) {
         if (getIsHumanForm()) {
             if (!this.transforming)
-                return MoCreatures.proxy.legacyWerehumanSounds ? MoCSoundEvents.ENTITY_WEREWOLF_HURT_HUMAN.get() : SoundEvents.GENERIC_HURT;
+                return MoCreatures.proxy.legacyWerehumanSounds ? MoCSoundEvents.ENTITY_WEREWOLF_HURT_HUMAN.get() : SoundEvents.PLAYER_HURT;
             return null;
         } else {
             return MoCSoundEvents.ENTITY_WEREWOLF_HURT.get();
@@ -235,7 +235,9 @@ public class MoCEntityWerewolf extends MoCEntityMob {
     @Override
     protected SoundEvent getAmbientSound() {
         if (getIsHumanForm()) {
-            return null;
+            // Human-form werewolves used to be completely silent while idle.
+            // Use the quiet vanilla player breath without replacing the legacy hurt/death toggle.
+            return SoundEvents.PLAYER_BREATH;
         } else {
             return MoCSoundEvents.ENTITY_WEREWOLF_AMBIENT.get();
         }
