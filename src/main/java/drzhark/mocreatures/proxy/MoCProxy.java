@@ -726,7 +726,7 @@ public class MoCProxy {
         this.legacyBigCatModels = this.mocSettingsConfig.get(CATEGORY_MOC_CREATURE_GENERAL_SETTINGS, "LegacyBigCatModels", false, "Use the old big cat model when true.").getBoolean(false);
         this.legacyBunnyTextures = this.mocSettingsConfig.get(CATEGORY_MOC_CREATURE_GENERAL_SETTINGS, "LegacyBunnyTextures", false, "Use the old bunny textures when true.").getBoolean(false);
         this.legacyRatDeathSound = this.mocSettingsConfig.get(CATEGORY_MOC_MONSTER_GENERAL_SETTINGS, "LegacyRatDeathSound", false, "Use the old rat death sound when true.").getBoolean(false);
-        this.legacyWerehumanSounds = this.mocSettingsConfig.get(CATEGORY_MOC_MONSTER_GENERAL_SETTINGS, "LegacyWerehumanSounds", false, "Use the old werehuman sounds when true.").getBoolean(false);
+        this.legacyWerehumanSounds = this.mocSettingsConfig.get(CATEGORY_MOC_MONSTER_GENERAL_SETTINGS, "LegacyWerehumanSounds", true, "Use the old werehuman sounds when true.").getBoolean(true);
         this.legacyWraithSounds = this.mocSettingsConfig.get(CATEGORY_MOC_MONSTER_GENERAL_SETTINGS, "LegacyWraithSounds", false, "Use the old wraith sounds when true.").getBoolean(false);
         this.legacyWyvernLairSky = this.mocSettingsConfig.get(CATEGORY_MOC_CREATURE_GENERAL_SETTINGS, "LegacyWyvernLairSky", false, "Use the old wyvern lair sky when true.").getBoolean(false);
         this.maxOPTamed = this.mocSettingsConfig.get(CATEGORY_OWNERSHIP_SETTINGS, "MaxOPTamed", 15, "Max amount of pets an OP player can own.").getInt(15);
