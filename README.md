@@ -1,6 +1,6 @@
 # Mo' Creatures: Aura Edition
 
-![DrZhark's Mo'Creatures Extended](logo_ext_small.png)
+![Mo' Creatures: Aura Edition](aura_banner.png)
 
 **Mo' Creatures: Aura Edition** is a fan-made **slop port** of **Mo' Creatures: Nostalgia Edition for Minecraft 1.20.1 Forge** to **Minecraft 1.21.1 NeoForge**.
 

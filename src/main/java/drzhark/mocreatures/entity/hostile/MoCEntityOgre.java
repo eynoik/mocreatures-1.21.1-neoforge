@@ -157,7 +157,8 @@ public class MoCEntityOgre extends MoCEntityMob {
         if (this.deathTime > 0) {
             return;
         }
-        MoCTools.destroyBlast(this, this.getX(), this.getY() + 1.0D, this.getZ(), getDestroyForce(), isFireStarter());
+        double blastY = this.getY() + (this.getBbHeight() * 0.5D);
+        MoCTools.destroyBlast(this, this.getX(), blastY, this.getZ(), getDestroyForce(), isFireStarter());
     }
 
     /**

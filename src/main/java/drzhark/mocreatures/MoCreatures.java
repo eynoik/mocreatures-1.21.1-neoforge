@@ -4,9 +4,11 @@ import com.mojang.authlib.GameProfile;
 
 import drzhark.mocreatures.client.renderer.fx.MoCParticles;
 import drzhark.mocreatures.compat.CompatHandler;
+import drzhark.mocreatures.config.MoCCombatScalingConfig;
 import drzhark.mocreatures.config.biome.BiomeSpawnConfig;
 import drzhark.mocreatures.entity.MoCEntityData;
 import drzhark.mocreatures.entity.tameable.MoCPetMapData;
+import drzhark.mocreatures.event.MoCCombatScalingHandler;
 import drzhark.mocreatures.event.MoCEventHooks;
 import drzhark.mocreatures.init.MoCBlocks;
 import drzhark.mocreatures.init.MoCCreativeTabs;
@@ -75,6 +77,8 @@ public class MoCreatures {
         CompatHandler.preInit();
 
         proxy.configInit();
+        MoCCombatScalingConfig.init();
+        NeoForge.EVENT_BUS.register(MoCCombatScalingHandler.class);
         proxy.registerRenderers();
         proxy.registerRenderInformation();
 
