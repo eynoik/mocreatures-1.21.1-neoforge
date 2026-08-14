@@ -126,16 +126,16 @@ jobs:
             build/reports/**
             build/tmp/**
 
-      - name: Publish Aura Edition v1.0.2 prerelease
-        if: ${{ success() && github.event_name == 'push' && github.ref == 'refs/heads/main' && contains(github.event.head_commit.message, '[release v1.0.2]') }}
+      - name: Publish Aura Edition v1.0.3 prerelease
+        if: ${{ success() && github.event_name == 'push' && github.ref == 'refs/heads/agent/fix-werewolf-hurt-voice-lines' && contains(github.event.head_commit.message, '[release v1.0.3]') }}
         env:
           GH_TOKEN: ${{ github.token }}
         shell: bash
         run: |
           set -euxo pipefail
-          RELEASE_TAG="aura-edition-1.21.1-v1.0.2"
-          RELEASE_JAR="Mo-Creatures-Aura-Edition-1.21.1-v1.0.2.jar"
-          CHECKSUM_FILE="aura-release-v1.0.2-sha256.txt"
+          RELEASE_TAG="aura-edition-1.21.1-v1.0.3"
+          RELEASE_JAR="Mo-Creatures-Aura-Edition-1.21.1-v1.0.3.jar"
+          CHECKSUM_FILE="aura-release-v1.0.3-sha256.txt"
 
           BUILT_JAR=$(find build/libs -maxdepth 1 -type f -name '*.jar' ! -name '*-sources.jar' ! -name '*-javadoc.jar' | head -n 1)
           test -n "$BUILT_JAR"
@@ -143,16 +143,14 @@ jobs:
           sha256sum "$RELEASE_JAR" > "$CHECKSUM_FILE"
 
           cat > release-notes.md <<'EOF'
-          ## Aura Edition v1.0.2
+          ## Aura Edition v1.0.3
 
           Fan-made slop port of Mo' Creatures: Nostalgia Edition 1.20.1 Forge to Minecraft 1.21.1 NeoForge.
 
           ### Fixes and changes
-          - Ogre destroy blast is now centered around the Ogre's actual body instead of originating near its feet.
-          - Added `config/MoCreatures/MoCCombatScaling.cfg`.
-          - `HealthMultiplier`: global Mo' Creatures max-health scaling (`1.0` normal, `2.0` double, `0.5` half).
-          - `DamageMultiplier`: global Mo' Creatures outgoing damage scaling (`1.0` normal, `2.0` double, `0.5` half), including special attacks.
-          - Health scaling uses a stable permanent modifier so chunk/entity reloads do not repeatedly stack the multiplier.
+          - Legacy werehuman sounds are enabled by default for new/default configurations.
+          - Fixed human-form werewolf hurt voice lines being muted during transformation when hit by a real attacker.
+          - Transformation self-damage remains silent, so the animation does not spam hurt sounds.
 
           This release is published only after the GitHub Actions build, dedicated-server/datapack smoke test, and headless client startup smoke test all pass.
 
@@ -161,6 +159,6 @@ jobs:
 
           gh release create "$RELEASE_TAG" "$RELEASE_JAR" "$CHECKSUM_FILE" \
             --target "$GITHUB_SHA" \
-            --title "Mo' Creatures: Aura Edition 1.21.1 - v1.0.2" \
+            --title "Mo' Creatures: Aura Edition 1.21.1 - v1.0.3" \
             --notes-file release-notes.md \
             --prerelease
