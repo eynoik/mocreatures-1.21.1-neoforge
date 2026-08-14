@@ -1,123 +1,84 @@
-name: Temporary Mo Creatures Health Audit
+name: Apply audited Mo Creatures health fixes
 
 on:
   push:
     branches: [ "agent/fix-werewolf-hurt-voice-lines" ]
 
+permissions:
+  contents: write
+
 jobs:
-  audit:
+  apply:
+    if: ${{ !contains(github.event.head_commit.message, '[health-fixed]') }}
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
-      - name: Fetch original DrZhark sources
-        run: git clone --depth 1 https://github.com/DrZhark/mocreaturesdev.git /tmp/mocreaturesdev
-      - name: Compare entity health attribute wiring
+        with:
+          ref: agent/fix-werewolf-hurt-voice-lines
+
+      - name: Apply verified health fixes
         shell: bash
         run: |
           python3 - <<'PY'
-          import pathlib, re
+          from pathlib import Path
 
-          CUR = pathlib.Path('src/main/java/drzhark/mocreatures/entity')
-          OLD = pathlib.Path('/tmp/mocreaturesdev/src/drzhark/mocreatures/entity')
-          REG = pathlib.Path('src/main/java/drzhark/mocreatures/init/MoCEntities.java').read_text(errors='ignore')
+          ROOT = Path('src/main/java')
 
-          def method_body(text, name):
-              m = re.search(r'(?:public|protected)\s+(?:static\s+)?[\w<>., ?]+\s+' + re.escape(name) + r'\s*\(\s*\)\s*\{', text)
-              if not m:
-                  return None
-              start = text.find('{', m.start())
-              depth = 0
-              for i in range(start, len(text)):
-                  if text[i] == '{': depth += 1
-                  elif text[i] == '}':
-                      depth -= 1
-                      if depth == 0:
-                          return text[start+1:i]
-              return None
+          def unique_file(class_name):
+              matches = [p for p in ROOT.rglob(class_name + '.java') if f'class {class_name} ' in p.read_text(errors='ignore')]
+              if len(matches) != 1:
+                  raise SystemExit(f'{class_name}: expected exactly one implementation, got {matches}')
+              return matches[0]
 
-          def class_info(path):
-              text = path.read_text(errors='ignore')
-              m = re.search(r'public\s+(?:abstract\s+)?class\s+(\w+)\s+extends\s+([\w.]+)', text)
-              if not m:
-                  return None
-              name, parent = m.group(1), m.group(2).split('.')[-1]
-              methods = {}
-              for meth in ('createAttributes', 'registerAttributes'):
-                  body = method_body(text, meth)
-                  if body is not None:
-                      hm = re.search(r'Attributes\.MAX_HEALTH\s*,\s*([0-9]+(?:\.[0-9]+)?)\s*[DF]?', body)
-                      methods[meth] = float(hm.group(1)) if hm else None
-              return {'name': name, 'parent': parent, 'methods': methods, 'path': str(path), 'text': text}
+          def replace_once(path, old, new):
+              text = path.read_text()
+              count = text.count(old)
+              if count != 1:
+                  raise SystemExit(f'{path}: expected one occurrence of {old!r}, got {count}')
+              path.write_text(text.replace(old, new))
+              print(f'patched {path}: {old} -> {new}')
 
-          current_multi = {}
-          for p in CUR.rglob('*.java'):
-              info = class_info(p)
-              if info:
-                  current_multi.setdefault(info['name'], []).append(info)
+          registry = Path('src/main/java/drzhark/mocreatures/init/MoCEntities.java')
+          for cls in [
+              'MoCEntityBird', 'MoCEntityBunny', 'MoCEntityDeer', 'MoCEntityFilchLizard',
+              'MoCEntityMole', 'MoCEntityTurtle', 'MoCEntityTurkey', 'MoCEntityHorse'
+          ]:
+              replace_once(registry, f'{cls}::createAttributes', f'{cls}::registerAttributes')
 
-          # Prefer the substantial implementation when compatibility wrappers duplicate a simple class name.
-          current = {}
-          for name, infos in current_multi.items():
-              infos.sort(key=lambda x: len(x['text']), reverse=True)
-              current[name] = infos[0]
+          # Same-class, single-value legacy comparisons from DrZhark/mocreaturesdev.
+          # Werewolf/Ogre and other form/type-dependent entities are intentionally excluded.
+          health_fixes = {
+              'MoCEntityTurkey': ('8.0D', '6.0D'),
+              'MoCEntityHorse': ('30.0D', '20.0D'),
+              'MoCEntityKomodo': ('25.0D', '20.0D'),
+              'MoCEntityMouse': ('8.0D', '4.0D'),
+              'MoCEntityPetScorpion': ('20.0D', '15.0D'),
+              'MoCEntityFlameWraith': ('25.0D', '15.0D'),
+              'MoCEntityHorseMob': ('30.0D', '20.0D'),
+              'MoCEntityHellRat': ('40.0D', '20.0D'),
+              'MoCEntityRat': ('16.0D', '10.0D'),
+              'MoCEntityWraith': ('20.0D', '10.0D'),
+              'MoCEntityBee': ('10.0D', '4.0D'),
+              'MoCEntityFly': ('10.0D', '2.0D'),
+              'MoCEntityMaggot': ('4.0D', '2.0D'),
+              'MoCEntitySnail': ('4.0D', '2.0D'),
+          }
+          for cls, (old_hp, new_hp) in health_fixes.items():
+              p = unique_file(cls)
+              replace_once(p,
+                  f'.add(Attributes.MAX_HEALTH, {old_hp})',
+                  f'.add(Attributes.MAX_HEALTH, {new_hp})')
 
-          def resolve_method(cls, meth):
-              seen = set()
-              while cls in current and cls not in seen:
-                  seen.add(cls)
-                  info = current[cls]
-                  if meth in info['methods']:
-                      return cls, info['methods'][meth]
-                  cls = info['parent']
-              return None, None
-
-          old = {}
-          for p in OLD.rglob('*.java'):
-              text = p.read_text(errors='ignore')
-              m = re.search(r'public\s+(?:abstract\s+)?class\s+(\w+)', text)
-              if not m:
-                  continue
-              name = m.group(1)
-              vals = []
-              body = method_body(text, 'getMaxHealth')
-              if body:
-                  vals += [int(x) for x in re.findall(r'\breturn\s+([0-9]+)\s*;', body)]
-              if not vals:
-                  # Very old classes sometimes assigned health in the constructor.
-                  vals += [int(x) for x in re.findall(r'\bhealth\s*=\s*([0-9]+)\s*;', text)]
-              if vals:
-                  old.setdefault(name, set()).update(vals)
-
-          refs = []
-          for m in re.finditer(r'(MoCEntity\w+)::(createAttributes|registerAttributes)', REG):
-              pair = (m.group(1), m.group(2))
-              if pair not in refs:
-                  refs.append(pair)
-
-          print('=== ENTITY HEALTH AUDIT ===')
-          print('class | registry_method | direct? | resolved_owner | current_hp | old_hp | flags')
-          problems = []
-          for cls, meth in refs:
-              info = current.get(cls)
-              direct = bool(info and meth in info['methods'])
-              owner, hp = resolve_method(cls, meth)
-              oldvals = sorted(old.get(cls, []))
-              flags = []
-              if info:
-                  other = 'registerAttributes' if meth == 'createAttributes' else 'createAttributes'
-                  if not direct and other in info['methods']:
-                      flags.append('WRONG_METHOD_REF')
-              if hp is not None and oldvals and len(oldvals) == 1 and hp > oldvals[0]:
-                  flags.append('HP_TOO_HIGH')
-              if hp is None:
-                  flags.append('HP_UNRESOLVED')
-              row = f'{cls} | {meth} | {direct} | {owner} | {hp} | {oldvals} | {",".join(flags)}'
-              print(row)
-              if flags:
-                  problems.append(row)
-
-          print('\n=== PROBLEMS / REVIEW CANDIDATES ===')
-          for row in problems:
-              print(row)
-          print(f'COUNT={len(problems)}')
+          # The audit workflow is deliberately one-shot and must not remain in the branch/release.
+          Path('.github/workflows/health-audit.yml').unlink()
           PY
+
+      - name: Commit fixes
+        shell: bash
+        run: |
+          git config user.name "meynoik"
+          git config user.email "neynoi.k@gmail.com"
+          git add src/main/java .github/workflows/health-audit.yml
+          git diff --cached --check
+          git commit -m "Fix legacy entity health values [health-fixed]"
+          git push origin HEAD:agent/fix-werewolf-hurt-voice-lines
