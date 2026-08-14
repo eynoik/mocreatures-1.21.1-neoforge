@@ -36,7 +36,7 @@ public class MoCEntityMaggot extends MoCEntityAmbient {
 
     public static AttributeSupplier.Builder createAttributes() {
         return MoCEntityAmbient.createAttributes()
-                .add(Attributes.MAX_HEALTH, 4.0D)
+                .add(Attributes.MAX_HEALTH, 2.0D)
                 .add(Attributes.MOVEMENT_SPEED, 0.1D);
     }
 

@@ -51,7 +51,7 @@ public class MoCEntityWraith extends MoCEntityMob//MoCEntityFlyerMob
     }
 
     public static AttributeSupplier.Builder createAttributes() {
-        return MoCEntityMob.createAttributes().add(Attributes.ATTACK_DAMAGE, 3.0D).add(Attributes.MAX_HEALTH, 20.0D).add(Attributes.MOVEMENT_SPEED, 0.25D);
+        return MoCEntityMob.createAttributes().add(Attributes.ATTACK_DAMAGE, 3.0D).add(Attributes.MAX_HEALTH, 10.0D).add(Attributes.MOVEMENT_SPEED, 0.25D);
     }
 
     @Override

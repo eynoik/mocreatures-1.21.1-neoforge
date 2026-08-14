@@ -65,7 +65,7 @@ public class MoCEntityHorseMob extends MoCEntityMob {
 
     public static AttributeSupplier.Builder createAttributes() {
         return MoCEntityMob.createAttributes()
-                .add(Attributes.MAX_HEALTH, 30.0D)
+                .add(Attributes.MAX_HEALTH, 20.0D)
                 .add(Attributes.MOVEMENT_SPEED, 0.3D)
                 .add(Attributes.ATTACK_DAMAGE, 4.0D);
     }

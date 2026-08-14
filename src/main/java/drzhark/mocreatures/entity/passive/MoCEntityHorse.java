@@ -121,7 +121,7 @@ public class MoCEntityHorse extends MoCEntityTameableAnimal {
     public static AttributeSupplier.Builder registerAttributes() {
         return MoCEntityTameableAnimal.createAttributes()
                 .add(Attributes.FOLLOW_RANGE, 12.0D)
-                .add(Attributes.MAX_HEALTH, 30.0D)
+                .add(Attributes.MAX_HEALTH, 20.0D)
                 .add(Attributes.MOVEMENT_SPEED, 0.25D);
     }
 

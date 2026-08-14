@@ -37,7 +37,7 @@ public class MoCEntityFlameWraith extends MoCEntityWraith implements Enemy {
     }
 
     public static AttributeSupplier.Builder createAttributes() {
-        return MoCEntityWraith.createAttributes().add(Attributes.MAX_HEALTH, 25.0D).add(Attributes.ATTACK_DAMAGE, 4.0D);
+        return MoCEntityWraith.createAttributes().add(Attributes.MAX_HEALTH, 15.0D).add(Attributes.ATTACK_DAMAGE, 4.0D);
     }
 
     @Override
