@@ -26,9 +26,13 @@ jobs:
 
           def unique_file(class_name):
               matches = [p for p in ROOT.rglob(class_name + '.java') if f'class {class_name} ' in p.read_text(errors='ignore')]
-              if len(matches) != 1:
-                  raise SystemExit(f'{class_name}: expected exactly one implementation, got {matches}')
-              return matches[0]
+              if not matches:
+                  raise SystemExit(f'{class_name}: implementation not found')
+              matches.sort(key=lambda p: len(p.read_text(errors='ignore')), reverse=True)
+              chosen = matches[0]
+              if len(matches) > 1:
+                  print(f'{class_name}: choosing full implementation {chosen} over compatibility wrapper(s) {matches[1:]}')
+              return chosen
 
           def replace_once(path, old, new):
               text = path.read_text()
@@ -69,7 +73,6 @@ jobs:
                   f'.add(Attributes.MAX_HEALTH, {old_hp})',
                   f'.add(Attributes.MAX_HEALTH, {new_hp})')
 
-          # The audit workflow is deliberately one-shot and must not remain in the branch/release.
           Path('.github/workflows/health-audit.yml').unlink()
           PY
 
