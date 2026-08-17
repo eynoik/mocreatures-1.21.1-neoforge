@@ -81,8 +81,6 @@ jobs:
 
           LOG=run/client/logs/latest.log
 
-          # A healthy client normally keeps running at the title screen until timeout (124).
-          # Any other non-zero exit means startup itself failed.
           if [ "$STATUS" -ne 0 ] && [ "$STATUS" -ne 124 ]; then
             echo "Client exited during startup (status: $STATUS)."
             if [ -f "$LOG" ]; then tail -250 "$LOG"; fi
@@ -126,16 +124,16 @@ jobs:
             build/reports/**
             build/tmp/**
 
-      - name: Publish Aura Edition v1.0.2 prerelease
-        if: ${{ success() && github.event_name == 'push' && github.ref == 'refs/heads/main' && contains(github.event.head_commit.message, '[release v1.0.2]') }}
+      - name: Publish Aura Edition v1.0.5 prerelease
+        if: ${{ success() && github.event_name == 'push' && github.ref == 'refs/heads/agent/fix-werewolf-hurt-voice-lines' && contains(github.event.head_commit.message, '[release v1.0.5]') }}
         env:
           GH_TOKEN: ${{ github.token }}
         shell: bash
         run: |
           set -euxo pipefail
-          RELEASE_TAG="aura-edition-1.21.1-v1.0.2"
-          RELEASE_JAR="Mo-Creatures-Aura-Edition-1.21.1-v1.0.2.jar"
-          CHECKSUM_FILE="aura-release-v1.0.2-sha256.txt"
+          RELEASE_TAG="aura-edition-1.21.1-v1.0.5"
+          RELEASE_JAR="Mo-Creatures-Aura-Edition-1.21.1-v1.0.5.jar"
+          CHECKSUM_FILE="aura-release-v1.0.5-sha256.txt"
 
           BUILT_JAR=$(find build/libs -maxdepth 1 -type f -name '*.jar' ! -name '*-sources.jar' ! -name '*-javadoc.jar' | head -n 1)
           test -n "$BUILT_JAR"
@@ -143,16 +141,14 @@ jobs:
           sha256sum "$RELEASE_JAR" > "$CHECKSUM_FILE"
 
           cat > release-notes.md <<'EOF'
-          ## Aura Edition v1.0.2
+          ## Aura Edition v1.0.5
 
-          Fan-made slop port of Mo' Creatures: Nostalgia Edition 1.20.1 Forge to Minecraft 1.21.1 NeoForge.
+          Fan-made port of Mo' Creatures: Nostalgia Edition to Minecraft 1.21.1 NeoForge.
 
-          ### Fixes and changes
-          - Ogre destroy blast is now centered around the Ogre's actual body instead of originating near its feet.
-          - Added `config/MoCreatures/MoCCombatScaling.cfg`.
-          - `HealthMultiplier`: global Mo' Creatures max-health scaling (`1.0` normal, `2.0` double, `0.5` half).
-          - `DamageMultiplier`: global Mo' Creatures outgoing damage scaling (`1.0` normal, `2.0` double, `0.5` half), including special attacks.
-          - Health scaling uses a stable permanent modifier so chunk/entity reloads do not repeatedly stack the multiplier.
+          ### Sound cleanup
+          - Removed the stale `grasshopperambient` sound definition that referenced the nonexistent `mocreatures:grasshopper_ambient` audio file.
+          - Grasshopper chirp and flying sounds remain unchanged and continue to use their existing assets.
+          - This removes the Minecraft resource-reload warning for the missing grasshopper ambient OGG.
 
           This release is published only after the GitHub Actions build, dedicated-server/datapack smoke test, and headless client startup smoke test all pass.
 
@@ -161,6 +157,6 @@ jobs:
 
           gh release create "$RELEASE_TAG" "$RELEASE_JAR" "$CHECKSUM_FILE" \
             --target "$GITHUB_SHA" \
-            --title "Mo' Creatures: Aura Edition 1.21.1 - v1.0.2" \
+            --title "Mo' Creatures: Aura Edition 1.21.1 - v1.0.5" \
             --notes-file release-notes.md \
             --prerelease
