@@ -495,12 +495,6 @@
       "mocreatures:golem_step"
     ]
   },
-  "grasshopperambient": {
-    "category": "neutral",
-    "sounds": [
-      "mocreatures:grasshopper_ambient"
-    ]
-  },
   "grasshopperchirp": {
     "category": "neutral",
     "sounds": [
