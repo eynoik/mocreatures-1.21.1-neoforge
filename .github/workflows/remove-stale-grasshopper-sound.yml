@@ -1,0 +1,51 @@
+name: Remove stale grasshopper sound entry
+
+on:
+  push:
+    branches:
+      - agent/fix-werewolf-hurt-voice-lines
+    paths:
+      - .github/workflows/remove-stale-grasshopper-sound.yml
+
+permissions:
+  contents: write
+
+jobs:
+  patch:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout branch
+        uses: actions/checkout@v4
+        with:
+          ref: agent/fix-werewolf-hurt-voice-lines
+          fetch-depth: 0
+
+      - name: Remove dangling grasshopper ambient event
+        shell: bash
+        run: |
+          python - <<'PY'
+          from pathlib import Path
+
+          path = Path('src/main/resources/assets/mocreatures/sounds.json')
+          text = path.read_text(encoding='utf-8')
+          block = '''  "grasshopperambient": {
+            "category": "neutral",
+            "sounds": [
+              "mocreatures:grasshopper_ambient"
+            ]
+          },
+          '''
+          if block not in text:
+              raise SystemExit('Expected grasshopperambient block not found; refusing to edit')
+          path.write_text(text.replace(block, '', 1), encoding='utf-8')
+          PY
+
+      - name: Commit source change and remove helper workflow
+        shell: bash
+        run: |
+          rm .github/workflows/remove-stale-grasshopper-sound.yml
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add -A
+          git commit -m "Remove stale grasshopper ambient sound entry"
+          git push origin HEAD:agent/fix-werewolf-hurt-voice-lines
