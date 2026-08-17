@@ -25,19 +25,15 @@ jobs:
         run: |
           python - <<'PY'
           from pathlib import Path
+          import re
 
           path = Path('src/main/resources/assets/mocreatures/sounds.json')
           text = path.read_text(encoding='utf-8')
-          block = '''  "grasshopperambient": {
-            "category": "neutral",
-            "sounds": [
-              "mocreatures:grasshopper_ambient"
-            ]
-          },
-          '''
-          if block not in text:
-              raise SystemExit('Expected grasshopperambient block not found; refusing to edit')
-          path.write_text(text.replace(block, '', 1), encoding='utf-8')
+          pattern = r'(?ms)^  "grasshopperambient": \{\n.*?^  \},\n(?=  "grasshopperchirp":)'
+          updated, count = re.subn(pattern, '', text, count=1)
+          if count != 1:
+              raise SystemExit(f'Expected exactly one grasshopperambient block, found {count}; refusing to edit')
+          path.write_text(updated, encoding='utf-8')
           PY
 
       - name: Commit source change and remove helper workflow
