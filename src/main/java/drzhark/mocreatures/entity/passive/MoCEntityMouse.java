@@ -57,7 +57,7 @@ public class MoCEntityMouse extends MoCEntityAnimal {
     }
 
     public static AttributeSupplier.Builder registerAttributes() {
-        return MoCEntityAnimal.createAttributes().add(Attributes.MAX_HEALTH, 8.0D).add(Attributes.MOVEMENT_SPEED, 0.35D);
+        return MoCEntityAnimal.createAttributes().add(Attributes.MAX_HEALTH, 4.0D).add(Attributes.MOVEMENT_SPEED, 0.35D);
     }
 
     @Override

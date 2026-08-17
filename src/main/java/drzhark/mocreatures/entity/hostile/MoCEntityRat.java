@@ -58,7 +58,7 @@ public class MoCEntityRat extends MoCEntityMob {
     }
 
     public static AttributeSupplier.Builder createAttributes() {
-        return MoCEntityMob.createAttributes().add(Attributes.MAX_HEALTH, 16.0D).add(Attributes.MOVEMENT_SPEED, 0.3D)
+        return MoCEntityMob.createAttributes().add(Attributes.MAX_HEALTH, 10.0D).add(Attributes.MOVEMENT_SPEED, 0.3D)
                 .add(Attributes.ATTACK_DAMAGE, 3.0D);
     }
 

@@ -93,7 +93,7 @@ public class MoCEntityPetScorpion extends MoCEntityTameableAnimal {
     public static AttributeSupplier.Builder createAttributes() {
         return MoCEntityTameableAnimal.createAttributes()
             .add(Attributes.FOLLOW_RANGE, 24.0D)
-            .add(Attributes.MAX_HEALTH, 20.0D)
+            .add(Attributes.MAX_HEALTH, 15.0D)
             .add(Attributes.MOVEMENT_SPEED, 0.3D)
             .add(Attributes.ATTACK_DAMAGE, 3.0D);
     }

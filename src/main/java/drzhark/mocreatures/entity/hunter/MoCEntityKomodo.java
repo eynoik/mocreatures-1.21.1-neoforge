@@ -80,7 +80,7 @@ public class MoCEntityKomodo extends MoCEntityTameableAnimal {
     public static AttributeSupplier.Builder createAttributes() {
         return MoCEntityTameableAnimal.createAttributes()
             .add(Attributes.FOLLOW_RANGE, 24.0D)
-            .add(Attributes.MAX_HEALTH, 25.0D)
+            .add(Attributes.MAX_HEALTH, 20.0D)
             .add(Attributes.ARMOR, 5.0D)
             .add(Attributes.ATTACK_DAMAGE, 4.5D)
             .add(Attributes.MOVEMENT_SPEED, 0.18D);
