@@ -74,7 +74,7 @@ public final class MoCVanillaMonsterSpawnRules {
         replaceWithVanillaNightRule(event, MoCEntities.WWOLF.get());
     }
 
-    private static <T extends Monster> void replaceWithVanillaNightRule(
+    private static <T extends MoCEntityMob> void replaceWithVanillaNightRule(
             RegisterSpawnPlacementsEvent event,
             EntityType<T> entityType) {
         event.register(
@@ -85,7 +85,7 @@ public final class MoCVanillaMonsterSpawnRules {
                 RegisterSpawnPlacementsEvent.Operation.REPLACE);
     }
 
-    private static <T extends Monster> boolean checkMoCRulesAndVanillaDarkness(
+    private static <T extends MoCEntityMob> boolean checkMoCRulesAndVanillaDarkness(
             EntityType<T> entityType,
             ServerLevelAccessor world,
             MobSpawnType spawnType,
