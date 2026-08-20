@@ -1,0 +1,125 @@
+name: Release Aura Edition v1.0.3
+
+on:
+  push:
+    branches: [ "main" ]
+
+permissions:
+  contents: write
+
+jobs:
+  release:
+    if: ${{ contains(github.event.head_commit.message, '[release v1.0.3]') }}
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup Java 21
+        uses: actions/setup-java@v5
+        with:
+          distribution: temurin
+          java-version: '21'
+
+      - name: Setup Gradle cache
+        uses: gradle/actions/setup-gradle@v4
+
+      - name: Build
+        shell: bash
+        run: |
+          set -euo pipefail
+          chmod +x gradlew
+          ./gradlew clean build --stacktrace --no-daemon
+
+      - name: Dedicated server smoke test
+        shell: bash
+        run: |
+          set -uo pipefail
+          mkdir -p run/server
+          printf 'eula=true\n' > run/server/eula.txt
+          set +e
+          timeout 90s ./gradlew runServer --no-daemon 2>&1 | tee server-smoke.log
+          STATUS=${PIPESTATUS[0]}
+          set -e
+          LOG=run/server/logs/latest.log
+          if ! grep -q 'Done (' "$LOG" 2>/dev/null; then
+            echo "Server did not reach Done (status: $STATUS)."
+            if [ -f "$LOG" ]; then tail -200 "$LOG"; fi
+            exit 1
+          fi
+          if grep -E "Couldn't parse element .*mocreatures:|Parsing error loading recipe mocreatures:" "$LOG"; then
+            echo "Mo' Creatures data parse errors detected."
+            exit 1
+          fi
+
+      - name: Client startup smoke test
+        shell: bash
+        run: |
+          set -uo pipefail
+          rm -rf run/client/crash-reports
+          mkdir -p run/client
+          if ! command -v xvfb-run >/dev/null 2>&1; then
+            sudo apt-get update
+            sudo apt-get install -y xvfb
+          fi
+          set +e
+          timeout 90s xvfb-run -a ./gradlew runClient --no-daemon 2>&1 | tee client-smoke.log
+          STATUS=${PIPESTATUS[0]}
+          set -e
+          LOG=run/client/logs/latest.log
+          if [ "$STATUS" -ne 0 ] && [ "$STATUS" -ne 124 ]; then
+            echo "Client exited during startup (status: $STATUS)."
+            if [ -f "$LOG" ]; then tail -250 "$LOG"; fi
+            exit 1
+          fi
+          if compgen -G 'run/client/crash-reports/*.txt' > /dev/null; then
+            echo 'Minecraft generated a client crash report.'
+            tail -250 run/client/crash-reports/*.txt || true
+            exit 1
+          fi
+          if [ ! -f "$LOG" ]; then
+            echo 'Client did not create latest.log.'
+            exit 1
+          fi
+          if grep -E "Error loading mods|has failed to load correctly|Failure message:.*mocreatures|Exception caught during firing event" "$LOG"; then
+            echo "Mo' Creatures client startup error detected."
+            tail -250 "$LOG"
+            exit 1
+          fi
+
+      - name: Publish v1.0.3 prerelease
+        env:
+          GH_TOKEN: ${{ github.token }}
+        shell: bash
+        run: |
+          set -euxo pipefail
+          RELEASE_TAG="aura-edition-1.21.1-v1.0.3"
+          RELEASE_JAR="Mo-Creatures-Aura-Edition-1.21.1-v1.0.3.jar"
+          CHECKSUM_FILE="aura-release-v1.0.3-sha256.txt"
+
+          BUILT_JAR=$(find build/libs -maxdepth 1 -type f -name '*.jar' ! -name '*-sources.jar' ! -name '*-javadoc.jar' | head -n 1)
+          test -n "$BUILT_JAR"
+          cp "$BUILT_JAR" "$RELEASE_JAR"
+          sha256sum "$RELEASE_JAR" > "$CHECKSUM_FILE"
+
+          cat > release-notes.md <<'EOF'
+          ## Aura Edition v1.0.3 — hostile spawn hotfix
+
+          ### Fixed
+          - Rat now follows vanilla hostile-mob darkness rules for natural spawning.
+          - Mini Golem now follows vanilla hostile-mob darkness rules for natural spawning.
+          - Ogre variants (Ogre, Green Ogre, Cave Ogre, Fire Ogre) now follow vanilla hostile-mob darkness rules for natural spawning.
+          - These mobs can no longer naturally spawn in normally lit areas just because the Mo' Creatures biome/config spawn predicate passed.
+          - Spawn eggs remain unaffected.
+
+          The fix is additive: the existing Mo' Creatures biome/config restrictions still have to pass, and the vanilla night-monster rule must also pass.
+
+          This prerelease is published only after the project build, dedicated-server smoke test, and headless client startup smoke test pass.
+          EOF
+
+          gh release create "$RELEASE_TAG" "$RELEASE_JAR" "$CHECKSUM_FILE" \
+            --target "$GITHUB_SHA" \
+            --title "Mo' Creatures: Aura Edition 1.21.1 - v1.0.3" \
+            --notes-file release-notes.md \
+            --prerelease
