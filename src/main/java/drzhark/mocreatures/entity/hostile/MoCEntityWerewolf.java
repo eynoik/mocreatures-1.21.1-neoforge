@@ -223,12 +223,14 @@ public class MoCEntityWerewolf extends MoCEntityMob {
     @Override
     protected SoundEvent getHurtSound(DamageSource source) {
         if (getIsHumanForm()) {
-            if (!this.transforming)
-                return MoCreatures.proxy.legacyWerehumanSounds ? MoCSoundEvents.ENTITY_WEREWOLF_HURT_HUMAN.get() : SoundEvents.PLAYER_HURT;
-            return null;
-        } else {
-            return MoCSoundEvents.ENTITY_WEREWOLF_HURT.get();
+            // Suppress only the artificial self-damage used by the transformation animation.
+            // Real attacks must still play the legacy werehuman voice lines.
+            if (this.transforming && source.getEntity() == this) {
+                return null;
+            }
+            return MoCreatures.proxy.legacyWerehumanSounds ? MoCSoundEvents.ENTITY_WEREWOLF_HURT_HUMAN.get() : SoundEvents.PLAYER_HURT;
         }
+        return MoCSoundEvents.ENTITY_WEREWOLF_HURT.get();
     }
 
     @Nullable

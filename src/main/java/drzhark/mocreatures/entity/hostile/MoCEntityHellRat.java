@@ -37,7 +37,7 @@ public class MoCEntityHellRat extends MoCEntityRat {
 
     public static AttributeSupplier.Builder createAttributes() {
         return MoCEntityRat.createAttributes()
-                .add(Attributes.MAX_HEALTH, 40.0D)
+                .add(Attributes.MAX_HEALTH, 20.0D)
                 .add(Attributes.MOVEMENT_SPEED, 0.325D)
                 .add(Attributes.ATTACK_DAMAGE, 4.5D)
                 .add(Attributes.ARMOR, 7.0D);
