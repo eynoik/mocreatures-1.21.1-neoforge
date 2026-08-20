@@ -124,16 +124,16 @@ jobs:
             build/reports/**
             build/tmp/**
 
-      - name: Publish Aura Edition v1.0.7 prerelease
-        if: ${{ success() && github.event_name == 'push' && github.ref == 'refs/heads/agent/fix-all-night-hostiles-v1.0.7' && contains(github.event.head_commit.message, '[release v1.0.7]') }}
+      - name: Publish Aura Edition v1.0.8 prerelease
+        if: ${{ success() && github.event_name == 'push' && github.ref == 'refs/heads/agent/fix-all-night-hostiles-v1.0.8' && contains(github.event.head_commit.message, '[release v1.0.8]') }}
         env:
           GH_TOKEN: ${{ github.token }}
         shell: bash
         run: |
           set -euxo pipefail
-          RELEASE_TAG="aura-edition-1.21.1-v1.0.7"
-          RELEASE_JAR="Mo-Creatures-Aura-Edition-1.21.1-v1.0.7.jar"
-          CHECKSUM_FILE="aura-release-v1.0.7-sha256.txt"
+          RELEASE_TAG="aura-edition-1.21.1-v1.0.8"
+          RELEASE_JAR="Mo-Creatures-Aura-Edition-1.21.1-v1.0.8.jar"
+          CHECKSUM_FILE="aura-release-v1.0.8-sha256.txt"
 
           BUILT_JAR=$(find build/libs -maxdepth 1 -type f -name '*.jar' ! -name '*-sources.jar' ! -name '*-javadoc.jar' | head -n 1)
           test -n "$BUILT_JAR"
@@ -141,7 +141,7 @@ jobs:
           sha256sum "$RELEASE_JAR" > "$CHECKSUM_FILE"
 
           cat > release-notes.md <<'EOF'
-          ## Aura Edition v1.0.7 — hostile spawn darkness hotfix
+          ## Aura Edition v1.0.8 — hostile spawn darkness hotfix
 
           Fan-made port of Mo' Creatures: Nostalgia Edition to Minecraft 1.21.1 NeoForge.
 
@@ -163,7 +163,7 @@ jobs:
           - Wraith and Flame Wraith.
           - Werewolf and WWolf.
 
-          v1.0.7 supersedes v1.0.6, whose AND-based predicate did not correctly override the existing NeoForge REPLACE spawn predicates.
+          v1.0.8 supersedes the intermediate v1.0.6/v1.0.7 hotfix attempts.
           This release is based on the full v1.0.5 tree and keeps all v1.0.4/v1.0.5 fixes.
           It is published only after the GitHub Actions build, dedicated-server/datapack smoke test, and headless client startup smoke test all pass.
 
@@ -172,6 +172,6 @@ jobs:
 
           gh release create "$RELEASE_TAG" "$RELEASE_JAR" "$CHECKSUM_FILE" \
             --target "$GITHUB_SHA" \
-            --title "Mo' Creatures: Aura Edition 1.21.1 - v1.0.7" \
+            --title "Mo' Creatures: Aura Edition 1.21.1 - v1.0.8" \
             --notes-file release-notes.md \
             --prerelease
