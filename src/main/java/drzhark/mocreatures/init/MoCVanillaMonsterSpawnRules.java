@@ -4,6 +4,7 @@
 package drzhark.mocreatures.init;
 
 import drzhark.mocreatures.MoCConstants;
+import drzhark.mocreatures.entity.MoCEntityMob;
 import net.minecraft.core.BlockPos;
 import net.minecraft.util.RandomSource;
 import net.minecraft.world.entity.EntityType;
@@ -12,6 +13,7 @@ import net.minecraft.world.entity.SpawnPlacementTypes;
 import net.minecraft.world.entity.monster.Monster;
 import net.minecraft.world.level.ServerLevelAccessor;
 import net.minecraft.world.level.levelgen.Heightmap;
+import net.neoforged.bus.api.EventPriority;
 import net.neoforged.bus.api.SubscribeEvent;
 import net.neoforged.fml.common.EventBusSubscriber;
 import net.neoforged.neoforge.event.entity.RegisterSpawnPlacementsEvent;
@@ -20,10 +22,11 @@ import net.neoforged.neoforge.event.entity.RegisterSpawnPlacementsEvent;
  * Restores the vanilla darkness requirement used by the classic/Nostalgia
  * hostile Mo' Creatures spawn rules.
  *
- * Aura Edition already has biome/config spawn predicates for these entities.
- * This handler combines vanilla Monster.checkMonsterSpawnRules with those
- * predicates using AND, so a natural spawn must satisfy both the Mo' Creatures
- * rules and normal hostile-mob darkness rules.
+ * Aura Edition already registers its own REPLACE spawn predicates for these
+ * entities. NeoForge ignores AND/OR predicates whenever a replacement predicate
+ * exists, so this handler runs at LOWEST priority and installs the final
+ * replacement predicate. The final predicate requires BOTH the existing
+ * Mo' Creatures spawn rules and vanilla Monster.checkMonsterSpawnRules.
  */
 @EventBusSubscriber(modid = MoCConstants.MOD_ID, bus = EventBusSubscriber.Bus.MOD)
 public final class MoCVanillaMonsterSpawnRules {
@@ -31,58 +34,58 @@ public final class MoCVanillaMonsterSpawnRules {
     private MoCVanillaMonsterSpawnRules() {
     }
 
-    @SubscribeEvent
+    @SubscribeEvent(priority = EventPriority.LOWEST)
     public static void registerVanillaNightRules(RegisterSpawnPlacementsEvent event) {
         // Ogres
-        addVanillaNightRule(event, MoCEntities.CAVE_OGRE.get());
-        addVanillaNightRule(event, MoCEntities.FIRE_OGRE.get());
-        addVanillaNightRule(event, MoCEntities.GREEN_OGRE.get());
+        replaceWithVanillaNightRule(event, MoCEntities.CAVE_OGRE.get());
+        replaceWithVanillaNightRule(event, MoCEntities.FIRE_OGRE.get());
+        replaceWithVanillaNightRule(event, MoCEntities.GREEN_OGRE.get());
 
         // Golems
-        addVanillaNightRule(event, MoCEntities.BIG_GOLEM.get());
-        addVanillaNightRule(event, MoCEntities.MINI_GOLEM.get());
+        replaceWithVanillaNightRule(event, MoCEntities.BIG_GOLEM.get());
+        replaceWithVanillaNightRule(event, MoCEntities.MINI_GOLEM.get());
 
         // Undead/night horse
-        addVanillaNightRule(event, MoCEntities.HORSE_MOB.get());
+        replaceWithVanillaNightRule(event, MoCEntities.HORSE_MOB.get());
 
         // Rats
-        addVanillaNightRule(event, MoCEntities.HELL_RAT.get());
-        addVanillaNightRule(event, MoCEntities.RAT.get());
+        replaceWithVanillaNightRule(event, MoCEntities.HELL_RAT.get());
+        replaceWithVanillaNightRule(event, MoCEntities.RAT.get());
 
         // Manticores
-        addVanillaNightRule(event, MoCEntities.DARK_MANTICORE.get());
-        addVanillaNightRule(event, MoCEntities.FIRE_MANTICORE.get());
-        addVanillaNightRule(event, MoCEntities.FROST_MANTICORE.get());
-        addVanillaNightRule(event, MoCEntities.PLAIN_MANTICORE.get());
-        addVanillaNightRule(event, MoCEntities.TOXIC_MANTICORE.get());
+        replaceWithVanillaNightRule(event, MoCEntities.DARK_MANTICORE.get());
+        replaceWithVanillaNightRule(event, MoCEntities.FIRE_MANTICORE.get());
+        replaceWithVanillaNightRule(event, MoCEntities.FROST_MANTICORE.get());
+        replaceWithVanillaNightRule(event, MoCEntities.PLAIN_MANTICORE.get());
+        replaceWithVanillaNightRule(event, MoCEntities.TOXIC_MANTICORE.get());
 
         // Scorpions
-        addVanillaNightRule(event, MoCEntities.CAVE_SCORPION.get());
-        addVanillaNightRule(event, MoCEntities.DIRT_SCORPION.get());
-        addVanillaNightRule(event, MoCEntities.FIRE_SCORPION.get());
-        addVanillaNightRule(event, MoCEntities.FROST_SCORPION.get());
-        addVanillaNightRule(event, MoCEntities.UNDEAD_SCORPION.get());
+        replaceWithVanillaNightRule(event, MoCEntities.CAVE_SCORPION.get());
+        replaceWithVanillaNightRule(event, MoCEntities.DIRT_SCORPION.get());
+        replaceWithVanillaNightRule(event, MoCEntities.FIRE_SCORPION.get());
+        replaceWithVanillaNightRule(event, MoCEntities.FROST_SCORPION.get());
+        replaceWithVanillaNightRule(event, MoCEntities.UNDEAD_SCORPION.get());
 
         // Other classic hostile mobs
-        addVanillaNightRule(event, MoCEntities.SILVER_SKELETON.get());
-        addVanillaNightRule(event, MoCEntities.FLAME_WRAITH.get());
-        addVanillaNightRule(event, MoCEntities.WRAITH.get());
-        addVanillaNightRule(event, MoCEntities.WEREWOLF.get());
-        addVanillaNightRule(event, MoCEntities.WWOLF.get());
+        replaceWithVanillaNightRule(event, MoCEntities.SILVER_SKELETON.get());
+        replaceWithVanillaNightRule(event, MoCEntities.FLAME_WRAITH.get());
+        replaceWithVanillaNightRule(event, MoCEntities.WRAITH.get());
+        replaceWithVanillaNightRule(event, MoCEntities.WEREWOLF.get());
+        replaceWithVanillaNightRule(event, MoCEntities.WWOLF.get());
     }
 
-    private static <T extends Monster> void addVanillaNightRule(
+    private static <T extends Monster> void replaceWithVanillaNightRule(
             RegisterSpawnPlacementsEvent event,
             EntityType<T> entityType) {
         event.register(
                 entityType,
                 SpawnPlacementTypes.ON_GROUND,
                 Heightmap.Types.MOTION_BLOCKING_NO_LEAVES,
-                MoCVanillaMonsterSpawnRules::checkVanillaNightMonsterSpawn,
-                RegisterSpawnPlacementsEvent.Operation.AND);
+                MoCVanillaMonsterSpawnRules::checkMoCRulesAndVanillaDarkness,
+                RegisterSpawnPlacementsEvent.Operation.REPLACE);
     }
 
-    private static <T extends Monster> boolean checkVanillaNightMonsterSpawn(
+    private static <T extends Monster> boolean checkMoCRulesAndVanillaDarkness(
             EntityType<T> entityType,
             ServerLevelAccessor world,
             MobSpawnType spawnType,
@@ -93,6 +96,7 @@ public final class MoCVanillaMonsterSpawnRules {
             return true;
         }
 
-        return Monster.checkMonsterSpawnRules(entityType, world, spawnType, pos, random);
+        return MoCEntityMob.checkMobSpawnRules(entityType, world, spawnType, pos, random)
+                && Monster.checkMonsterSpawnRules(entityType, world, spawnType, pos, random);
     }
 }
