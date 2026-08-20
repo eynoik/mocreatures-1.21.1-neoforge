@@ -124,16 +124,16 @@ jobs:
             build/reports/**
             build/tmp/**
 
-      - name: Publish Aura Edition v1.0.5 prerelease
-        if: ${{ success() && github.event_name == 'push' && github.ref == 'refs/heads/agent/fix-werewolf-hurt-voice-lines' && contains(github.event.head_commit.message, '[release v1.0.5]') }}
+      - name: Publish Aura Edition v1.0.6 prerelease
+        if: ${{ success() && github.event_name == 'push' && github.ref == 'refs/heads/agent/fix-all-night-hostiles-v1.0.6' && contains(github.event.head_commit.message, '[release v1.0.6]') }}
         env:
           GH_TOKEN: ${{ github.token }}
         shell: bash
         run: |
           set -euxo pipefail
-          RELEASE_TAG="aura-edition-1.21.1-v1.0.5"
-          RELEASE_JAR="Mo-Creatures-Aura-Edition-1.21.1-v1.0.5.jar"
-          CHECKSUM_FILE="aura-release-v1.0.5-sha256.txt"
+          RELEASE_TAG="aura-edition-1.21.1-v1.0.6"
+          RELEASE_JAR="Mo-Creatures-Aura-Edition-1.21.1-v1.0.6.jar"
+          CHECKSUM_FILE="aura-release-v1.0.6-sha256.txt"
 
           BUILT_JAR=$(find build/libs -maxdepth 1 -type f -name '*.jar' ! -name '*-sources.jar' ! -name '*-javadoc.jar' | head -n 1)
           test -n "$BUILT_JAR"
@@ -141,22 +141,35 @@ jobs:
           sha256sum "$RELEASE_JAR" > "$CHECKSUM_FILE"
 
           cat > release-notes.md <<'EOF'
-          ## Aura Edition v1.0.5
+          ## Aura Edition v1.0.6 — hostile spawn darkness hotfix
 
           Fan-made port of Mo' Creatures: Nostalgia Edition to Minecraft 1.21.1 NeoForge.
 
-          ### Sound cleanup
-          - Removed the stale `grasshopperambient` sound definition that referenced the nonexistent `mocreatures:grasshopper_ambient` audio file.
-          - Grasshopper chirp and flying sounds remain unchanged and continue to use their existing assets.
-          - This removes the Minecraft resource-reload warning for the missing grasshopper ambient OGG.
+          ### Hostile spawning fixed
+          - Restored the vanilla darkness requirement used by the classic/Nostalgia hostile spawn behavior.
+          - Natural Mo' Creatures monsters now have to satisfy both their existing biome/config rules and Minecraft's normal hostile-mob darkness rules.
+          - Lighting an area now prevents these Mo' Creatures monsters from naturally spawning there, just like ordinary night monsters.
+          - Spawn eggs remain unaffected.
 
-          This release is published only after the GitHub Actions build, dedicated-server/datapack smoke test, and headless client startup smoke test all pass.
+          ### Covered natural hostile mobs
+          - Ogres: Green Ogre, Cave Ogre, Fire Ogre.
+          - Golems: Big Golem, Mini Golem.
+          - Horse Mob.
+          - Rats: Rat, Hell Rat.
+          - Manticores: Dark, Fire, Frost, Plain, Toxic.
+          - Scorpions: Cave, Dirt, Fire, Frost, Undead.
+          - Silver Skeleton.
+          - Wraith and Flame Wraith.
+          - Werewolf and WWolf.
+
+          This release is based on the full v1.0.5 tree and keeps all v1.0.4/v1.0.5 fixes.
+          It is published only after the GitHub Actions build, dedicated-server/datapack smoke test, and headless client startup smoke test all pass.
 
           The port may still contain bugs. Back up important modded worlds.
           EOF
 
           gh release create "$RELEASE_TAG" "$RELEASE_JAR" "$CHECKSUM_FILE" \
             --target "$GITHUB_SHA" \
-            --title "Mo' Creatures: Aura Edition 1.21.1 - v1.0.5" \
+            --title "Mo' Creatures: Aura Edition 1.21.1 - v1.0.6" \
             --notes-file release-notes.md \
             --prerelease
