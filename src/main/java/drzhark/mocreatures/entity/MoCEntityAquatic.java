@@ -209,8 +209,7 @@ public boolean isPushedByFluid(FluidType type) {
 
     @Override
     public String getPetName() {
-        Component customName = this.getCustomName();
-        return customName != null ? customName.getString() : this.entityData.get(NAME_STR);
+        return this.entityData.get(NAME_STR);
     }
 
     @Override
