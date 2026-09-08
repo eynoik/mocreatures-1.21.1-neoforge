@@ -138,6 +138,10 @@ public boolean isPushedByFluid(FluidType type) {
     @OnlyIn(Dist.CLIENT)
     @Override
     public Component getName() {
+        if (this.getCustomName() != null) {
+            return this.getCustomName();
+        }
+
         String entityKey = this.getType().getDescriptionId();
         if (!MoCreatures.proxy.verboseEntityNames || entityKey == null) {
             return super.getName();
@@ -209,8 +213,17 @@ public boolean isPushedByFluid(FluidType type) {
     }
 
     @Override
+    public void setCustomName(@Nullable Component name) {
+        super.setCustomName(name);
+        // Vanilla name tags and /data changes must also update the legacy save field.
+        this.entityData.set(NAME_STR, name == null ? "" : name.getString());
+    }
+
+    @Override
     public void setPetName(String name) {
-        this.entityData.set(NAME_STR, name);
+        String petName = name == null ? "" : name.trim();
+        this.entityData.set(NAME_STR, petName);
+        this.setCustomName(petName.isEmpty() ? null : Component.literal(petName));
     }
 
     @Override
@@ -563,7 +576,13 @@ public boolean isPushedByFluid(FluidType type) {
         super.readAdditionalSaveData(compound);
         setAdult(compound.getBoolean("Adult"));
         setMoCAge(compound.getInt("Edad"));
-        setPetName(compound.getString("Name"));
+        // Vanilla CustomName is loaded by Entity before this method. Preserve it,
+        // including styled names and names applied with a vanilla name tag.
+        if (this.getCustomName() == null) {
+            setPetName(compound.getString("Name"));
+        } else {
+            this.entityData.set(NAME_STR, this.getCustomName().getString());
+        }
         setTypeMoC(compound.getInt("TypeInt"));
     }
 

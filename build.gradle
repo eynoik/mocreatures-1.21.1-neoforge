@@ -32,6 +32,7 @@ runs {
         argument '--nogui'
     }
     gameTestServer {
+        modSource project.sourceSets.test
         systemProperty 'neoforge.enabledGameTestNamespaces', project.mod_id
     }
     data {
@@ -66,5 +67,9 @@ tasks.withType(ProcessResources).configureEach {
 }
 
 tasks.withType(JavaCompile).configureEach { options.encoding = 'UTF-8'; options.compilerArgs += ['-Xmaxerrs', '1000'] }
+
+// These sources use Minecraft's GameTest runner, not JUnit. The vanilla Gradle
+// test task must not fail merely because it cannot discover JUnit test methods.
+tasks.named('test') { failOnNoDiscoveredTests = false }
 
 idea { module { downloadSources = true; downloadJavadoc = true } }

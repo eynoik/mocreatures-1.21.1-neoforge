@@ -13,7 +13,6 @@ import drzhark.mocreatures.entity.hostile.MoCEntityWraith;
 import net.minecraft.client.renderer.MultiBufferSource;
 import net.minecraft.client.renderer.RenderType;
 import net.minecraft.client.renderer.entity.EntityRendererProvider;
-import net.minecraft.client.renderer.entity.MobRenderer;
 import net.minecraft.client.renderer.texture.OverlayTexture;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.util.Mth;
@@ -21,7 +20,7 @@ import net.neoforged.api.distmarker.Dist;
 import net.neoforged.api.distmarker.OnlyIn;
 
 @OnlyIn(Dist.CLIENT)
-public class MoCRenderWraith extends MobRenderer<MoCEntityWraith, MoCModelWraith<MoCEntityWraith>> {
+public class MoCRenderWraith extends MoCNameplateRenderer<MoCEntityWraith, MoCModelWraith<MoCEntityWraith>> {
 
     public MoCRenderWraith(EntityRendererProvider.Context renderManagerIn, MoCModelWraith modelbiped, float f) {
         super(renderManagerIn, modelbiped, f);
@@ -65,6 +64,7 @@ public class MoCRenderWraith extends MobRenderer<MoCEntityWraith, MoCModelWraith
         model.renderToBuffer(poseStack, vertexConsumer, packedLight, OverlayTexture.NO_OVERLAY, tint);
     
         poseStack.popPose();
+        renderNameAndHealth(wraith, poseStack, buffer, packedLight, partialTicks);
     }
     
 

@@ -91,14 +91,7 @@ public abstract class MoCEntityAnimal extends Animal implements IMoCEntity {
     @OnlyIn(Dist.CLIENT)
     @Override
     public Component getName() {
-        // NAME_STR is Mo' Creatures' synchronized pet-name field. Use it as the
-        // primary client display name so the hover nametag always renders the
-        // actual name chosen in the MoC naming GUI.
-        String petName = this.getPetName();
-        if (petName != null && !petName.isEmpty()) {
-            return Component.literal(petName);
-        }
-        if (this.hasCustomName() && this.getCustomName() != null) {
+        if (this.getCustomName() != null) {
             return this.getCustomName();
         }
 
@@ -186,20 +179,17 @@ public abstract class MoCEntityAnimal extends Animal implements IMoCEntity {
     }
 
     @Override
+    public void setCustomName(@Nullable Component name) {
+        super.setCustomName(name);
+        // Vanilla name tags and /data changes must also update the legacy save field.
+        this.entityData.set(NAME_STR, name == null ? "" : name.getString());
+    }
+
+    @Override
     public void setPetName(String name) {
         String petName = name == null ? "" : name.trim();
         this.entityData.set(NAME_STR, petName);
-
-        // Keep the legacy MoC name and vanilla 1.21 CustomName in sync.
-        if (petName.isEmpty()) {
-            this.setCustomName(null);
-            this.setCustomNameVisible(false);
-        } else {
-            this.setCustomName(Component.literal(petName));
-            // Keep vanilla semantics: the name is visible when the player aims at
-            // the mob. MoC can still draw persistent pet names through its own renderer.
-            this.setCustomNameVisible(false);
-        }
+        this.setCustomName(petName.isEmpty() ? null : Component.literal(petName));
     }
 
     @Override
@@ -555,7 +545,13 @@ public void faceLocation(double x, double y, double z, float maxTurn) {
             CompoundTag data = compound.getCompound("MoCData");
             setAdult(data.getBoolean("Adult"));
             setMoCAge(data.getInt("Edad"));
-            setPetName(data.getString("Name"));
+            // Vanilla CustomName is loaded by Entity before this method. Preserve it,
+            // including styled names and names applied with a vanilla name tag.
+            if (this.getCustomName() == null) {
+                setPetName(data.getString("Name"));
+            } else {
+                this.entityData.set(NAME_STR, this.getCustomName().getString());
+            }
             setTypeMoC(data.getInt("TypeInt"));
         }
     }

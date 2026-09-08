@@ -9,7 +9,6 @@ import drzhark.mocreatures.entity.passive.MoCEntityFilchLizard;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.MultiBufferSource;
 import net.minecraft.client.renderer.entity.EntityRendererProvider;
-import net.minecraft.client.renderer.entity.MobRenderer;
 import net.minecraft.client.renderer.entity.layers.RenderLayer;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.item.ItemStack;
@@ -19,7 +18,7 @@ import net.minecraft.resources.ResourceLocation;
 import com.mojang.math.Axis;
 
 // Courtesy of Daveyx0, permission given
-public class MoCRenderFilchLizard extends MobRenderer<MoCEntityFilchLizard, MoCModelFilchLizard<MoCEntityFilchLizard>> {
+public class MoCRenderFilchLizard extends MoCNameplateRenderer<MoCEntityFilchLizard, MoCModelFilchLizard<MoCEntityFilchLizard>> {
 
     public MoCRenderFilchLizard(EntityRendererProvider.Context renderManagerIn, MoCModelFilchLizard modelBase, float f) {
         super(renderManagerIn, modelBase, f);
