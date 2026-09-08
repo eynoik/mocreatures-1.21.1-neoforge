@@ -5,29 +5,21 @@ package drzhark.mocreatures.client.renderer.entity;
 
 import com.mojang.blaze3d.vertex.PoseStack;
 import com.mojang.blaze3d.vertex.VertexConsumer;
-import drzhark.mocreatures.MoCreatures;
 import drzhark.mocreatures.entity.IMoCEntity;
 import drzhark.mocreatures.entity.passive.MoCEntityHorse;
 import drzhark.mocreatures.entity.hunter.MoCEntityBigCat;
 import drzhark.mocreatures.entity.neutral.MoCEntityWyvern;
-import net.minecraft.client.Minecraft;
-import net.minecraft.client.gui.Font;
 import net.minecraft.client.model.EntityModel;
 import net.minecraft.client.renderer.MultiBufferSource;
 import net.minecraft.client.renderer.texture.OverlayTexture;
 import net.minecraft.client.renderer.RenderType;
-import net.minecraft.client.renderer.entity.EntityRenderer;
 import net.minecraft.client.renderer.entity.EntityRendererProvider;
-import net.minecraft.client.renderer.entity.LivingEntityRenderer;
-import net.minecraft.client.renderer.entity.MobRenderer;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.util.Mth;
 import net.minecraft.world.entity.Mob;
-import org.joml.Matrix4f;
 import com.mojang.math.Axis;
-import net.minecraft.network.chat.Component;
 
-public class MoCRenderMoC<T extends Mob, M extends EntityModel<T>> extends MobRenderer<T, M> {
+public class MoCRenderMoC<T extends Mob, M extends EntityModel<T>> extends MoCNameplateRenderer<T, M> {
 
     private float prevPitch;
     private float prevRoll;
@@ -115,7 +107,7 @@ public class MoCRenderMoC<T extends Mob, M extends EntityModel<T>> extends MobRe
         poseStack.popPose();
 
         // Render name and health if needed
-        renderNameAndHealth(entityIn, poseStack, buffer, packedLight);
+        renderNameAndHealth(entityIn, poseStack, buffer, packedLight, partialTicks);
     }
     
     /**
@@ -183,174 +175,8 @@ public class MoCRenderMoC<T extends Mob, M extends EntityModel<T>> extends MobRe
         return new float[]{1.0F, 1.0F, 1.0F};
     }
     
-    /**
-     * Renders name and health display
-     */
-    protected void renderNameAndHealth(T entityIn, PoseStack poseStack, MultiBufferSource buffer, int packedLight) {
-        IMoCEntity entityMoC = (IMoCEntity) entityIn;
-        boolean showName = MoCreatures.proxy.getDisplayPetName() && !(entityMoC.getPetName().isEmpty()) && (entityIn.getPassengers().isEmpty());
-        boolean showHealth = MoCreatures.proxy.getDisplayPetHealth() && (entityIn.getPassengers().isEmpty());
-        
-        if (entityMoC.getIsTamed() && (entityIn.getPassengers().isEmpty())) {
-            float f2 = 1.6F;
-            float f3 = 0.01666667F * f2;
-            float f5 = (float) this.entityRenderDispatcher.distanceToSqr(entityIn);
-            
-            if (f5 < 256F) {
-                String s = "";
-                s = s + entityMoC.getPetName();
-                float f7 = 0.1F;
-                
-                poseStack.pushPose();
-                poseStack.translate(0.0F, f7, 0.0F);
-                poseStack.mulPose(this.entityRenderDispatcher.cameraOrientation());
-                poseStack.scale(-f3, -f3, f3);
-                int yOff = entityMoC.nameYOffset();
-                
-                if (showHealth) {
-                    if (!showName) {
-                        yOff += 8;
-                    }
-                    
-                    Matrix4f matrix = poseStack.last().pose();
-                    
-                    // Health bar background (red)
-                    float health = entityIn.getHealth();
-                    float maxHealth = entityIn.getMaxHealth();
-                    float healthRatio = health / maxHealth;
-                    float barWidth = 40F * healthRatio;
-                    
-                    // Use static white texture for health bars
-                    ResourceLocation WHITE_TEXTURE = ResourceLocation.parse("textures/misc/white.png");
-                    
-                    // Red background (empty health)
-                    VertexConsumer vertexconsumer = buffer.getBuffer(RenderType.text(WHITE_TEXTURE));
-                    vertexconsumer.addVertex(matrix, -20F + barWidth, -10 + yOff, 0.0F).setColor(0.7F, 0.0F, 0.0F, 1.0F).setUv(0, 0).setOverlay(0).setLight(packedLight).setNormal(0, 1, 0);
-                    vertexconsumer.addVertex(matrix, -20F + barWidth, -6 + yOff, 0.0F).setColor(0.7F, 0.0F, 0.0F, 1.0F).setUv(0, 1).setOverlay(0).setLight(packedLight).setNormal(0, 1, 0);
-                    vertexconsumer.addVertex(matrix, 20F, -6 + yOff, 0.0F).setColor(0.7F, 0.0F, 0.0F, 1.0F).setUv(1, 1).setOverlay(0).setLight(packedLight).setNormal(0, 1, 0);
-                    vertexconsumer.addVertex(matrix, 20F, -10 + yOff, 0.0F).setColor(0.7F, 0.0F, 0.0F, 1.0F).setUv(1, 0).setOverlay(0).setLight(packedLight).setNormal(0, 1, 0);
-                    
-                    // Green health (filled health)
-                    vertexconsumer = buffer.getBuffer(RenderType.text(WHITE_TEXTURE));
-                    vertexconsumer.addVertex(matrix, -20F, -10 + yOff, 0.01F).setColor(0.0F, 0.7F, 0.0F, 1.0F).setUv(0, 0).setOverlay(0).setLight(packedLight).setNormal(0, 1, 0);
-                    vertexconsumer.addVertex(matrix, -20F, -6 + yOff, 0.01F).setColor(0.0F, 0.7F, 0.0F, 1.0F).setUv(0, 1).setOverlay(0).setLight(packedLight).setNormal(0, 1, 0);
-                    vertexconsumer.addVertex(matrix, barWidth - 20F, -6 + yOff, 0.01F).setColor(0.0F, 0.7F, 0.0F, 1.0F).setUv(1, 1).setOverlay(0).setLight(packedLight).setNormal(0, 1, 0);
-                    vertexconsumer.addVertex(matrix, barWidth - 20F, -10 + yOff, 0.01F).setColor(0.0F, 0.7F, 0.0F, 1.0F).setUv(1, 0).setOverlay(0).setLight(packedLight).setNormal(0, 1, 0);
-                }
-                
-                if (showName) {
-                    Matrix4f matrix4f = poseStack.last().pose();
-                    Font font = this.getFont();
-                    
-                    // Get text dimensions
-                    float textWidth = font.width(Component.literal(s));
-                    float textX = -textWidth / 2.0f;
-                    
-                    // Draw name background using gui render type
-                    VertexConsumer vertexconsumer = buffer.getBuffer(RenderType.gui());
-                    int left = (int)(textX - 1);
-                    int top = (int)(yOff - 1);
-                    int right = (int)(textX + textWidth + 1);
-                    int bottom = (int)(yOff + 8);
-                    
-                    // Draw quad with minimal attributes
-                    vertexconsumer.addVertex(matrix4f, left, top, 0.0F).setColor(0, 0, 0, 64);
-                    vertexconsumer.addVertex(matrix4f, left, bottom, 0.0F).setColor(0, 0, 0, 64);
-                    vertexconsumer.addVertex(matrix4f, right, bottom, 0.0F).setColor(0, 0, 0, 64);
-                    vertexconsumer.addVertex(matrix4f, right, top, 0.0F).setColor(0, 0, 0, 64);
-                    
-                    // Render text
-                    font.drawInBatch(Component.literal(s), textX, yOff, 0x20ffffff, false, matrix4f, buffer, Font.DisplayMode.SEE_THROUGH, 0, packedLight);
-                    font.drawInBatch(Component.literal(s), textX, yOff, -1, false, matrix4f, buffer, Font.DisplayMode.NORMAL, 0, packedLight);
-                }
-                
-                poseStack.popPose();
-            }
-        }
-    }
-
     public void renderMoC(T entityIn, float entityYaw, float partialTicks, PoseStack poseStack, MultiBufferSource buffer, int packedLight) {
         super.render(entityIn, entityYaw, partialTicks, poseStack, buffer, packedLight);
-        IMoCEntity entityMoC = (IMoCEntity) entityIn;
-        boolean showName = MoCreatures.proxy.getDisplayPetName() && !(entityMoC.getPetName().isEmpty()) && (entityIn.getPassengers().isEmpty());
-        boolean showHealth = MoCreatures.proxy.getDisplayPetHealth() && (entityIn.getPassengers().isEmpty());
-        
-        if (entityMoC.getIsTamed() && (entityIn.getPassengers().isEmpty())) {
-            float f2 = 1.6F;
-            float f3 = 0.01666667F * f2;
-            float f5 = (float) this.entityRenderDispatcher.distanceToSqr(entityIn);
-            
-            if (f5 < 256F) {
-                String s = "";
-                s = s + entityMoC.getPetName();
-                float f7 = 0.1F;
-                
-                poseStack.pushPose();
-                poseStack.translate(0.0F, f7, 0.0F);
-                poseStack.mulPose(this.entityRenderDispatcher.cameraOrientation());
-                poseStack.scale(-f3, -f3, f3);
-                int yOff = entityMoC.nameYOffset();
-                
-                if (showHealth) {
-                    if (!showName) {
-                        yOff += 8;
-                    }
-                    
-                    Matrix4f matrix = poseStack.last().pose();
-                    
-                    // Health bar background (red)
-                    float health = entityIn.getHealth();
-                    float maxHealth = entityIn.getMaxHealth();
-                    float healthRatio = health / maxHealth;
-                    float barWidth = 40F * healthRatio;
-                    
-                    // Use static white texture for health bars
-                    ResourceLocation WHITE_TEXTURE = ResourceLocation.parse("textures/misc/white.png");
-                    
-                    // Red background (empty health)
-                    VertexConsumer vertexconsumer = buffer.getBuffer(RenderType.text(WHITE_TEXTURE));
-                    vertexconsumer.addVertex(matrix, -20F + barWidth, -10 + yOff, 0.0F).setColor(0.7F, 0.0F, 0.0F, 1.0F).setUv(0, 0).setOverlay(0).setLight(packedLight).setNormal(0, 1, 0);
-                    vertexconsumer.addVertex(matrix, -20F + barWidth, -6 + yOff, 0.0F).setColor(0.7F, 0.0F, 0.0F, 1.0F).setUv(0, 1).setOverlay(0).setLight(packedLight).setNormal(0, 1, 0);
-                    vertexconsumer.addVertex(matrix, 20F, -6 + yOff, 0.0F).setColor(0.7F, 0.0F, 0.0F, 1.0F).setUv(1, 1).setOverlay(0).setLight(packedLight).setNormal(0, 1, 0);
-                    vertexconsumer.addVertex(matrix, 20F, -10 + yOff, 0.0F).setColor(0.7F, 0.0F, 0.0F, 1.0F).setUv(1, 0).setOverlay(0).setLight(packedLight).setNormal(0, 1, 0);
-                    
-                    // Green health (filled health)
-                    vertexconsumer = buffer.getBuffer(RenderType.text(WHITE_TEXTURE));
-                    vertexconsumer.addVertex(matrix, -20F, -10 + yOff, 0.01F).setColor(0.0F, 0.7F, 0.0F, 1.0F).setUv(0, 0).setOverlay(0).setLight(packedLight).setNormal(0, 1, 0);
-                    vertexconsumer.addVertex(matrix, -20F, -6 + yOff, 0.01F).setColor(0.0F, 0.7F, 0.0F, 1.0F).setUv(0, 1).setOverlay(0).setLight(packedLight).setNormal(0, 1, 0);
-                    vertexconsumer.addVertex(matrix, barWidth - 20F, -6 + yOff, 0.01F).setColor(0.0F, 0.7F, 0.0F, 1.0F).setUv(1, 1).setOverlay(0).setLight(packedLight).setNormal(0, 1, 0);
-                    vertexconsumer.addVertex(matrix, barWidth - 20F, -10 + yOff, 0.01F).setColor(0.0F, 0.7F, 0.0F, 1.0F).setUv(1, 0).setOverlay(0).setLight(packedLight).setNormal(0, 1, 0);
-                }
-                
-                if (showName) {
-                    Matrix4f matrix4f = poseStack.last().pose();
-                    Font font = this.getFont();
-                    
-                    // Get text dimensions
-                    float textWidth = font.width(Component.literal(s));
-                    float textX = -textWidth / 2.0f;
-                    
-                    // Draw name background using gui render type
-                    VertexConsumer vertexconsumer = buffer.getBuffer(RenderType.gui());
-                    int left = (int)(textX - 1);
-                    int top = (int)(yOff - 1);
-                    int right = (int)(textX + textWidth + 1);
-                    int bottom = (int)(yOff + 8);
-                    
-                    // Draw quad with minimal attributes
-                    vertexconsumer.addVertex(matrix4f, left, top, 0.0F).setColor(0, 0, 0, 64);
-                    vertexconsumer.addVertex(matrix4f, left, bottom, 0.0F).setColor(0, 0, 0, 64);
-                    vertexconsumer.addVertex(matrix4f, right, bottom, 0.0F).setColor(0, 0, 0, 64);
-                    vertexconsumer.addVertex(matrix4f, right, top, 0.0F).setColor(0, 0, 0, 64);
-                    
-                    // Render text
-                    font.drawInBatch(Component.literal(s), textX, yOff, 0x20ffffff, false, matrix4f, buffer, Font.DisplayMode.SEE_THROUGH, 0, packedLight);
-                    font.drawInBatch(Component.literal(s), textX, yOff, -1, false, matrix4f, buffer, Font.DisplayMode.NORMAL, 0, packedLight);
-                }
-                
-                poseStack.popPose();
-            }
-        }
     }
 
     @Override
@@ -383,20 +209,7 @@ public class MoCRenderMoC<T extends Mob, M extends EntityModel<T>> extends MobRe
         stretch(mocreature, matrixStackIn);
     }
 
-    @Override
-    public boolean shouldShowName(T entity) {
-        // The legacy renderer disabled vanilla name rendering unconditionally.
-        // On 1.21 this also kills the normal "look at a named mob" nametag.
-        // NAME_STR is synchronized, so explicitly allow the hover label for a
-        // named MoC entity under the crosshair, then fall back to vanilla rules.
-        IMoCEntity entityMoC = (IMoCEntity) entity;
-        String petName = entityMoC.getPetName();
-        if (petName != null && !petName.isEmpty()
-                && Minecraft.getInstance().crosshairPickEntity == entity) {
-            return true;
-        }
-        return super.shouldShowName(entity);
-    }
+
 
     /**
      * Tilts the creature to the front / back

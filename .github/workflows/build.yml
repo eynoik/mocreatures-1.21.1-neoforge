@@ -35,6 +35,9 @@ jobs:
           STATUS=${PIPESTATUS[0]}
           exit $STATUS
 
+      - name: Pet name persistence regression tests
+        run: ./gradlew runGameTestServer --no-daemon
+
       - name: Server load and datapack smoke test
         shell: bash
         run: |

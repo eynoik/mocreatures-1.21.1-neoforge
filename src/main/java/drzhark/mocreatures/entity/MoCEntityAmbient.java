@@ -58,6 +58,10 @@ public abstract class MoCEntityAmbient extends PathfinderMob implements IMoCEnti
     @OnlyIn(Dist.CLIENT)
     @Override
     public Component getName() {
+        if (this.getCustomName() != null) {
+            return this.getCustomName();
+        }
+
         String entityString = this.getType().getDescriptionId(); // translation key like "entity.mocreatures.myentity"
         if (!MoCreatures.proxy.verboseEntityNames || entityString == null) {
             return super.getName();
@@ -148,12 +152,22 @@ public abstract class MoCEntityAmbient extends PathfinderMob implements IMoCEnti
 
     @Override
     public String getPetName() {
-        return this.entityData.get(NAME_STR);
+        Component customName = this.getCustomName();
+        return customName != null ? customName.getString() : this.entityData.get(NAME_STR);
+    }
+
+    @Override
+    public void setCustomName(@Nullable Component name) {
+        super.setCustomName(name);
+        // Vanilla name tags and /data changes must also update the legacy save field.
+        this.entityData.set(NAME_STR, name == null ? "" : name.getString());
     }
 
     @Override
     public void setPetName(String name) {
-        this.entityData.set(NAME_STR, name);
+        String petName = name == null ? "" : name.trim();
+        this.entityData.set(NAME_STR, petName);
+        this.setCustomName(petName.isEmpty() ? null : Component.literal(petName));
     }
 
     @Override
@@ -297,7 +311,13 @@ public abstract class MoCEntityAmbient extends PathfinderMob implements IMoCEnti
             CompoundTag mocTag = compound.getCompound("MoCData");
             setAdult(mocTag.getBoolean("Adult"));
             setMoCAge(mocTag.getInt("Edad"));
-            setPetName(mocTag.getString("Name"));
+            // Vanilla CustomName is loaded by Entity before this method. Preserve it,
+            // including styled names and names applied with a vanilla name tag.
+            if (this.getCustomName() == null) {
+                setPetName(mocTag.getString("Name"));
+            } else {
+                this.entityData.set(NAME_STR, this.getCustomName().getString());
+            }
             setTypeMoC(mocTag.getInt("TypeInt"));
         }
     }

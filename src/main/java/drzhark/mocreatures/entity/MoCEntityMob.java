@@ -76,6 +76,10 @@ public abstract class MoCEntityMob extends Monster implements IMoCEntity {
     @OnlyIn(Dist.CLIENT)
     @Override
     public Component getName() {
+        if (this.getCustomName() != null) {
+            return this.getCustomName();
+        }
+
         String entityString = this.getType().getDescriptionId();
         if (!MoCreatures.proxy.verboseEntityNames || entityString == null) {
             return super.getName();
@@ -150,12 +154,22 @@ public abstract class MoCEntityMob extends Monster implements IMoCEntity {
 
     @Override
     public String getPetName() {
-        return this.entityData.get(NAME_STR);
+        Component customName = this.getCustomName();
+        return customName != null ? customName.getString() : this.entityData.get(NAME_STR);
+    }
+
+    @Override
+    public void setCustomName(@Nullable Component name) {
+        super.setCustomName(name);
+        // Vanilla name tags and /data changes must also update the legacy save field.
+        this.entityData.set(NAME_STR, name == null ? "" : name.getString());
     }
 
     @Override
     public void setPetName(String name) {
-        this.entityData.set(NAME_STR, name == null ? "" : name);
+        String petName = name == null ? "" : name.trim();
+        this.entityData.set(NAME_STR, petName);
+        this.setCustomName(petName.isEmpty() ? null : Component.literal(petName));
     }
 
     @Override
@@ -321,7 +335,13 @@ public abstract class MoCEntityMob extends Monster implements IMoCEntity {
         super.readAdditionalSaveData(tag);
         setAdult(tag.getBoolean("Adult"));
         setMoCAge(tag.getInt("Edad"));
-        setPetName(tag.getString("Name"));
+        // Vanilla CustomName is loaded by Entity before this method. Preserve it,
+        // including styled names and names applied with a vanilla name tag.
+        if (this.getCustomName() == null) {
+            setPetName(tag.getString("Name"));
+        } else {
+            this.entityData.set(NAME_STR, this.getCustomName().getString());
+        }
         setTypeMoC(tag.getInt("TypeInt"));
     }
 
