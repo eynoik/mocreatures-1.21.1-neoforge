@@ -19,13 +19,6 @@ public class MoCRenderShark extends MoCNameplateRenderer<MoCEntityShark, MoCMode
         super(renderManagerIn, modelbase, f);
     }
 
-    @SuppressWarnings("removal")
-    @Override
-    public void render(MoCEntityShark entityshark, float entityYaw, float partialTicks, PoseStack poseStack, MultiBufferSource buffer, int packedLightIn) {
-        super.render(entityshark, entityYaw, partialTicks, poseStack, buffer, packedLightIn);
-
-    }
-
     @Override
     protected void scale(MoCEntityShark entityshark, PoseStack poseStack, float partialTickTime) {
         stretch(entityshark, poseStack);

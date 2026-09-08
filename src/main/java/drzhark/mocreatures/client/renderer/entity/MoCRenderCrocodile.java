@@ -8,7 +8,6 @@ import drzhark.mocreatures.client.model.MoCModelCrocodile;
 import drzhark.mocreatures.entity.hunter.MoCEntityCrocodile;
 import net.minecraft.client.renderer.MultiBufferSource;
 import net.minecraft.client.renderer.entity.EntityRendererProvider;
-import net.minecraft.client.renderer.entity.MobRenderer;
 import net.minecraft.tags.FluidTags;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.util.Mth;
@@ -18,7 +17,7 @@ import net.neoforged.api.distmarker.Dist;
 import net.neoforged.api.distmarker.OnlyIn;
 
 @OnlyIn(Dist.CLIENT)
-public class MoCRenderCrocodile extends MobRenderer<MoCEntityCrocodile, MoCModelCrocodile<MoCEntityCrocodile>> {
+public class MoCRenderCrocodile extends MoCNameplateRenderer<MoCEntityCrocodile, MoCModelCrocodile<MoCEntityCrocodile>> {
 
     public MoCModelCrocodile croc;
 

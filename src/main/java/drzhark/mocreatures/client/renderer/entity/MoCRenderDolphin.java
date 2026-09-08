@@ -19,13 +19,6 @@ public class MoCRenderDolphin extends MoCNameplateRenderer<MoCEntityDolphin, MoC
         super(renderManagerIn, modelbase, f);
     }
 
-    @SuppressWarnings("removal")
-    @Override
-    public void render(MoCEntityDolphin entitydolphin, float entityYaw, float partialTicks, PoseStack poseStack, MultiBufferSource buffer, int packedLightIn) {
-        super.render(entitydolphin, entityYaw, partialTicks, poseStack, buffer, packedLightIn);
-
-    }
-
     @Override
     protected void scale(MoCEntityDolphin entitydolphin, PoseStack poseStack, float partialTickTime) {
         stretch(entitydolphin, poseStack);

@@ -8,14 +8,13 @@ import drzhark.mocreatures.client.model.MoCModelRat;
 import drzhark.mocreatures.entity.hostile.MoCEntityRat;
 import net.minecraft.client.renderer.MultiBufferSource;
 import net.minecraft.client.renderer.entity.EntityRendererProvider;
-import net.minecraft.client.renderer.entity.MobRenderer;
 import net.minecraft.resources.ResourceLocation;
 import com.mojang.math.Axis;
 import net.neoforged.api.distmarker.Dist;
 import net.neoforged.api.distmarker.OnlyIn;
 
 @OnlyIn(Dist.CLIENT)
-public class MoCRenderRat<T extends MoCEntityRat, M extends MoCModelRat<T>> extends MobRenderer<T, M> {
+public class MoCRenderRat<T extends MoCEntityRat, M extends MoCModelRat<T>> extends MoCNameplateRenderer<T, M> {
 
     public MoCRenderRat(EntityRendererProvider.Context renderManagerIn, M modelbase, float f) {
         super(renderManagerIn, modelbase, f);

@@ -37,12 +37,6 @@ public class MoCLegacyRenderBigCat extends MoCNameplateRenderer<MoCEntityBigCat,
     }
 
     @Override
-    public void render(MoCEntityBigCat entitybigcat, float entityYaw, float partialTicks, PoseStack poseStack, MultiBufferSource buffer, int packedLightIn) {
-        super.render(entitybigcat, entityYaw, partialTicks, poseStack, buffer, packedLightIn);
-
-    }
-
-    @Override
     protected void scale(MoCEntityBigCat entitybigcat, PoseStack poseStack, float f) {
         this.bigcat1.sitting = entitybigcat.getIsSitting();
         this.bigcat1.tamed = entitybigcat.getIsTamed();
